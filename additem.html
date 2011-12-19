@@ -9,27 +9,66 @@ Simple HTML5 / Javascript Mobile Web Form
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
+    <meta name="keywords" content="vfw, project 1" />
+    <meta name="description" content="VFW Project 1" />
     <meta name="robots" content="" />
-    <title>Hello World!</title>
-    <link type="text/css" src="css/stytle.css" />
+    <title>VFW - Project 1</title>
+    <script type="text/javascript" src="js/fox_jeremy_project1.js"></script>
+    
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
   </head>
-  
+
   <body>
-    
-    <h1>Something</h1>
-    
-    <form action="#" method="post">
-    
-      <input type="text" id="">
-      <input type="range" id="">
-      <input type="checkbox" id="">
-      <input type="radio" id="">
-      <input type="date" id="">
-      <input type="submit" id="">
-    
-    </form>
-    
+
+    <div id="header"> Test > Test > Test > Test </div>
+
+    <div id="mainContent">
+      <h1>Bill Planner</h1>
+      
+      <form action="#" method="post">
+      
+        <input type="text" placeholder="Pay To" id="" />
+        
+        <p>Pay This Amount:<br />
+        <input type="range" min="0" max="100" value="0" step="5" name="amount" list="amounts" onchange="showValue(this.value)" />
+        $<span id="range">0</span>.00
+        <datalist id="amounts">
+          <option value="0">
+          <option value="5">
+          <option value="10">
+          <option value="15">
+          <option value="20">
+          <option value="30">
+          <option value="40">
+          <option value="50">
+          <option value="60">
+          <option value="70">
+          <option value="80">
+          <option value="90">
+          <option value="100">
+        </datalist>
+        </p>
+
+        Pay From: <br />
+        <script type="text/javascript"> getAccounts() </script>
+        
+        <p>
+        Paid On:<br />
+        <input type="date" id="date" name="date" /><br />
+        <script type="text/javascript"> currentDate() </script>
+        </p>
+        
+        <p>
+        Remember This Payment:
+        <input type="checkbox" id="" /><br />
+        </p>
+        
+        <p>
+        <input type="submit" id="" />
+        </p>
+      </form>
+    </div>  
+    <div id="footer"> &copy My Company 2011 </div>
+
   </body>
 </html>
