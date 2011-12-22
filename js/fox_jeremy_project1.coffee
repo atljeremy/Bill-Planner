@@ -16,7 +16,7 @@ Simple HTML5 / Javascript Mobile Web Form
   for account in accounts
     accountStripped = account.toLowerCase()
     accountStripped = accountStripped.replace(/\s+/g, "")
-    output = "#{account}: <input type=\"radio\" name=\"test\" value=\"#{accountStripped}\" id=\"\" /><br />"
+    output = "#{account}: <input type=\"radio\" name=\"test\" value=\"#{accountStripped}\" id=\"\" required aria-required=\"true\" /><br />"
     document.write(output)
 
 @showValue = (newValue) ->
@@ -29,3 +29,32 @@ Simple HTML5 / Javascript Mobile Web Form
   year = currentTime.getFullYear()
   showDate = year + "-" + month + "-" + day
   document.getElementById("date").value=showDate
+  
+@uncheckYes = () ->
+  document.getElementById("rememberYes").checked=""
+
+@uncheckNo = () ->
+  document.getElementById("rememberNo").checked=""
+
+@placeholder = () =>
+  if !Modernizr.input.placeholder
+    $("input[placeholder], textarea[placeholder]").each -> 
+  
+      if $(this).val()==""
+        $(this).val $(this).attr("placeholder")
+        $(this).focus ->
+          if $(this).val()==$(this).attr("placeholder")
+            $(this).val("")
+            $(this).removeClass('placeholder')
+            
+        $(this).blur ->
+          if($(this).val() =="")
+            $(this).val $(this).attr("placeholder")
+            $(this).addClass('placeholder')
+    
+    
+    $('form').submit ->
+      placeheld = $(this).find('[placeholder]')
+      for placeheld in placeheld
+        if $(placeheld).val() == $(placeheld).attr('placeholder')
+          $(placeheld).attr('value','')
