@@ -1,3 +1,6 @@
+/*********************************************************
+// HTML Element Styles
+*********************************************************/
 body {
   color: white;
   font-size: 12px;
@@ -6,6 +9,9 @@ body {
   margin: 0px;
 }
 
+/*********************************************************
+// Div Styles
+*********************************************************/
 #header {
   color: white;
   font-size: 12px;
@@ -77,8 +83,12 @@ body {
   border-radius: 5px;
 }
 
+/*********************************************************
+// Input Styles
+*********************************************************/
 input {
   font-family: Helvetica, Verdana, Arial, sans-serif;
+  font-size: 20px;
   margin-left: 5px;
 }
 
@@ -135,10 +145,85 @@ input:focus:valid {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebf1f6', endColorstr='#d5ebfb',GradientType=0 );
 }
 
+/* Input Tooltip */
+.tooltip {
+	background-color:#000;
+	border:1px solid #fff;
+	padding:10px 15px;
+	width:200px;
+	display:none;
+	color:#fff;
+	text-align:left;
+	font-size:12px;
+	-moz-box-shadow:0 0 10px #000;
+	-webkit-box-shadow:0 0 10px #000;
+}
+
+/* Calendar Styles */
+#billForm, .active, #calroot {
+	-moz-border-radius:4px;		
+}
+
+#flight .active {
+	background-color:#fff;
+	color:#333;
+	border:1px solid #ccc;
+	border-bottom:0;
+}
+
+.active input {
+	color:#333;
+	text-shadow:none;
+}
+
+/* date input */
+.date {		
+	float:left;
+	display:block;
+	border:0;
+	background-color:transparent;
+	font-size:18px;
+	color:#fff;
+	text-shadow:0 0 1px #000;
+	width:180px;
+	cursor:pointer;
+}
+
+/* date input trigger element */
+.caltrigger {
+	display:block;
+	width:30px;
+	height:32px;
+	float:left;
+	background:url(icon.jpg) no-repeat 0 0;
+	margin-top:-8px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+}
+
+.active .caltrigger {
+	background-position: 0 -32px;		
+}
+
+/*********************************************************
+// Text Styles
+*********************************************************/
 h1 {
   font-family: Helvetica, Verdana, Arial, sans-serif;
   margin-left: auto;
   margin-right: auto;
+  text-shadow: 2px 2px 4px #000;
+  filter: dropshadow(color=#000, offx=2, offy=2);
+}
+
+#rangeExtras {
+  font-size: 25px;
+  text-shadow: 2px 2px 4px #000;
+  filter: dropshadow(color=#000, offx=2, offy=2);
+}
+
+#range {
+  font-size: 25px;
   text-shadow: 2px 2px 4px #000;
   filter: dropshadow(color=#000, offx=2, offy=2);
 }

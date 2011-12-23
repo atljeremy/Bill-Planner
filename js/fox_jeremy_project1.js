@@ -21,7 +21,7 @@
       account = accounts[_i];
       accountStripped = account.toLowerCase();
       accountStripped = accountStripped.replace(/\s+/g, "");
-      output = "" + account + ": <input type=\"radio\" name=\"test\" value=\"" + accountStripped + "\" id=\"\" required aria-required=\"true\" /><br />";
+      output = "" + account + ": <input type=\"radio\" name=\"test\" value=\"" + accountStripped + "\" id=\"payFrom\" onfocus=\"tooltip()\" required aria-required=\"true\" title=\"Please choose one of your accounts to make this payment from.\" /><br />";
       _results.push(document.write(output));
     }
     return _results;
@@ -38,7 +38,7 @@
     day = currentTime.getDate();
     year = currentTime.getFullYear();
     showDate = year + "-" + month + "-" + day;
-    return document.getElementById("date").value = showDate;
+    return document.getElementById("payOn").value = showDate;
   };
 
   this.uncheckYes = function() {
@@ -83,6 +83,26 @@
         return _results;
       });
     }
+  };
+
+  this.tooltip = function() {
+    return $("#billForm :input").tooltip({
+      position: "top center",
+      offset: [-10, 0],
+      effect: "fade",
+      opacity: 0.7
+    });
+  };
+
+  this.calendar = function() {
+    $(":date").dateinput({
+      trigger: true,
+      format: 'dd mmmm yyyy',
+      min: -1
+    });
+    return $(":date").bind("onShow onHide", function() {
+      $(_this).parent().toggleClass("active");
+    });
   };
 
 }).call(this);

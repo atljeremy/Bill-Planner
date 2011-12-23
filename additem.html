@@ -14,12 +14,19 @@ Simple HTML5 / Javascript Mobile Web Form
     <meta name="robots" content="" />
     <title>VFW - Project 1</title>
     
+    <!-- My Projects CSS -->
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
     
+    <!-- CSS Required by Libraries -->
+    <link rel="stylesheet" href="css/calendar.css" type="text/css" />
+    
+    <!-- No reason to reinvent the wheel, let's just use some awesome pre-existing libraries -->
     <script type="text/javascript" src="js/modernizr.js"></script>
     <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+    <script src="http://cdn.jquerytools.org/1.2.6/jquery.tools.min.js"></script>
+    
+    <!-- My Projects JS -->
     <script type="text/javascript" src="js/fox_jeremy_project1.js"></script>
-    <script type="text/javascript"> placeholder() </script>
   </head>
 
   <body>
@@ -29,15 +36,15 @@ Simple HTML5 / Javascript Mobile Web Form
     <div id="mainContent">
       <h1>Bill Planner</h1>
       
-      <form action="#" method="post">
+      <form action="#" method="post" id="billForm">
       
         <div id="sectionHeader">Pay To:</div>
-        <input type="text" placeholder="Full Sail University" id="" required aria-required="true" />
+        <input type="text" placeholder="Full Sail University" id="payTo" required aria-required="true" maxlength="50" title="Enter payee in this field. Maximum of 50 characters." />
         
         <p>
         <div id="sectionHeader">Pay This Amount:</div>
-        <input type="range" min="0" max="100" value="0" step="5" name="amount" list="amounts" onchange="showValue(this.value)" required aria-required="true" />
-        $<span id="range">0</span>.00
+        <input type="range" min="0" max="100" value="0" step="5" name="amount" id="payAmount" list="amounts" onchange="showValue(this.value)" required aria-required="true" title="Use slider to select the amount you would like to pay." />
+        <font id="rangeExtras">$</font><span id="range">0</span><font id="rangeExtras">.00</font>
         <datalist id="amounts">
           <option value="0">
           <option value="5">
@@ -59,23 +66,26 @@ Simple HTML5 / Javascript Mobile Web Form
         <script type="text/javascript"> getAccounts() </script>
         
         <p>
-        <div id="sectionHeader">Paid On:</div>
-        <input type="date" id="date" name="date" required aria-required="true" /><br />
+        <div id="sectionHeader">Pay On:</div>
+        <input type="date" id="payOn" name="date" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
         <script type="text/javascript"> currentDate() </script>
         </p>
         
         <p>
         <div id="sectionHeader">Remember This Payment:</div>
-        Yes: <input type="checkbox" id="rememberYes" checked="checked" onclick="uncheckNo()" />
-        No: <input type="checkbox" id="rememberNo" value="No" onclick="uncheckYes()"/>
+        Yes: <input type="checkbox" id="rememberYes" checked="checked" onclick="uncheckNo()" title="Checking this option will store this payment for future use." />
+        No: <input type="checkbox" id="rememberNo" value="No" onclick="uncheckYes()" title="Checking this option will not store this payment for future use."/>
         </p>
         
         <p>
-        <input type="submit" id="" />
+        <input type="submit" id="submitBillForm" title="Please make sure you have filled in all required fields. Pay To, Pay This Amount, Pay From, and Pay On field are required."/>
         </p>
       </form>
     </div>  
     <div id="footer"> &copy My Company 2011 </div>
-
+    
+  <script type="text/javascript"> placeholder() </script>
+  <script type="text/javascript"> tooltip() </script>
+  <script type="text/javascript"> calendar() </script>
   </body>
 </html>
