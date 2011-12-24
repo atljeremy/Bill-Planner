@@ -27,8 +27,16 @@
     return _results;
   };
 
-  this.showValue = function(newValue) {
+  this.showAmount = function(newValue) {
     return document.getElementById("range").innerHTML = newValue;
+  };
+
+  this.showPayTo = function(newValue) {
+    return document.getElementById("checkPayTo").innerHTML = newValue;
+  };
+
+  this.showDate = function(newValue) {
+    return document.getElementById("checkDate").innerHTML = newValue;
   };
 
   this.currentDate = function() {
@@ -97,12 +105,16 @@
   this.calendar = function() {
     $(":date").dateinput({
       trigger: true,
-      format: 'dd mmmm yyyy',
+      format: 'mmmm dd yyyy',
       min: -1
     });
     return $(":date").bind("onShow onHide", function() {
-      $(_this).parent().toggleClass("active");
+      return $(this).parent().toggleClass("active");
     });
+  };
+
+  this.rangeStyle = function() {
+    return $(":range").rangeinput();
   };
 
 }).call(this);

@@ -1,16 +1,16 @@
 /*********************************************************
-// HTML Element Styles
+  HTML Element Styles
 *********************************************************/
 body {
   color: white;
-  font-size: 12px;
+  font-size: 13px;
   font-family: Helvetica, Verdana, Arial, sans-serif;
   background-image:url('../i/linen.jpg');
   margin: 0px;
 }
 
 /*********************************************************
-// Div Styles
+  Div Styles
 *********************************************************/
 #header {
   color: white;
@@ -31,6 +31,7 @@ body {
   padding: 10px;
   position: fixed;
   top: 0px;
+  z-index: 1000;
 }
 
 #mainContent {
@@ -61,11 +62,12 @@ body {
   padding-top: 20px;
   position: fixed;
   bottom: 0px;
+  z-index: 1000;
 }
 
 #sectionHeader {
   font-family: Helvetica, Verdana, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   padding: 5px;
   margin-bottom: 10px;
   width: 250px;
@@ -83,8 +85,21 @@ body {
   border-radius: 5px;
 }
 
+#checkImage {
+  background-image: url('../i/check-template.jpg');
+  background-size: 300px auto;
+  width: 300px;
+  height: 136px;
+}
+
+#checkAmount {
+  position: relative;
+  left: 238px;
+  top: 47px;
+}
+
 /*********************************************************
-// Input Styles
+  Input Styles
 *********************************************************/
 input {
   font-family: Helvetica, Verdana, Arial, sans-serif;
@@ -159,54 +174,13 @@ input:focus:valid {
 	-webkit-box-shadow:0 0 10px #000;
 }
 
-/* Calendar Styles */
-#billForm, .active, #calroot {
-	-moz-border-radius:4px;		
-}
-
-#flight .active {
-	background-color:#fff;
-	color:#333;
-	border:1px solid #ccc;
-	border-bottom:0;
-}
-
-.active input {
-	color:#333;
-	text-shadow:none;
-}
-
-/* date input */
-.date {		
-	float:left;
-	display:block;
-	border:0;
-	background-color:transparent;
-	font-size:18px;
-	color:#fff;
-	text-shadow:0 0 1px #000;
-	width:180px;
-	cursor:pointer;
-}
-
-/* date input trigger element */
-.caltrigger {
-	display:block;
-	width:30px;
-	height:32px;
-	float:left;
-	background:url(icon.jpg) no-repeat 0 0;
-	margin-top:-8px;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-}
-
-.active .caltrigger {
-	background-position: 0 -32px;		
+#exposeMask {
+	background:#678 url(/tools/img/mask/mask_gradient_1000.png) no-repeat;
+	background-position:13% 160px;
 }
 
 /*********************************************************
-// Text Styles
+  Text Styles
 *********************************************************/
 h1 {
   font-family: Helvetica, Verdana, Arial, sans-serif;
@@ -217,13 +191,26 @@ h1 {
 }
 
 #rangeExtras {
-  font-size: 25px;
-  text-shadow: 2px 2px 4px #000;
-  filter: dropshadow(color=#000, offx=2, offy=2);
+  color: black;
+  font-size: 14px;
 }
 
 #range {
-  font-size: 25px;
-  text-shadow: 2px 2px 4px #000;
-  filter: dropshadow(color=#000, offx=2, offy=2);
+  color: black;
+  font-size: 14px;
+}
+
+#checkPayTo {
+  color: black;
+  font-size: 14px;
+}
+
+#checkDate {
+  color: black;
+  font-size: 14px;
+}
+
+#checkName {
+  color: black;
+  font-size: 14px;
 }

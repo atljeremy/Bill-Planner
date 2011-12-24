@@ -19,8 +19,14 @@ Simple HTML5 / Javascript Mobile Web Form
     output = "#{account}: <input type=\"radio\" name=\"test\" value=\"#{accountStripped}\" id=\"payFrom\" onfocus=\"tooltip()\" required aria-required=\"true\" title=\"Please choose one of your accounts to make this payment from.\" /><br />"
     document.write(output)
 
-@showValue = (newValue) ->
+@showAmount = (newValue) ->
   document.getElementById("range").innerHTML=newValue
+  
+@showPayTo = (newValue) ->
+  document.getElementById("checkPayTo").innerHTML=newValue
+  
+@showDate = (newValue) ->
+  document.getElementById("checkDate").innerHTML=newValue
 
 @currentDate = () ->
   currentTime = new Date()
@@ -66,8 +72,10 @@ Simple HTML5 / Javascript Mobile Web Form
     effect: "fade"
     opacity: 0.7
     
-@calendar = () =>
-  $(":date").dateinput trigger: true, format: 'dd mmmm yyyy', min: -1
-  $(":date").bind "onShow onHide", () =>
-  	$(this).parent().toggleClass("active")
-  	return
+@calendar = () ->
+  $(":date").dateinput(trigger: true, format: 'mmmm dd yyyy', min: -1)
+  $(":date").bind "onShow onHide", () ->
+    $(this).parent().toggleClass("active")
+    
+@rangeStyle = () ->
+  $(":range").rangeinput()

@@ -19,11 +19,11 @@ Simple HTML5 / Javascript Mobile Web Form
     
     <!-- CSS Required by Libraries -->
     <link rel="stylesheet" href="css/calendar.css" type="text/css" />
+    <link rel="stylesheet" href="css/range.css" type="text/css" />
     
     <!-- No reason to reinvent the wheel, let's just use some awesome pre-existing libraries -->
     <script type="text/javascript" src="js/modernizr.js"></script>
-    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
-    <script src="http://cdn.jquerytools.org/1.2.6/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="js/jquery.tools.min.js"></script>
     
     <!-- My Projects JS -->
     <script type="text/javascript" src="js/fox_jeremy_project1.js"></script>
@@ -39,27 +39,11 @@ Simple HTML5 / Javascript Mobile Web Form
       <form action="#" method="post" id="billForm">
       
         <div id="sectionHeader">Pay To:</div>
-        <input type="text" placeholder="Full Sail University" id="payTo" required aria-required="true" maxlength="50" title="Enter payee in this field. Maximum of 50 characters." />
+        <input type="text" placeholder="Full Sail University" id="payTo" onchange="showPayTo(this.value)" required aria-required="true" maxlength="50" title="Enter payee in this field. Maximum of 50 characters." />
         
         <p>
         <div id="sectionHeader">Pay This Amount:</div>
-        <input type="range" min="0" max="100" value="0" step="5" name="amount" id="payAmount" list="amounts" onchange="showValue(this.value)" required aria-required="true" title="Use slider to select the amount you would like to pay." />
-        <font id="rangeExtras">$</font><span id="range">0</span><font id="rangeExtras">.00</font>
-        <datalist id="amounts">
-          <option value="0">
-          <option value="5">
-          <option value="10">
-          <option value="15">
-          <option value="20">
-          <option value="30">
-          <option value="40">
-          <option value="50">
-          <option value="60">
-          <option value="70">
-          <option value="80">
-          <option value="90">
-          <option value="100">
-        </datalist>
+        <input type="range" min="0" max="250" value="0" step="10" name="amount" id="payAmount" list="amounts" onchange="showAmount(this.value)" required aria-required="true" title="Use slider to select the amount you would like to pay." />       
         </p>
 
         <div id="sectionHeader">Pay From:</div>
@@ -67,8 +51,29 @@ Simple HTML5 / Javascript Mobile Web Form
         
         <p>
         <div id="sectionHeader">Pay On:</div>
-        <input type="date" id="payOn" name="date" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
+        <input type="date" class="datePicker" id="payOn" onchange="showDate(this.value)" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
         <script type="text/javascript"> currentDate() </script>
+        </p>
+        
+        <p>
+        <div id="sectionHeader">Check Preview:</div>
+        <div id="checkImage">
+        
+        <!-- Name -->
+        <span id="checkName">John Doe</span>
+        
+        <!-- Pay To  -->
+        <span id="checkPayTo">0</span>
+        
+        <!-- Date -->
+        <span id="checkDate">0</span>
+        
+        <!-- Check Amount -->
+        <div id="checkAmount">
+        <span id="range">0</span><font id="rangeExtras">.00</font>
+        </div>
+        
+        </div>
         </p>
         
         <p>
@@ -83,9 +88,11 @@ Simple HTML5 / Javascript Mobile Web Form
       </form>
     </div>  
     <div id="footer"> &copy My Company 2011 </div>
-    
+
+  <!-- Call Javascript functions -->
   <script type="text/javascript"> placeholder() </script>
   <script type="text/javascript"> tooltip() </script>
   <script type="text/javascript"> calendar() </script>
+  <script type="text/javascript"> rangeStyle() </script>
   </body>
 </html>
