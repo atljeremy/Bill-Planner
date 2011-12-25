@@ -39,6 +39,7 @@ body {
 	margin-top: 35px;
 	margin-right: auto;
 	margin-left: auto;
+	margin-bottom: 50px;
 }
 
 #footer {
@@ -92,10 +93,28 @@ body {
   height: 136px;
 }
 
-#checkAmount {
+#checkAmountDiv {
   position: relative;
   left: 238px;
-  top: 47px;
+  top: 16px;
+}
+
+#checkNameDiv {
+  position: relative;
+  left: 160px;
+  top: 51px;
+}
+
+#checkPayToDiv {
+  position: relative;
+  left: 45px;
+  top: 30px;
+}
+
+#checkDateDiv {
+  position: relative;
+  left: 170px;
+  top: 25px;
 }
 
 /*********************************************************
@@ -207,10 +226,10 @@ h1 {
 
 #checkDate {
   color: black;
-  font-size: 14px;
+  font-size: 11px;
 }
 
 #checkName {
   color: black;
-  font-size: 14px;
+  font-size: 13px;
 }

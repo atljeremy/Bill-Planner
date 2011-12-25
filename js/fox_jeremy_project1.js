@@ -39,6 +39,10 @@
     return document.getElementById("checkDate").innerHTML = newValue;
   };
 
+  this.showYourName = function(newValue) {
+    return document.getElementById("checkName").innerHTML = newValue;
+  };
+
   this.currentDate = function() {
     var currentTime, day, month, showDate, year;
     currentTime = new Date();
@@ -105,7 +109,7 @@
   this.calendar = function() {
     $(":date").dateinput({
       trigger: true,
-      format: 'mmmm dd yyyy',
+      format: 'mmm dd yyyy',
       min: -1
     });
     return $(":date").bind("onShow onHide", function() {

@@ -27,6 +27,9 @@ Simple HTML5 / Javascript Mobile Web Form
   
 @showDate = (newValue) ->
   document.getElementById("checkDate").innerHTML=newValue
+  
+@showYourName = (newValue) ->
+  document.getElementById("checkName").innerHTML=newValue
 
 @currentDate = () ->
   currentTime = new Date()
@@ -73,7 +76,7 @@ Simple HTML5 / Javascript Mobile Web Form
     opacity: 0.7
     
 @calendar = () ->
-  $(":date").dateinput(trigger: true, format: 'mmmm dd yyyy', min: -1)
+  $(":date").dateinput(trigger: true, format: 'mmm dd yyyy', min: -1)
   $(":date").bind "onShow onHide", () ->
     $(this).parent().toggleClass("active")
     

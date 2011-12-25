@@ -38,8 +38,13 @@ Simple HTML5 / Javascript Mobile Web Form
       
       <form action="#" method="post" id="billForm">
       
+        <div id="sectionHeader">Your Name:</div>
+        <input type="text" placeholder="John doe" id="yourName" onchange="showYourName(this.value)" required aria-required="true" maxlength="50" title="Enter your name in this field. Maximum of 50 characters." />
+      
+        <p>
         <div id="sectionHeader">Pay To:</div>
         <input type="text" placeholder="Full Sail University" id="payTo" onchange="showPayTo(this.value)" required aria-required="true" maxlength="50" title="Enter payee in this field. Maximum of 50 characters." />
+        </p>
         
         <p>
         <div id="sectionHeader">Pay This Amount:</div>
@@ -51,7 +56,7 @@ Simple HTML5 / Javascript Mobile Web Form
         
         <p>
         <div id="sectionHeader">Pay On:</div>
-        <input type="date" class="datePicker" id="payOn" onchange="showDate(this.value)" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
+        <input type="date" placeholder="mm/dd/yyy" class="datePicker" id="payOn" onchange="showDate(this.value)" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
         <script type="text/javascript"> currentDate() </script>
         </p>
         
@@ -59,18 +64,24 @@ Simple HTML5 / Javascript Mobile Web Form
         <div id="sectionHeader">Check Preview:</div>
         <div id="checkImage">
         
-        <!-- Name -->
-        <span id="checkName">John Doe</span>
+        <!-- Date -->
+        <div id="checkDateDiv">
+        <span id="checkDate">Date</span>
+        </div>
         
         <!-- Pay To  -->
+        <div id="checkPayToDiv">
         <span id="checkPayTo">0</span>
-        
-        <!-- Date -->
-        <span id="checkDate">0</span>
+        </div>
         
         <!-- Check Amount -->
-        <div id="checkAmount">
+        <div id="checkAmountDiv">
         <span id="range">0</span><font id="rangeExtras">.00</font>
+        </div>
+        
+        <!-- Name -->
+        <div id="checkNameDiv">
+        <span id="checkName">John Doe</span>
         </div>
         
         </div>
