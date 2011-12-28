@@ -1,0 +1,10 @@
+Deliverable 1
+Author: Jeremy Fox
+Created For: VFW Online
+Simple HTML5 / Javascript Mobile Web Form
+
+Modernizr:
+modernizer.js library is being utilized in this project. This is an open source javascript library that can be found here http://www.modernizr.com/
+
+jQuery:
+jquery-1.7.1.min.js library is being utilized in this project. This is an open source javascript library that can be found here http://jquery.com/
