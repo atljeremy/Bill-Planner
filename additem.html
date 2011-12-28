@@ -12,6 +12,8 @@ Simple HTML5 / Javascript Mobile Web Form
     <meta name="keywords" content="vfw, project 1" />
     <meta name="description" content="VFW Project 1" />
     <meta name="robots" content="" />
+    <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;"/>
+    <meta name="HandheldFriendly" content="true" />
     <title>VFW - Project 1</title>
     
     <!-- My Projects CSS -->
@@ -71,7 +73,7 @@ Simple HTML5 / Javascript Mobile Web Form
         
         <!-- Pay To  -->
         <div id="checkPayToDiv">
-        <span id="checkPayTo">0</span>
+        <span id="checkPayTo">Test</span>
         </div>
         
         <!-- Check Amount -->
@@ -81,7 +83,7 @@ Simple HTML5 / Javascript Mobile Web Form
         
         <!-- Name -->
         <div id="checkNameDiv">
-        <span id="checkName">John Doe</span>
+        <span id="checkName">John</span>
         </div>
         
         </div>
@@ -89,12 +91,12 @@ Simple HTML5 / Javascript Mobile Web Form
         
         <p>
         <div id="sectionHeader">Remember This Payment:</div>
-        Yes: <input type="checkbox" id="rememberYes" checked="checked" onclick="uncheckNo()" title="Checking this option will store this payment for future use." />
-        No: <input type="checkbox" id="rememberNo" value="No" onclick="uncheckYes()" title="Checking this option will not store this payment for future use."/>
+        Yes: <input type="checkbox" id="rememberYes" checked="checked" onclick="uncheckNo()" />
+        No: <input type="checkbox" id="rememberNo" value="No" onclick="uncheckYes()" />
         </p>
         
         <p>
-        <input type="submit" id="submitBillForm" title="Please make sure you have filled in all required fields. Pay To, Pay This Amount, Pay From, and Pay On field are required."/>
+        <input type="submit" id="submitBillForm" />
         </p>
       </form>
     </div>  

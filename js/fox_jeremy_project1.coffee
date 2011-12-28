@@ -16,7 +16,7 @@ Simple HTML5 / Javascript Mobile Web Form
   for account in accounts
     accountStripped = account.toLowerCase()
     accountStripped = accountStripped.replace(/\s+/g, "")
-    output = "#{account}: <input type=\"radio\" name=\"test\" value=\"#{accountStripped}\" id=\"payFrom\" onfocus=\"tooltip()\" required aria-required=\"true\" title=\"Please choose one of your accounts to make this payment from.\" /><br />"
+    output = "#{account}: <input type=\"radio\" name=\"test\" value=\"#{accountStripped}\" id=\"payFrom\" required aria-required=\"true\" /><br />"
     document.write(output)
 
 @showAmount = (newValue) ->

@@ -21,7 +21,7 @@
       account = accounts[_i];
       accountStripped = account.toLowerCase();
       accountStripped = accountStripped.replace(/\s+/g, "");
-      output = "" + account + ": <input type=\"radio\" name=\"test\" value=\"" + accountStripped + "\" id=\"payFrom\" onfocus=\"tooltip()\" required aria-required=\"true\" title=\"Please choose one of your accounts to make this payment from.\" /><br />";
+      output = "" + account + ": <input type=\"radio\" name=\"test\" value=\"" + accountStripped + "\" id=\"payFrom\" required aria-required=\"true\" /><br />";
       _results.push(document.write(output));
     }
     return _results;
