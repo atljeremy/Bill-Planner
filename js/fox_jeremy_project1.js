@@ -28,7 +28,12 @@
   };
 
   this.showAmount = function(newValue) {
-    return document.getElementById("range").innerHTML = newValue;
+    document.getElementById("range").innerHTML = newValue;
+    this.convertAmountToWords(newValue);
+  };
+
+  this.showAmountWords = function(newValue) {
+    return document.getElementById("checkAmountWords").innerHTML = newValue;
   };
 
   this.showPayTo = function(newValue) {
@@ -98,7 +103,13 @@
   };
 
   this.tooltip = function() {
-    return $("#billForm :input").tooltip({
+    $("#yourName").tooltip({
+      position: "top center",
+      offset: [-10, 0],
+      effect: "fade",
+      opacity: 0.7
+    });
+    return $("#payTo").tooltip({
       position: "top center",
       offset: [-10, 0],
       effect: "fade",
@@ -119,6 +130,124 @@
 
   this.rangeStyle = function() {
     return $(":range").rangeinput();
+  };
+
+  /*
+  The concept of the following functions were found here: http://www.tek-tips.com/viewthread.cfm?qid=859695
+  It has been edited to suit my needs
+  */
+
+  this.convert0_99ToWords = function(intValue) {
+    var tensAmount, unitsAmount;
+    if (isNaN(intValue) || intValue < 0 || intValue > 99) return "";
+    intValue = parseInt(intValue, 10);
+    switch (intValue) {
+      case 0:
+        return "";
+      case 1:
+        return "one";
+      case 2:
+        return "two";
+      case 3:
+        return "three";
+      case 4:
+        return "four";
+      case 5:
+        return "five";
+      case 6:
+        return "six";
+      case 7:
+        return "seven";
+      case 8:
+        return "eight";
+      case 9:
+        return "nine";
+      case 10:
+        return "ten";
+      case 11:
+        return "eleven";
+      case 12:
+        return "twelve";
+      case 13:
+        return "thirteen";
+      case 14:
+        return "fourteen";
+      case 15:
+        return "fifteen";
+      case 16:
+        return "sixteen";
+      case 17:
+        return "seventeen";
+      case 18:
+        return "eighteen";
+      case 19:
+        return "nineteen";
+      case 20:
+        return "twenty";
+      case 30:
+        return "thirty";
+      case 40:
+        return "fourty";
+      case 50:
+        return "fifty";
+      case 60:
+        return "sixty";
+      case 70:
+        return "seventy";
+      case 80:
+        return "eighty";
+      case 90:
+        return "ninety";
+      default:
+        tensAmount = parseInt(intValue / 10) * 10;
+        unitsAmount = intValue - tensAmount;
+        return _this.convert0_99ToWords(tensAmount) + " " + _this.convert0_99ToWords(unitsAmount);
+    }
+  };
+
+  this.convertAmountToWords = function(amount) {
+    var amountNumber, amountWords, centsAmount, dollarsAmount, negativeAmount, tempDollarsAmount, tempHundredsAmount, tempTensAmount;
+    amountNumber = amount;
+    if (isNaN(amountNumber)) {
+      alert("You have not entered a valid number. Use only numbers (0-9) and full-stop character (.)");
+      return;
+    }
+    if (amountNumber === "") {
+      alert("You have not entered anything.");
+      return;
+    }
+    negativeAmount = amountNumber.indexOf("-") !== -1;
+    if (negativeAmount) amountNumber = amountNumber.replace("-", "");
+    if (amountNumber.indexOf(".") === 0) amountNumber = "0" + amountNumber;
+    dollarsAmount = parseInt(amountNumber, 10);
+    tempDollarsAmount = dollarsAmount;
+    centsAmount = parseInt((parseFloat(amountNumber) - dollarsAmount).toFixed(2) * 100, 10);
+    amountWords = "";
+    tempTensAmount = (dollarsAmount > 9 ? parseInt(dollarsAmount.toString().substr(dollarsAmount.toString().length - 2), 10) : dollarsAmount);
+    amountWords = this.convert0_99ToWords(tempTensAmount);
+    tempDollarsAmount -= tempTensAmount;
+    if (tempDollarsAmount > 99) {
+      tempHundredsAmount = parseInt(tempDollarsAmount / 100, 10).toString();
+      tempHundredsAmount = parseInt(tempHundredsAmount.charAt(tempHundredsAmount.length - 1), 10);
+      if (tempHundredsAmount !== 0) {
+        if (tempTensAmount !== 0) {
+          amountWords = this.convert0_99ToWords(tempHundredsAmount) + " hundred and " + amountWords;
+        } else {
+          amountWords = this.convert0_99ToWords(tempHundredsAmount) + " hundred " + amountWords;
+        }
+      }
+      tempDollarsAmount -= tempHundredsAmount * 100;
+    }
+    if (dollarsAmount > 0) {
+      amountWords += (dollarsAmount === 1 ? " dollar" : " dollars");
+    }
+    if (dollarsAmount === 0) amountWords += "0";
+    if (centsAmount > 0) {
+      if (dollarsAmount > 0) amountWords += " and ";
+      amountWords += this.convert0_99ToWords(centsAmount) + (centsAmount === 1 ? " cent" : " cents");
+    }
+    if (negativeAmount) amountWords = "Negative " + amountWords;
+    return this.showAmountWords(amountWords);
   };
 
 }).call(this);

@@ -13,24 +13,16 @@ body {
   Div Styles
 *********************************************************/
 #header {
-  color: white;
-  font-size: 12px;
-  font-family: Helvetica, Verdana, Arial, sans-serif;
-  background: -moz-linear-gradient(top,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0)));
-  background: -webkit-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  background: -o-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  background: -ms-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  background: linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
+  background-image: url(../i/header-fade.png);
+  background-repeat: repeat-x;
   width: 100%;
   height: 35px;
   margin-top: 0px;
-  margin-left: auto;
-  margin-right: auto;
   padding: 10px;
   position: fixed;
   top: 0px;
+  display: block;
+  text-align: center;
   z-index: 1000;
 }
 
@@ -95,15 +87,25 @@ body {
 #checkAmountDiv {
   position: relative;
   left: 238px;
-  top: 16px;
+  top: 18px;
   width: 50px;
+  height: auto;
+}
+
+#checkAmountWordsDiv {
+  position: relative;
+  left: 18px;
+  top: 17px;
+  width: 215px;
+  height: auto;
 }
 
 #checkNameDiv {
   position: relative;
   left: 160px;
-  top: 51px;
+  top: 35px;
   width: 130px;
+  height: auto;
 }
 
 #checkPayToDiv {
@@ -111,6 +113,7 @@ body {
   left: 45px;
   top: 30px;
   width: 180px;
+  height: auto;
 }
 
 #checkDateDiv {
@@ -118,6 +121,7 @@ body {
   left: 170px;
   top: 25px;
   width: 75px;
+  height: auto;
 }
 
 /*********************************************************
@@ -205,26 +209,40 @@ input:focus:valid {
   Text Styles
 *********************************************************/
 h1 {
-  font-family: Helvetica, Verdana, Arial, sans-serif;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 20px;
+  text-shadow: 2px 2px 4px #000;
+  filter: dropshadow(color=#000, offx=2, offy=2);
+}
+
+#headerTitle {
+  font-size: 25px;
   text-shadow: 2px 2px 4px #000;
   filter: dropshadow(color=#000, offx=2, offy=2);
 }
 
 #rangeExtras {
   color: black;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 #range {
   color: black;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+#checkAmountWords {
+  color: black;
+  font-size: 10px;
+}
+
+#checkAmountWordsCents {
+  color: black;
+  font-size: 10px;
 }
 
 #checkPayTo {
   color: black;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 #checkDate {
@@ -234,5 +252,5 @@ h1 {
 
 #checkName {
   color: black;
-  font-size: 13px;
+  font-size: 12px;
 }
