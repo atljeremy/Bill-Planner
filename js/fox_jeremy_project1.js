@@ -13,6 +13,20 @@
 
   this.pullData = function() {};
 
+  this.scrollToTop = function() {
+    var d, e, g, w, x, y;
+    w = window;
+    d = document;
+    e = d.documentElement;
+    g = d.getElementsByTagName('body')[0];
+    x = w.innerWidth || e.clientWidth || g.clientWidth;
+    y = w.innerHeight || e.clientHeight || g.clientHeight;
+    y += 60;
+    alert(y);
+    $("#PAGETOP").css("min-height", y + 'px');
+    $(this).scrollTo("#PAGETOP", 1000);
+  };
+
   this.getAccounts = function() {
     var account, accountStripped, accounts, output, _i, _len, _results;
     accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];

@@ -24,15 +24,11 @@ Simple HTML5 / Javascript Mobile Web Form
     <link rel="stylesheet" href="css/calendar.css" type="text/css" />
     <link rel="stylesheet" href="css/range.css" type="text/css" />
     
-    <!-- No reason to reinvent the wheel, let's just use some awesome pre-existing libraries -->
-    <script type="text/javascript" src="js/modernizr.js"></script>
-    <script type="text/javascript" src="js/jquery.tools.min.js"></script>
-    
     <!-- My Projects JS -->
     <script type="text/javascript" src="js/fox_jeremy_project1.js"></script>
   </head>
 
-  <body>
+  <body id="PAGETOP">
 
     <div id="header"> <span id="headerTitle">Bill Planner</span> </div>
 
@@ -108,7 +104,13 @@ Simple HTML5 / Javascript Mobile Web Form
     </div>  
     <div id="footer"> &copy My Company 2011 </div>
 
+  <!-- No reason to reinvent the wheel, let's just use some awesome pre-existing libraries -->
+  <script type="text/javascript" src="js/modernizr.js"></script>
+  <script type="text/javascript" src="js/jquery.tools.min.js"></script>
+  <script type="text/javascript" src="js/jquery.scrollTo-min.js"></script>
+
   <!-- Call Javascript functions -->
+  <script type="text/javascript"> scrollToTop() </script>
   <script type="text/javascript"> placeholder() </script>
   <script type="text/javascript"> tooltip() </script>
   <script type="text/javascript"> calendar() </script>

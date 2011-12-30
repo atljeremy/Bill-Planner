@@ -5,13 +5,27 @@ Created For: VFW Online
 Simple HTML5 / Javascript Mobile Web Form
 ###
 
-@saveData = () ->
+@saveData = ->
   #something
   
-@pullData = () ->
+@pullData = ->
   #something
   
-@getAccounts = () ->
+@scrollToTop = ->
+  w = window
+  d = document
+  e = d.documentElement
+  g = d.getElementsByTagName('body')[0]
+  x = w.innerWidth or e.clientWidth or g.clientWidth
+  y = w.innerHeight or e.clientHeight or g.clientHeight
+  y += 60
+  alert y
+  $("#PAGETOP").css("min-height", y + 'px')
+  $(this).scrollTo( "#PAGETOP", 1000 )
+  return
+
+  
+@getAccounts = ->
   accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
   for account in accounts
     accountStripped = account.toLowerCase()
@@ -36,7 +50,7 @@ Simple HTML5 / Javascript Mobile Web Form
 @showYourName = (newValue) ->
   document.getElementById("checkName").innerHTML=newValue
 
-@currentDate = () ->
+@currentDate = ->
   currentTime = new Date()
   month = currentTime.getMonth()+1
   day = currentTime.getDate()
@@ -44,13 +58,13 @@ Simple HTML5 / Javascript Mobile Web Form
   showDate = year + "-" + month + "-" + day
   document.getElementById("payOn").value=showDate
   
-@uncheckYes = () ->
+@uncheckYes = ->
   document.getElementById("rememberYes").checked=""
 
-@uncheckNo = () ->
+@uncheckNo = ->
   document.getElementById("rememberNo").checked=""
 
-@placeholder = () =>
+@placeholder = =>
   if !Modernizr.input.placeholder
     $("input[placeholder], textarea[placeholder]").each -> 
   
@@ -73,7 +87,7 @@ Simple HTML5 / Javascript Mobile Web Form
         if $(placeheld).val() == $(placeheld).attr('placeholder')
           $(placeheld).attr('value','')
           
-@tooltip = () =>
+@tooltip = =>
   $("#yourName").tooltip
     position: "top center"
     offset: [-10, 0]
@@ -86,12 +100,12 @@ Simple HTML5 / Javascript Mobile Web Form
     effect: "fade"
     opacity: 0.7
     
-@calendar = () ->
+@calendar = ->
   $(":date").dateinput(trigger: true, format: 'mmm dd yyyy', min: -1)
   $(":date").bind "onShow onHide", () ->
     $(this).parent().toggleClass("active")
     
-@rangeStyle = () ->
+@rangeStyle = ->
   $(":range").rangeinput()
 
 ###
