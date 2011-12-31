@@ -29,8 +29,15 @@ body {
 #plus {
   position: absolute;
   top: 6px;
-  right: 20px;
+  right: 30px;
 }
+
+#grid {
+  position: absolute;
+  top: 6px;
+  left: 10px;
+}
+
 
 #mainContent {
 	padding: 10px;
