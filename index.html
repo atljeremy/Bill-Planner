@@ -108,11 +108,17 @@ Simple HTML5 / Javascript Mobile Web Form
     </div>  
     <div id="footer"> &copy My Company 2011 </div>
 
-  <!-- Call Javascript functions -->
-  <script type="text/javascript"> scrollToTop() </script>
-  <script type="text/javascript"> placeholder() </script>
-  <script type="text/javascript"> tooltip() </script>
-  <script type="text/javascript"> calendar() </script>
-  <script type="text/javascript"> rangeStyle() </script>
+  <!-- Call Javascript functions ONLY when the DOM is ready -->
+  <script type="text/javascript">
+  $(document).ready(function() {
+    alert("DOM READY");
+    scrollToTop();
+    placeholder();
+    tooltip();
+    calendar();
+    rangeStyle();
+  });
+  </script>
+  <script type="text/javascript">alert("DOM NOT READY");</script>
   </body>
 </html>
