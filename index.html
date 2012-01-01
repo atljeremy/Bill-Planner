@@ -35,43 +35,40 @@ Simple HTML5 / Javascript Mobile Web Form
   <body id="PAGETOP">
 
     <div id="header">
-      <a href="#">
-      <div id="gridIcon"><img src="i/grid.png" alt="Add A New Bill"/></div>
-      </a>
       <span id="headerTitle">Bill Planner</span>
-      <a href="#">
-      <div id="plusIcon"><img src="i/plus.png" alt="Add A New Bill"/></div>
-      </a>
     </div>
-
+    
     <div id="mainContent">
       
-      <div id="grid">
-      
-        <div id="A">
-          <div id="gridBlock">Test 1</div>
+    <div id="grid">
+      <div class="row">
+        <div class="cell">
+          <div class="gridBlock">Test1</div>
         </div>
-        <div id="B">
-          <div id="gridBlock">Test 2</div>
+        <div class="cell">
+          <div class="gridBlock">Test2</div>
         </div>
-        <div id="C">
-          <div id="gridBlock">Test 3</div>
-        </div>
-        <div id="D">
-          <div id="gridBlock">Test 4</div>
-        </div>
-        
       </div>
-      
-    </div>  
-    <div id="footer"> &copy My Company 2011 </div>
+      <div class="row">
+        <div class="cell">
+          <div class="gridBlock">Test3</div>
+        </div>
+        <div class="cell">
+          <div class="gridBlock">Test4</div>
+        </div>
+      </div>
+    </div>
 
-  <!-- Fire the following Javascript functions ONLY when the DOM is ready -->
-  <script type="text/javascript">
-  $(document).ready(function() {
-    scrollToTop();
-  });
-  </script>
+    </div>
+ 
+    <div id="footer"> &copy My Company 2011 </div>
+  
+    <!-- Fire the following Javascript functions ONLY when the DOM is ready -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+      scrollToTop();
+    });
+    </script>
   
   </body>
 </html>
