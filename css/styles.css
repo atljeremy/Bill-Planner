@@ -46,6 +46,7 @@ body {
 
 #grid {
 	width: 320px;
+	margin-top: 10px;
 	overflow: scroll;
 	clear:both;
 }
