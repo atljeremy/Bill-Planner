@@ -26,23 +26,37 @@ body {
   z-index: 1000;
 }
 
-#plus {
+#plusIcon {
   position: absolute;
   top: 6px;
   right: 30px;
 }
 
-#grid {
+#gridIcon {
   position: absolute;
   top: 6px;
   left: 10px;
 }
 
-
 #mainContent {
 	padding: 10px;
 	margin-top: 35px;
 	width: 320px;
+}
+
+#grid { display: grid; grid-columns: 1fr 1fr; grid-rows: 1fr 1fr }
+#A { grid-column: 1; grid-row: 1; }
+#B { grid-column: 1; grid-row: 2; }
+#C { grid-column: 2; grid-row: 1; }
+#D { grid-column: 2; grid-row: 2; }
+
+#gridBlock {
+  background: #FF0000;
+  margin-left: auto;
+  margin-right: auto;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
 }
 
 #footer {

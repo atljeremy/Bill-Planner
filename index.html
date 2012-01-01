@@ -36,83 +36,33 @@ Simple HTML5 / Javascript Mobile Web Form
 
     <div id="header">
       <a href="#">
-      <div id="grid"><img src="i/grid.png" alt="Add A New Bill"/></div>
+      <div id="gridIcon"><img src="i/grid.png" alt="Add A New Bill"/></div>
       </a>
       <span id="headerTitle">Bill Planner</span>
       <a href="#">
-      <div id="plus"><img src="i/plus.png" alt="Add A New Bill"/></div>
+      <div id="plusIcon"><img src="i/plus.png" alt="Add A New Bill"/></div>
       </a>
     </div>
 
     <div id="mainContent">
-      <h1>Create a Payment</h1>
       
-      <form action="#" method="post" id="billForm">
+      <div id="grid">
       
-        <div id="sectionHeader">Your Name:</div>
-        <input type="text" placeholder="John doe" id="yourName" onchange="showYourName(this.value)" required aria-required="true" maxlength="25" title="Enter your name in this field. Maximum of 25 characters." />
+        <div id="A">
+          <div id="gridBlock">Test 1</div>
+        </div>
+        <div id="B">
+          <div id="gridBlock">Test 2</div>
+        </div>
+        <div id="C">
+          <div id="gridBlock">Test 3</div>
+        </div>
+        <div id="D">
+          <div id="gridBlock">Test 4</div>
+        </div>
+        
+      </div>
       
-        <p>
-        <div id="sectionHeader">Pay To:</div>
-        <input type="text" placeholder="Full Sail University" id="payTo" onchange="showPayTo(this.value)" required aria-required="true" maxlength="30" title="Enter payee in this field. Maximum of 30 characters." />
-        </p>
-        
-        <p>
-        <div id="sectionHeader">Pay This Amount:</div>
-        <input type="range" min="0" max="250" value="0" step="10" name="amount" id="payAmount" list="amounts" onchange="showAmount(this.value)" required aria-required="true" title="Use slider to select the amount you would like to pay." />       
-        </p>
-
-        <div id="sectionHeader">Pay From:</div>
-        <script type="text/javascript"> getAccounts() </script>
-        
-        <p>
-        <div id="sectionHeader">Pay On:</div>
-        <input type="date" placeholder="mm/dd/yyy" class="datePicker" id="payOn" onchange="showDate(this.value)" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
-        <script type="text/javascript"> currentDate() </script>
-        </p>
-        
-        <p>
-        <div id="sectionHeader">Check Preview:</div>
-        <div id="checkImage">
-        
-        <!-- Date -->
-        <div id="checkDateDiv">
-        <span id="checkDate">&nbsp;</span>
-        </div>
-        
-        <!-- Pay To  -->
-        <div id="checkPayToDiv">
-        <span id="checkPayTo">&nbsp;</span>
-        </div>
-        
-        <!-- Check Amount -->
-        <div id="checkAmountDiv">
-        <span id="range">0</span><font id="rangeExtras">.00</font>
-        </div>
-        
-        <!-- Check Amount in Words -->
-        <div id="checkAmountWordsDiv">
-        <span id="checkAmountWords">0</span><font id="checkAmountWordsCents"> and 00/100</font>
-        </div>
-        
-        <!-- Name -->
-        <div id="checkNameDiv">
-        <span id="checkName">&nbsp;</span>
-        </div>
-        
-        </div>
-        </p>
-        
-        <p>
-        <div id="sectionHeader">Remember This Payment:</div>
-        Yes: <input type="checkbox" id="rememberYes" checked="checked" onclick="uncheckNo()" title="Test"/>
-        No: <input type="checkbox" id="rememberNo" onclick="uncheckYes()" title="test2"/>
-        </p>
-        
-        <p>
-        <input type="submit" id="submitBillForm" />
-        </p>
-      </form>
     </div>  
     <div id="footer"> &copy My Company 2011 </div>
 
@@ -120,14 +70,8 @@ Simple HTML5 / Javascript Mobile Web Form
   <script type="text/javascript">
   $(document).ready(function() {
     scrollToTop();
-    placeholder();
-    tooltip();
-    calendar();
   });
   </script>
-  
-  <!-- Fire the following Javascript functions immediatley -->
-  <script type="text/javascript">rangeStyle()</script>
   
   </body>
 </html>
