@@ -22,24 +22,23 @@
     x = w.innerWidth || e.clientWidth || g.clientWidth;
     y = w.innerHeight || e.clientHeight || g.clientHeight;
     y += 60;
-    $("body").css("min-height", y + 'px');
-    $('html, body').animate({
-      scrollTop: $("#PAGETOP").offset().top
-    }, 1000);
+    alert(y);
+    $("#PAGETOP").css("min-height", y + 'px');
+    $.scrollTo('#PAGETOP', 1000);
   };
 
   this.getAccounts = function() {
-    var account, accountStripped, accounts, output, _i, _len, _results;
+    var account, accountStripped, accounts, output, _i, _len;
     accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
-    _results = [];
+    document.write("<select id=\"payFrom\" required aria-required=\"true\">");
     for (_i = 0, _len = accounts.length; _i < _len; _i++) {
       account = accounts[_i];
       accountStripped = account.toLowerCase();
       accountStripped = accountStripped.replace(/\s+/g, "");
-      output = "" + account + ": <input type=\"radio\" name=\"test\" value=\"" + accountStripped + "\" id=\"payFrom\" required aria-required=\"true\" /><br />";
-      _results.push(document.write(output));
+      output = "<option value=\"" + accountStripped + "\" />" + account + "</option>    ";
+      document.write(output);
     }
-    return _results;
+    return document.write("</select>");
   };
 
   this.showAmount = function(newValue) {

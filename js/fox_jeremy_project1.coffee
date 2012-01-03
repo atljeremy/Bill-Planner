@@ -26,12 +26,15 @@ Simple HTML5 / Javascript Mobile Web Form
 
 @getAccounts = ->
   accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
+  document.write("<select id=\"payFrom\" required aria-required=\"true\">")
   for account in accounts
     accountStripped = account.toLowerCase()
     accountStripped = accountStripped.replace(/\s+/g, "")
-    output = "#{account}: <input type=\"radio\" name=\"test\" value=\"#{accountStripped}\" id=\"payFrom\" required aria-required=\"true\" /><br />"
+    output = "<option value=\"#{accountStripped}\" />#{account}</option>
+    "
     document.write(output)
-
+  document.write("</select>")
+    
 @showAmount = (newValue) ->
   document.getElementById("range").innerHTML=newValue
   @convertAmountToWords(newValue)
