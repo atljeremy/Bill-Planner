@@ -19,11 +19,11 @@ Simple HTML5 / Javascript Mobile Web Form
   x = w.innerWidth or e.clientWidth or g.clientWidth
   y = w.innerHeight or e.clientHeight or g.clientHeight
   y += 60
-  $("body").css("min-height", y + 'px')
-  $('html, body').animate({scrollTop: $("#PAGETOP").offset().top}, 1000)
+  alert y
+  $("#PAGETOP").css("min-height", y + 'px')
+  $.scrollTo( '#PAGETOP', 1000,  )
   return
 
-  
 @getAccounts = ->
   accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
   for account in accounts
