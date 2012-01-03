@@ -22,9 +22,10 @@
     x = w.innerWidth || e.clientWidth || g.clientWidth;
     y = w.innerHeight || e.clientHeight || g.clientHeight;
     y += 60;
-    alert(y);
     $("#PAGETOP").css("min-height", y + 'px');
-    $.scrollTo('#PAGETOP', 1000);
+    $("html, body").animate({
+      scrollTop: 0
+    }, 1000);
   };
 
   this.getAccounts = function() {
