@@ -5,8 +5,8 @@
   Simple HTML5 / Javascript Mobile Web Form
   */
 
-  this.saveData = function() {};
+  this.storeData = function() {};
 
-  this.pullData = function() {};
+  this.getData = function() {};
 
   this.getAccounts = function() {};

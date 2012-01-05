@@ -5,10 +5,10 @@ Created For: VFW Online
 Simple HTML5 / Javascript Mobile Web Form
 ###
 
-@saveData = ->
+@storeData = ->
   #something
   
-@pullData = ->
+@getData = ->
   #something
 
 @getAccounts = ->
