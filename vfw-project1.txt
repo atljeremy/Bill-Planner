@@ -1,1 +1,4 @@
 Git Repo: https://github.com/atljeremy/VFW-Project-1
+gh-pages URL's:
+http://atljeremy.github.com
+http://atljeremy.github.com/VFW-Project-1
