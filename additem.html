@@ -16,18 +16,7 @@ Simple HTML5 / Javascript Mobile Web Form
     <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;"/>
     <meta name="HandheldFriendly" content="true" />
     <title>VFW - Project 1</title>
-    
-    <!-- My Projects CSS -->
-    <link rel="stylesheet" href="css/styles.css" type="text/css" />
-    
-    <!-- CSS Required by Libraries -->
-    <link rel="stylesheet" href="css/calendar.css" type="text/css" />
-    <link rel="stylesheet" href="css/range.css" type="text/css" />
-    
-    <!-- No reason to reinvent the wheel, let's just use some awesome pre-existing libraries -->
-    <script type="text/javascript" src="js/modernizr.js"></script>
-    <script type="text/javascript" src="js/jquery.tools.min.js"></script>
-  
+
     <!-- My Projects JS -->
     <script type="text/javascript" src="js/fox_jeremy_project1.js"></script>
   </head>
@@ -35,13 +24,7 @@ Simple HTML5 / Javascript Mobile Web Form
   <body id="PAGETOP">
 
     <div id="header">
-      <a href="index.html">
-      <div id="gridIcon"><img src="i/grid.png" alt="Add A New Bill"/></div>
-      </a>
       <span id="headerTitle">Bill Planner</span>
-      <a href="#">
-      <div id="plusIcon"><img src="i/plus.png" alt="Add A New Bill"/></div>
-      </a>
     </div>
 
     <div id="mainContent">
@@ -104,8 +87,8 @@ Simple HTML5 / Javascript Mobile Web Form
         <br /><br />
         
         <div class="sectionHeader">Remember This Payment:</div>
-          Yes: <input type="checkbox" id="rememberYes" checked="checked" onclick="uncheckNo()" title="Test"/>
-          No: <input type="checkbox" id="rememberNo" onclick="uncheckYes()" title="test2"/>
+          Yes: <input type="checkbox" id="rememberYes" checked="checked" title="Test"/>
+          No: <input type="checkbox" id="rememberNo" title="test2"/>
           <br /><br />
 
         
@@ -114,19 +97,5 @@ Simple HTML5 / Javascript Mobile Web Form
       </form>
     </div>  
     <div id="footer"> &copy; My Company 2011 </div>
-
-  <!-- Fire the following Javascript functions ONLY when the DOM is ready -->
-  <script type="text/javascript">
-  $(document).ready(function() {
-    scrollToTop();
-    placeholder();
-    tooltip();
-    calendar();
-  });
-  </script>
-  
-  <!-- Fire the following Javascript functions immediatley -->
-  <script type="text/javascript">rangeStyle()</script>
-  
   </body>
 </html>
