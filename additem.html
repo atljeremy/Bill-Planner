@@ -5,6 +5,7 @@ Deliverable 1
 Author: Jeremy Fox
 Created For: VFW Online
 Simple HTML5 / Javascript Mobile Web Form
+additem.html
 -->
 
 <html>
@@ -12,53 +13,57 @@ Simple HTML5 / Javascript Mobile Web Form
     <meta charset="UTF-8" />
     <meta name="keywords" content="vfw, project 1" />
     <meta name="description" content="VFW Project 1" />
-    <meta name="robots" content="" />
-    <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;"/>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;" />
     <meta name="HandheldFriendly" content="true" />
     <title>VFW - Project 1</title>
-
-    <!-- My Projects JS -->
-    <script type="text/javascript" src="js/fox_jeremy_project1.js"></script>
+    
+    <!-- all "id"'s and "class"'s within this project are placeholders for future CSS styles -->
   </head>
 
   <body id="PAGETOP">
 
     <div id="header">
-      <span id="headerTitle">Bill Planner</span>
+      <h1>Bill Planner</h1>
     </div>
 
     <div id="mainContent">
-      <h1>Create a Payment</h1>
+      <h2>Create a Payment</h2>
       
       <form action="#" method="post" id="billForm">
       
         <div class="sectionHeader">Your Name:</div>
-          <input type="text" placeholder="John doe" id="yourName" onchange="showYourName(this.value)" required aria-required="true" maxlength="25" title="Enter your name in this field. Maximum of 25 characters." />
+          <input type="text" placeholder="John doe" id="yourName" required aria-required="true" maxlength="25" title="Enter your name in this field. Maximum of 25 characters." />
           <br /><br />
-      
         
         <div class="sectionHeader">Pay To:</div>
-          <input type="text" placeholder="Full Sail University" id="payTo" onchange="showPayTo(this.value)" required aria-required="true" maxlength="30" title="Enter payee in this field. Maximum of 30 characters." />
+          <input type="text" placeholder="Full Sail University" id="payTo" required aria-required="true" maxlength="30" title="Enter payee in this field. Maximum of 30 characters." />
           <br /><br />
         
-        
         <div class="sectionHeader">Pay This Amount:</div>
-          <input type="range" min="0" max="250" value="0" step="10" name="amount" id="payAmount" list="amounts" onchange="showAmount(this.value)" required aria-required="true" title="Use slider to select the amount you would like to pay." />    
+          <input type="range" min="0" max="250" value="0" step="10" name="amount" id="payAmount" list="amounts" required aria-required="true" title="Use slider to select the amount you would like to pay." />    
           <br /><br />   
 
         <div class="sectionHeader">Pay From:</div>
-          
+          <select>
+            <option value="volvo">Account 1</option>
+            <option value="saab">Account 2</option>
+          </select>
           <br /><br />
         
         <div class="sectionHeader">Pay On:</div>
-          <input type="date" placeholder="mm/dd/yyy" class="datePicker" id="payOn" onchange="showDate(this.value)" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
+          <input type="date" placeholder="mm/dd/yyy" class="datePicker" id="payOn" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
+          <br /><br />
+          
+        <div class="sectionHeader">Notes:</div>
+          <textarea></textarea>
           <br /><br />
         
         <div class="sectionHeader">Remember This Payment:</div>
+          <!-- These will be single selection after the addition of jQuery -->
           Yes: <input type="checkbox" id="rememberYes" checked="checked" title="Test"/>
           No: <input type="checkbox" id="rememberNo" title="test2"/>
           <br /><br />
-
         
         <input type="submit" id="submitBillForm" />
 
