@@ -23,26 +23,29 @@ additem.html
 
   <body id="PAGETOP">
 
-    <div id="header">
+    <header>
       <h1>Bill Planner</h1>
-    </div>
+    </header>
 
     <div id="mainContent">
       <h2>Create a Payment</h2>
       
       <form action="#" method="post" id="billForm">
       
-        <div class="sectionHeader">Your Name:</div>
+        <section>
+          <header>Your Name:</header>
           <input type="text" id="yourName" required maxlength="25" title="Enter your name in this field. Maximum of 25 characters." placeholder="John doe" />
-          <br /><br />
+        </section>
         
-        <div class="sectionHeader">Pay To:</div>
+        <section>
+          <header>Pay To:</header>
           <input type="text" id="payTo" required maxlength="30" title="Enter payee in this field. Maximum of 30 characters." placeholder="Full Sail University" />
-          <br /><br />
+        </section>
         
-        <div class="sectionHeader">Pay This Amount:</div>
+        <section>
+          <header>Pay This Amount:</header>
           <input type="range" id="payAmount" required min="0" max="250" value="0" step="10" name="amount" title="Use slider to select the amount you would like to pay." />    
-          <br /><br />   
+        </section>   
 
         <div class="sectionHeader">Pay From:</div>
           <select>
@@ -51,24 +54,27 @@ additem.html
           </select>
           <br /><br />
         
-        <div class="sectionHeader">Pay On:</div>
+        <section>
+          <header>Pay On:</header>
           <input type="date" id="payOn" required class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /><br />
-          <br /><br />
+        </section>
           
-        <div class="sectionHeader">Notes:</div>
+        <section>
+          <header>Notes:</header>
           <textarea></textarea>
-          <br /><br />
+        </section>
         
-        <div class="sectionHeader">Remember This Payment:</div>
+        <section>
+          <header>Remember This Payment:</header>
           <!-- These will be single selection after the addition of jQuery -->
           Yes: <input type="checkbox" id="rememberYes" checked="checked" title="Test"/>
           No: <input type="checkbox" id="rememberNo" title="test2"/>
-          <br /><br />
+        </section>
         
         <input type="submit" id="submitBillForm" />
 
       </form>
     </div>  
-    <div id="footer"> &copy; My Company 2011 </div>
+    <footer> &copy; My Company 2011 </footer>
   </body>
 </html>
