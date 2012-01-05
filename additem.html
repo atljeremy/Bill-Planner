@@ -33,15 +33,15 @@ additem.html
       <form action="#" method="post" id="billForm">
       
         <div class="sectionHeader">Your Name:</div>
-          <input type="text" placeholder="John doe" id="yourName" required aria-required="true" maxlength="25" title="Enter your name in this field. Maximum of 25 characters." />
+          <input type="text" placeholder="John doe" id="yourName" required maxlength="25" title="Enter your name in this field. Maximum of 25 characters." />
           <br /><br />
         
         <div class="sectionHeader">Pay To:</div>
-          <input type="text" placeholder="Full Sail University" id="payTo" required aria-required="true" maxlength="30" title="Enter payee in this field. Maximum of 30 characters." />
+          <input type="text" placeholder="Full Sail University" id="payTo" required maxlength="30" title="Enter payee in this field. Maximum of 30 characters." />
           <br /><br />
         
         <div class="sectionHeader">Pay This Amount:</div>
-          <input type="range" min="0" max="250" value="0" step="10" name="amount" id="payAmount" list="amounts" required aria-required="true" title="Use slider to select the amount you would like to pay." />    
+          <input type="range" min="0" max="250" value="0" step="10" name="amount" id="payAmount" required title="Use slider to select the amount you would like to pay." />    
           <br /><br />   
 
         <div class="sectionHeader">Pay From:</div>
@@ -52,7 +52,7 @@ additem.html
           <br /><br />
         
         <div class="sectionHeader">Pay On:</div>
-          <input type="date" placeholder="mm/dd/yyy" class="datePicker" id="payOn" required aria-required="true" title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
+          <input type="date" placeholder="mm/dd/yyy" class="datePicker" id="payOn" required title="Enter the date you would like to make this payment. Format is yyyy-mm-dd."/><br />
           <br /><br />
           
         <div class="sectionHeader">Notes:</div>
