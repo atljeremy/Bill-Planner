@@ -18,22 +18,62 @@ index.html
     <meta name="HandheldFriendly" content="true" />
     <title>Bill Planner</title>
     
-    <!-- all "id"'s and "class"'s within this project are placeholders for future CSS styles -->
+    <!-- jQuery Mobile CSS -->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+    
+    <!-- My CSS -->
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
   </head>
 
   <body id="PAGETOP">
 
-    <header>
-      <h1>Bill Planner</h1>
-    </header>
+    <div data-role="page" data-theme="c">
+  
+    	<div data-role="header">
+        <a href="" class="hidden"></a>
+    		<h1>Bill Planner</h1>
+    		<a href="additem.html" rel="external">
+        <img src="i/plus.png" alt="Add A New Bill"/>
+        </a>
+    	</div><!-- /header -->
+    
+    	<div data-role="content">	
 
-    <div id="mainContent">
-      Let <b>Bill Planner</b> help you stay on track! Let's get started…<br /><br />
+        Let <b>Bill Planner</b> help you stay on track! Let's get started…<br /><br />
+      
+        <div id="grid">
+          <div class="row">
+            <div class="cell">
+              <a href="additem.html"><div class="gridBlock">Add A Bill</div></a>
+            </div>
+            <div class="cell">
+              <a href="#"><div class="gridBlock">Review & Edit Bills</div></a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="cell">
+              <a href="#"><div class="gridBlock">Test</div></a>
+            </div>
+            <div class="cell">
+              <a href="#"><div class="gridBlock">Test</div></a>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /content -->
     
-      <a href="additem.html">Add A Bill</a>
-      <a href="#">Review & Edit Bills</a>
-    </div>
+      <div data-role="footer">
+        <h4>&copy; My Company 2011</h4>
+      </div> <!-- /footer -->
+      
+    </div> <!-- /page -->
     
-    <footer> &copy; My Company 2011 </footer>
+    <!-- My JS -->
+    <script src="js/main.js"></script>
+    
+    <!-- jQuery and jQuery Mobile JS - both are required for jQuery Mobile -->
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+    
   </body>
 </html>
