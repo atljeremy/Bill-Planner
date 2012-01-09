@@ -31,7 +31,7 @@ additem.html
 
   <body id="PAGETOP">
   
-    <div data-role="page" id="cacheMe" data-dom-cache="true" data-theme="c">
+    <div data-role="page" id="addItem" data-dom-cache="true" data-theme="c">
   
     	<div data-role="header">
         <a href="index.html">
@@ -89,13 +89,15 @@ additem.html
     <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
     
-      <!-- Fire the following Javascript functions ONLY when the DOM is ready -->
-  <script type="text/javascript">
-  $(document).ready(function() {
-    getAccounts()
-    currentDate();
-  });
-  </script>
+    <!-- Fire the following Javascript functions ONLY when the DOM is ready -->
+    <script type="text/javascript">
+    $( '#addItem' ).live( 'pageinit',function(event){
+      alert( 'This page was just enhanced by jQuery Mobile!' );
+
+      getAccounts();
+      currentDate();
+    });
+    </script>
 
   </body>
 </html>
