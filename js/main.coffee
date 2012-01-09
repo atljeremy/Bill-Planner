@@ -15,10 +15,9 @@ Simple HTML5 / Javascript Mobile Web Form
   #something
   
 getAccounts = ->
-  accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
-  accountsform = $("#billForm");
-  liSelect = $("#select");
-  makeSelect = document.createElement("select");
+  accounts      = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
+  liSelect      = document.getElementById("selectAccounts");
+  makeSelect    = document.createElement("select");
   makeSelect.setAttribute("id", "payFrom");
   for account in accounts
     makeOpt = document.createElement("option");

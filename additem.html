@@ -34,7 +34,7 @@ additem.html
 
   <body id="PAGETOP">
   
-    <div data-role="page" data-id="addItem" data-dom-cache="true" data-theme="c">
+    <div data-role="page" id="addItem" data-dom-cache="true" data-theme="c">
   
     	<div data-role="header">
         <a href="index.html">
@@ -58,7 +58,7 @@ additem.html
                 
                 <li><label for="payAmount" class="sectionHeader">Pay This Amount:</label><input type="range" id="payAmount" required min="0" max="250" value="0" step="10" name="amount" title="Use slider to select the amount you would like to pay." /></li>
                 
-                <li id="select"><label for="payFrom" class="sectionHeader">Pay From:</label></li>
+                <li id="selectAccounts"><label for="payFrom" class="sectionHeader">Pay From:</label></li>
                 
                 <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" required class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
                 
@@ -89,7 +89,7 @@ additem.html
     </div><!-- /page -->
     
     <script type="text/javascript">
-    $( '#aboutPage' ).live( 'pageinit',function(event){
+    $( '#addItem' ).live( 'pageinit',function(event){
       $.mobile.accounts();
       $.mobile.date();
     });

@@ -16,10 +16,9 @@
   this.addAccount = function(account) {};
 
   getAccounts = function() {
-    var account, accounts, accountsform, liSelect, makeOpt, makeSelect, _i, _len;
+    var account, accounts, liSelect, makeOpt, makeSelect, _i, _len;
     accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
-    accountsform = $("#billForm");
-    liSelect = $("#select");
+    liSelect = document.getElementById("selectAccounts");
     makeSelect = document.createElement("select");
     makeSelect.setAttribute("id", "payFrom");
     for (_i = 0, _len = accounts.length; _i < _len; _i++) {
