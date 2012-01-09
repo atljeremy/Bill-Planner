@@ -27,12 +27,12 @@ index.html
 
   <body id="PAGETOP">
 
-    <div data-role="page" data-theme="c">
+    <div data-role="page" id="cacheMe" data-dom-cache="true" data-theme="c">
   
     	<div data-role="header">
         <a href="" class="hidden"></a>
     		<h1>Bill Planner</h1>
-    		<a href="additem.html" rel="external">
+    		<a href="additem.html" data-prefetch>
         <img src="i/plus.png" alt="Add A New Bill"/>
         </a>
     	</div><!-- /header -->
@@ -44,7 +44,7 @@ index.html
         <div id="grid">
           <div class="row">
             <div class="cell">
-              <a href="additem.html"><div class="gridBlock">Add A Bill</div></a>
+              <a href="additem.html" data-prefetch><div class="gridBlock">Add A Bill</div></a>
             </div>
             <div class="cell">
               <a href="#"><div class="gridBlock">Review & Edit Bills</div></a>
