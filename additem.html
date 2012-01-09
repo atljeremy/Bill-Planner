@@ -91,7 +91,7 @@ additem.html
     
     <!-- Fire the following Javascript functions ONLY when the DOM is ready -->
     <script type="text/javascript">
-    $( '#addItem' ).live( 'pageinit',function(event){
+    $( '#addItem' ).live( 'pageshow',function(event, ui){
       alert( 'This page was just enhanced by jQuery Mobile!' );
 
       getAccounts();
