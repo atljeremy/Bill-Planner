@@ -14,7 +14,7 @@ Simple HTML5 / Javascript Mobile Web Form
 @addAccount = (account) ->
   #something
   
-@getAccounts = ->
+getAccounts = ->
   accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
   document.write("<select id=\"payFrom\" required aria-required=\"true\">")
   for account in accounts
@@ -25,7 +25,7 @@ Simple HTML5 / Javascript Mobile Web Form
     document.write(output)
   document.write("</select>")
 
-@currentDate = ->
+currentDate = ->
   currentTime = new Date()
   month = currentTime.getMonth()+1
   day = currentTime.getDate()
@@ -41,3 +41,7 @@ add0 = (n) ->
 
 @uncheckNo = ->
   document.getElementById("rememberNo").checked="false"
+  
+$(document).bind "mobileinit", ->
+  $.mobile.accounts = getAccounts
+  $.mobile.date     = currentDate

@@ -25,8 +25,12 @@ additem.html
     <!-- My CSS -->
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
     
+    <!-- jQuery - required for jQuery Mobile -->
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
     <!-- My JS -->
     <script src="js/main.js"></script>
+    <!-- jQuery Mobile JS -->
+    <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
   </head>
 
   <body id="PAGETOP">
@@ -55,9 +59,13 @@ additem.html
                 
                 <li><label for="payAmount" class="sectionHeader">Pay This Amount:</label><input type="range" id="payAmount" required min="0" max="250" value="0" step="10" name="amount" title="Use slider to select the amount you would like to pay." /></li>
                 
-                <li><label for="payFrom" class="sectionHeader">Pay From:</label></li>
+                <li><label for="payFrom" class="sectionHeader">Pay From:</label>
+                <script type="text/javascript">$.mobile.accounts()</script>
+                </li>
                 
-                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" required class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
+                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" required class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" />
+                <script type="text/javascript">$.mobile.date()</script>
+                </li>
                 
                 <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes"></textarea></li>
               </ul>
@@ -85,11 +93,8 @@ additem.html
   	
     </div><!-- /page -->
     
-    <!-- jQuery and jQuery Mobile JS - both are required for jQuery Mobile -->
-    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
-    
     <!-- Fire the following Javascript functions ONLY when the DOM is ready -->
+<!--
     <script type="text/javascript">
     $( '#addItem' ).live( 'pageshow',function(event, ui){
       alert( 'This page was just enhanced by jQuery Mobile!' );
@@ -98,6 +103,7 @@ additem.html
       currentDate();
     });
     </script>
+-->
 
   </body>
 </html>

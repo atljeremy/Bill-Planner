@@ -7,7 +7,7 @@
   Simple HTML5 / Javascript Mobile Web Form
   */
 
-  var add0;
+  var add0, currentDate, getAccounts;
 
   this.storeData = function() {};
 
@@ -15,7 +15,7 @@
 
   this.addAccount = function(account) {};
 
-  this.getAccounts = function() {
+  getAccounts = function() {
     var account, accountStripped, accounts, output, _i, _len;
     accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
     document.write("<select id=\"payFrom\" required aria-required=\"true\">");
@@ -29,7 +29,7 @@
     return document.write("</select>");
   };
 
-  this.currentDate = function() {
+  currentDate = function() {
     var currentTime, day, month, showDate, year;
     currentTime = new Date();
     month = currentTime.getMonth() + 1;
@@ -54,5 +54,10 @@
   this.uncheckNo = function() {
     return document.getElementById("rememberNo").checked = "false";
   };
+
+  $(document).bind("mobileinit", function() {
+    $.mobile.accounts = getAccounts;
+    return $.mobile.date = currentDate;
+  });
 
 }).call(this);
