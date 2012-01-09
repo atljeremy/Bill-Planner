@@ -16,17 +16,20 @@
   this.addAccount = function(account) {};
 
   getAccounts = function() {
-    var account, accountStripped, accounts, output, _i, _len;
+    var account, accounts, accountsform, liSelect, makeOpt, makeSelect, _i, _len;
     accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
-    document.write("<select id=\"payFrom\" required aria-required=\"true\">");
+    accountsform = $("#billForm");
+    liSelect = $("#select");
+    makeSelect = document.createElement("select");
+    makeSelect.setAttribute("id", "payFrom");
     for (_i = 0, _len = accounts.length; _i < _len; _i++) {
       account = accounts[_i];
-      accountStripped = account.toLowerCase();
-      accountStripped = accountStripped.replace(/\s+/g, "");
-      output = "<option value=\"" + accountStripped + "\" />" + account + "</option>    ";
-      document.write(output);
+      makeOpt = document.createElement("option");
+      makeOpt.setAttribute("value", account);
+      makeOpt.innerHTML = account;
+      makeSelect.appendChild(makeOpt);
     }
-    return document.write("</select>");
+    liSelect.appendChild(makeSelect);
   };
 
   currentDate = function() {

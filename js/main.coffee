@@ -16,14 +16,17 @@ Simple HTML5 / Javascript Mobile Web Form
   
 getAccounts = ->
   accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
-  document.write("<select id=\"payFrom\" required aria-required=\"true\">")
+  accountsform = $("#billForm");
+  liSelect = $("#select");
+  makeSelect = document.createElement("select");
+  makeSelect.setAttribute("id", "payFrom");
   for account in accounts
-    accountStripped = account.toLowerCase()
-    accountStripped = accountStripped.replace(/\s+/g, "")
-    output = "<option value=\"#{accountStripped}\" />#{account}</option>
-    "
-    document.write(output)
-  document.write("</select>")
+    makeOpt = document.createElement("option");
+    makeOpt.setAttribute("value", account);
+    makeOpt.innerHTML = account;
+    makeSelect.appendChild(makeOpt);
+  liSelect.appendChild(makeSelect);
+  return
 
 currentDate = ->
   currentTime = new Date()
