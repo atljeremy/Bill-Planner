@@ -40,7 +40,7 @@ index.html
     	<div data-role="header">
         <a href="" class="hidden"></a>
     		<h1>Bill Planner</h1>
-    		<a href="additem.html" data-prefetch>
+    		<a href="additem.html" ref="external">
         <img src="i/plus.png" alt="Add A New Bill"/>
         </a>
     	</div><!-- /header -->
@@ -52,7 +52,7 @@ index.html
         <div id="grid">
           <div class="row">
             <div class="cell">
-              <a href="additem.html" data-prefetch><div class="gridBlock">Add A Bill</div></a>
+              <a href="additem.html" ref="external"><div class="gridBlock">Add A Bill</div></a>
             </div>
             <div class="cell">
               <a href="#"><div class="gridBlock">Review & Edit Bills</div></a>
@@ -75,14 +75,6 @@ index.html
       </div> <!-- /footer -->
       
     </div> <!-- /page -->
-    
-    <!-- The following functions are used on the addItem page but need to be here or they will cause problems with jQuery mobile -->
-    <script type="text/javascript">
-    $( '#addItem' ).live( 'pageinit',function(event){
-      $.mobile.accounts();
-      $.mobile.date();
-    });
-    </script>
     
   </body>
 </html>

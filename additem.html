@@ -88,6 +88,13 @@ additem.html
     	</div><!-- /footer -->
   	
     </div><!-- /page -->
+    
+    <script type="text/javascript">
+    $( '#addItem' ).live( 'pageinit',function(event){
+      $.mobile.accounts();
+      $.mobile.date();
+    });
+    </script>
 
   </body>
 </html>
