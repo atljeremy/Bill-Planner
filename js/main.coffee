@@ -6,7 +6,31 @@ Simple HTML5 / Javascript Mobile Web Form
 ###
 
 @storeData = ->
-  #something
+  newDate = new Date()
+  itemId = newDate.getTime()
+  
+  item = {}
+  item.name = ["Name:", ""]
+  item.payto = ["Pay To:", ""]
+  item.amount = ["Amount:", ""]
+  item.account = ["From Account:", ""]
+  item.payon = ["Pay On:", ""]
+  item.notes = ["Notes:", ""]
+  item.remember = ["Remember This Payment:", getFavValue]
+
+  try
+    localStorage.setItem itemId, JSON.stringify(item)
+  catch (e)
+    if (e == QUOTA_EXCEEDED_ERR)
+      alert('Quota exceeded!')
+
+getFavValue = ->
+  radios = document.forms[0].favorite
+  for radio in radios
+    if radio.checked
+      rememberValue = ""
+      rememberValue = radio.value
+      return rememberValue
   
 @getData = ->
   #something
