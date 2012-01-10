@@ -11,7 +11,7 @@
   Main Metheds
   */
 
-  var add0, currentDate, getAccounts, getFavValue, validateRequiredFields;
+  var add0, currentDate, getAccounts, getFavValue, stopEvent, validateRequiredFields;
 
   this.storeData = function() {
     var item, itemId, message, messages, newDate;
@@ -42,6 +42,21 @@
   this.getData = function() {};
 
   this.addAccount = function(account) {};
+
+  $("#billForm").live("submit", function(e) {
+    var formdata;
+    stopEvent(e);
+    formdata = $(this).serialize();
+    $.ajax({
+      type: "POST",
+      url: "additem.html",
+      data: formdata,
+      success: function() {
+        return storeData();
+      }
+    });
+    return false;
+  });
 
   /*
   Helper Methods
@@ -87,6 +102,16 @@
       message.push("Please Enter The Date You Would Like To Make This Payment.");
     }
     return message;
+  };
+
+  stopEvent = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if ($.browser.msie) {
+      event.originalEvent.keyCode = 0;
+      event.originalEvent.cancelBubble = true;
+      return event.originalEvent.returnValue = false;
+    }
   };
 
   /*

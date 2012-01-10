@@ -37,7 +37,18 @@ Main Metheds
   #something
 
 @addAccount = (account) ->
-  #something 
+  #something
+  
+$("#billForm").live "submit", (e) ->
+  stopEvent(e)
+  formdata = $(this).serialize()
+  $.ajax
+    type: "POST"
+    url: "additem.html"
+    data: formdata
+    success: ->
+      storeData()
+  return false
 
 ###
 Helper Methods
@@ -67,6 +78,14 @@ validateRequiredFields = ->
   message.push "Please Enter The Date You Would Like To Make This Payment." if $("#payOn").val() == null or $("#payOn").val() == ""
   
   return message
+
+stopEvent = (event) ->
+  event.preventDefault()
+  event.stopPropagation()
+  if $.browser.msie
+    event.originalEvent.keyCode = 0
+    event.originalEvent.cancelBubble = true
+    event.originalEvent.returnValue = false
 
 ###
 Bind to jQueries mobileinit
