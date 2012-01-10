@@ -13,7 +13,7 @@ Main Metheds
   itemId = newDate.getTime()
   
   messages = validateRequiredFields()
-  unless messages == null or message == ""
+  unless _.isEmpty(messages) 
     message = messages.join('\n')
     alert message
   else

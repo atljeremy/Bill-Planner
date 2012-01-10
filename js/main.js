@@ -18,7 +18,7 @@
     newDate = new Date();
     itemId = newDate.getTime();
     messages = validateRequiredFields();
-    if (messages !== null || message !== "") {
+    if (!_.isEmpty(messages)) {
       message = messages.join('\n');
       return alert(message);
     } else {

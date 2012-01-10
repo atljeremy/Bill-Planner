@@ -24,6 +24,10 @@ additem.html
     <!-- My CSS -->
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
     
+    
+    <script src="js/underscore.js"></script>
+    <script src="js/underscore.string.js"></script>
+    
     <!-- jQuery - required for jQuery Mobile -->
     <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
     <!-- My JS -->
@@ -49,7 +53,7 @@ additem.html
     
     	<div data-role="content">	
 
-        <form action="#" method="post" id="billForm">
+        <form action="#" method="post" id="billForm" data-ajax="false">
           <fieldset>
             <legend><h2>Create a Payment</h2></legend>
               <ul>
@@ -92,15 +96,6 @@ additem.html
     	</div><!-- /footer -->
   	
     </div><!-- /page -->
-    
-<!--
-    <script type="text/javascript">
-    $( '#addItem' ).live( 'pageinit',function(event){
-      $.mobile.accounts();
-      $.mobile.date();
-    });
-    </script>
--->
 
   </body>
 </html>
