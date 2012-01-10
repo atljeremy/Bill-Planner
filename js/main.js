@@ -7,9 +7,40 @@
   Simple HTML5 / Javascript Mobile Web Form
   */
 
-  var add0, currentDate, getAccounts;
+  var add0, currentDate, getAccounts, getFavValue;
 
-  this.storeData = function() {};
+  this.storeData = function() {
+    var item, itemId, newDate;
+    newDate = new Date();
+    itemId = newDate.getTime();
+    item = {};
+    item.name = ["Name:", $("#name").val()];
+    item.payto = ["Pay To:", $("#payTo").val()];
+    item.amount = ["Amount:", $("#payAmount").val()];
+    item.account = ["From Account:", $("#payFrom").val()];
+    item.payon = ["Pay On:", $("#payOn").val()];
+    item.notes = ["Notes:", $("#notes").val()];
+    item.remember = ["Remember This Payment:", getFavValue()];
+    try {
+      localStorage.setItem(itemId, JSON.stringify(item));
+      return alert("Bill Added!");
+    } catch (e) {
+      if (e === QUOTA_EXCEEDED_ERR) return alert('Quota exceeded!');
+    }
+  };
+
+  getFavValue = function() {
+    var radio, radios, rememberValue, _i, _len;
+    radios = document.forms[0].remember;
+    for (_i = 0, _len = radios.length; _i < _len; _i++) {
+      radio = radios[_i];
+      if (radio.checked) {
+        rememberValue = "";
+        rememberValue = radio.value;
+        return rememberValue;
+      }
+    }
+  };
 
   this.getData = function() {};
 
@@ -59,7 +90,7 @@
 
   $(document).bind("mobileinit", function() {
     $.mobile.accounts = getAccounts;
-    return $.mobile.date = currentDate;
+    $.mobile.date = currentDate;
   });
 
 }).call(this);

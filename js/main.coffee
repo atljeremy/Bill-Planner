@@ -10,22 +10,23 @@ Simple HTML5 / Javascript Mobile Web Form
   itemId = newDate.getTime()
   
   item = {}
-  item.name = ["Name:", ""]
-  item.payto = ["Pay To:", ""]
-  item.amount = ["Amount:", ""]
-  item.account = ["From Account:", ""]
-  item.payon = ["Pay On:", ""]
-  item.notes = ["Notes:", ""]
-  item.remember = ["Remember This Payment:", getFavValue]
+  item.name = ["Name:", $("#name").val()]
+  item.payto = ["Pay To:", $("#payTo").val()]
+  item.amount = ["Amount:", $("#payAmount").val()]
+  item.account = ["From Account:", $("#payFrom").val()]
+  item.payon = ["Pay On:", $("#payOn").val()]
+  item.notes = ["Notes:", $("#notes").val()]
+  item.remember = ["Remember This Payment:", getFavValue()]
 
   try
     localStorage.setItem itemId, JSON.stringify(item)
-  catch (e)
+    alert("Bill Added!")
+  catch e
     if (e == QUOTA_EXCEEDED_ERR)
       alert('Quota exceeded!')
 
 getFavValue = ->
-  radios = document.forms[0].favorite
+  radios = document.forms[0].remember
   for radio in radios
     if radio.checked
       rememberValue = ""
@@ -39,9 +40,9 @@ getFavValue = ->
   #something
   
 getAccounts = ->
-  accounts      = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
-  liSelect      = document.getElementById("selectAccounts");
-  makeSelect    = document.createElement("select");
+  accounts   = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
+  liSelect   = document.getElementById("selectAccounts");
+  makeSelect = document.createElement("select");
   makeSelect.setAttribute("id", "payFrom");
   for account in accounts
     makeOpt = document.createElement("option");
@@ -71,3 +72,4 @@ add0 = (n) ->
 $(document).bind "mobileinit", ->
   $.mobile.accounts = getAccounts
   $.mobile.date     = currentDate
+  return

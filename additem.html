@@ -53,7 +53,7 @@ additem.html
           <fieldset>
             <legend><h2>Create a Payment</h2></legend>
               <ul>
-                <li><label for="yourName" class="sectionHeader">Your Name:</label><input type="text" id="yourName" required maxlength="25" title="Enter your name in this field. Maximum of 25 characters." placeholder="John doe" /></li>
+                <li><label for="yourName" class="sectionHeader">Your Name:</label><input type="text" id="name" required maxlength="25" title="Enter your name in this field. Maximum of 25 characters." placeholder="John doe" /></li>
                 
                 <li><label for="payTo" class="sectionHeader">Pay To:</label><input type="text" id="payTo" required maxlength="30" title="Enter payee in this field. Maximum of 30 characters." placeholder="Full Sail University" /></li>
                 
@@ -72,7 +72,7 @@ additem.html
             <label for="rememberNo"> No </label><input type="radio" id="rememberNo" name="remember" value="No"/>
           </section>
           
-          <input type="submit" id="submitBillForm" value="Add This Bill" />
+          <input type="submit" id="submitBillForm" value="Add This Bill" onclick="storeData()" />
           
           </fieldset>
         </form>
