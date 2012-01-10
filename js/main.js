@@ -7,25 +7,51 @@
   Simple HTML5 / Javascript Mobile Web Form
   */
 
-  var add0, currentDate, getAccounts, getFavValue;
+  /*
+  Main Metheds
+  */
+
+  var add0, currentDate, getAccounts, getFavValue, validateRequiredFields;
 
   this.storeData = function() {
-    var item, itemId, newDate;
+    var item, itemId, message, messages, newDate;
     newDate = new Date();
     itemId = newDate.getTime();
-    item = {};
-    item.name = ["Name:", $("#name").val()];
-    item.payto = ["Pay To:", $("#payTo").val()];
-    item.amount = ["Amount:", $("#payAmount").val()];
-    item.account = ["From Account:", $("#payFrom").val()];
-    item.payon = ["Pay On:", $("#payOn").val()];
-    item.notes = ["Notes:", $("#notes").val()];
-    item.remember = ["Remember This Payment:", getFavValue()];
-    try {
-      localStorage.setItem(itemId, JSON.stringify(item));
-      return alert("Bill Added!");
-    } catch (e) {
-      if (e === QUOTA_EXCEEDED_ERR) return alert('Quota exceeded!');
+    messages = validateRequiredFields();
+    if (messages !== null || message !== "") {
+      message = messages.join('\n');
+      return alert(message);
+    } else {
+      item = {};
+      item.name = ["Name:", $("#name").val()];
+      item.payto = ["Pay To:", $("#payTo").val()];
+      item.amount = ["Amount:", $("#payAmount").val()];
+      item.account = ["From Account:", $("#payFrom").val()];
+      item.payon = ["Pay On:", $("#payOn").val()];
+      item.notes = ["Notes:", $("#notes").val()];
+      item.remember = ["Remember This Payment:", getFavValue()];
+      try {
+        localStorage.setItem(itemId, JSON.stringify(item));
+        return alert("Bill Added!");
+      } catch (e) {
+        if (e === QUOTA_EXCEEDED_ERR) return alert('Quota exceeded!');
+      }
+    }
+  };
+
+  this.getData = function() {};
+
+  this.addAccount = function(account) {};
+
+  /*
+  Helper Methods
+  */
+
+  add0 = function(n) {
+    if (n < 10) {
+      return "0" + n;
+    } else {
+      return "" + n;
     }
   };
 
@@ -42,13 +68,39 @@
     }
   };
 
-  this.getData = function() {};
+  validateRequiredFields = function() {
+    var message;
+    message = [];
+    if ($("#name").val() === null || $("#name").val() === "") {
+      message.push("Please Enter Your Name.");
+    }
+    if ($("#payTo").val() === null || $("#payTo").val() === "") {
+      message.push("Please Enter Who You Would Like To Pay.");
+    }
+    if ($("#payAmount").val() === null || $("#payAmount").val() === 0) {
+      message.push("Please Enter The Amount To Pay.");
+    }
+    if ($("#payFrom").val() === null || $("#payFrom").val() === "" || $("#payFrom").val() === "-- Choose Account --") {
+      message.push("Please Enter The Account To Pay From.");
+    }
+    if ($("#payOn").val() === null || $("#payOn").val() === "") {
+      message.push("Please Enter The Date You Would Like To Make This Payment.");
+    }
+    return message;
+  };
 
-  this.addAccount = function(account) {};
+  /*
+  Bind to jQueries mobileinit
+  */
+
+  $(document).bind("mobileinit", function() {
+    $.mobile.accounts = getAccounts;
+    $.mobile.date = currentDate;
+  });
 
   getAccounts = function() {
     var account, accounts, liSelect, makeOpt, makeSelect, _i, _len;
-    accounts = ["Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
+    accounts = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
     liSelect = document.getElementById("selectAccounts");
     makeSelect = document.createElement("select");
     makeSelect.setAttribute("id", "payFrom");
@@ -71,26 +123,5 @@
     showDate = year + "-" + add0(month) + "-" + add0(day);
     return document.getElementById("payOn").value = showDate;
   };
-
-  add0 = function(n) {
-    if (n < 10) {
-      return "0" + n;
-    } else {
-      return "" + n;
-    }
-  };
-
-  this.uncheckYes = function() {
-    return document.getElementById("rememberYes").checked = "false";
-  };
-
-  this.uncheckNo = function() {
-    return document.getElementById("rememberNo").checked = "false";
-  };
-
-  $(document).bind("mobileinit", function() {
-    $.mobile.accounts = getAccounts;
-    $.mobile.date = currentDate;
-  });
 
 }).call(this);
