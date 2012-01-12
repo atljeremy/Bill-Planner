@@ -15,7 +15,7 @@ ul {
 }
 
 li {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 /*********************************************************
@@ -51,6 +51,13 @@ li {
   text-shadow: 2px 2px 4px #000;
   filter: dropshadow(color=#000, offx=2, offy=2);
   margin-top: 10px;
+}
+
+/* jQuery Mobile Grouped Buttons - Horizontal */
+.ui-controlgroup-horizontal .ui-checkbox, .ui-controlgroup-horizontal .ui-radio {
+  display: inline-block;
+  float: none;
+  margin-right: -5px;
 }
 
 /*********************************************************
@@ -153,11 +160,28 @@ li {
 
 .center {
   text-align: center;
-  margin: 5px;
+  margin: 15px 0px 5px 0px;
 }
 
 .hidden {
   visibility: hidden;
+}
+
+#items {
+  visibility: hidden;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  background: -moz-linear-gradient(top,  rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.40) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.40)), color-stop(100%,rgba(0,0,0,0.40)));
+  background: -webkit-linear-gradient(top,  rgba(0,0,0,0.40) 0%,rgba(0,0,0,0.40) 100%);
+  background: -o-linear-gradient(top,  rgba(0,0,0,0.40) 0%,rgba(0,0,0,0.40) 100%);
+  background: -ms-linear-gradient(top,  rgba(0,0,0,0.40) 0%,rgba(0,0,0,0.40) 100%);
+  background: linear-gradient(top,  rgba(0,0,0,0.40) 0%,rgba(0,0,0,0.40) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#a6000000',GradientType=0 );
 }
 
 /*********************************************************
@@ -235,20 +259,4 @@ h2 {
   font-size: 15px;
   text-shadow: 2px 2px 4px #000;
   filter: dropshadow(color=#000, offx=2, offy=2);
-}
-
-#headerTitle {
-  font-size: 25px;
-  text-shadow: 2px 2px 4px #000;
-  filter: dropshadow(color=#000, offx=2, offy=2);
-}
-
-#rangeExtras {
-  color: black;
-  font-size: 13px;
-}
-
-#range {
-  color: black;
-  font-size: 13px;
 }

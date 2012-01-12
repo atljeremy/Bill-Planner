@@ -24,9 +24,8 @@ additem.html
     <!-- My CSS -->
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
     
-    
+    <!-- Underscore is a utility-belt library for JavaScript that provides a lot of the functional programming support -->
     <script src="js/underscore.js"></script>
-    <script src="js/underscore.string.js"></script>
     
     <!-- jQuery - required for jQuery Mobile -->
     <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
@@ -72,13 +71,14 @@ additem.html
                 </li>
                 
                 <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes"></textarea></li>
+                
+                <li><label for="rememberGroup" class="sectionHeader">Remember This Payment:</label>
+                  <div data-role="controlgroup" data-type="horizontal" id="rememberGroup">
+                    <label for="rememberYes"> Yes </label><input type="radio" id="rememberYes" checked="checked" name="remember" value="Yes"/>
+                    <label for="rememberNo"> No </label><input type="radio" id="rememberNo" name="remember" value="No"/>
+                  </div>
+                </li>
               </ul>
-          
-          <section>
-            <header class="sectionHeader">Remember This Payment:</header>
-            <label for="rememberYes"> Yes </label><input type="radio" id="rememberYes" checked="checked" name="remember" value="Yes"/>
-            <label for="rememberNo"> No </label><input type="radio" id="rememberNo" name="remember" value="No"/>
-          </section>
           
           <input type="submit" id="submitBillForm" value="Add This Bill" />
           
@@ -86,7 +86,13 @@ additem.html
         </form>
     	
       	<section class="center">
-          <a href="#">Clear Stored Data</a> | <a href="#">Display Data</a>
+          <div data-role="controlgroup" data-type="horizontal">
+            <a href="#" data-role="button">Clear Stored Data</a><a href="#" data-role="button" onclick="getData()">Display Data</a>
+          </div>
+      	</section>
+      	
+      	<section>
+      	 <div id="items"><!-- This will be populated by the "Display Data" link --></div>
       	</section>
     	
     	</div><!-- /content -->

@@ -13,7 +13,7 @@ Main Metheds
   itemId = newDate.getTime()
   
   messages = validateRequiredFields()
-  unless _.isEmpty(messages) 
+  unless _.isEmpty(messages)
     message = messages.join('\n')
     alert message
   else
@@ -32,10 +32,30 @@ Main Metheds
     catch e
       if (e == QUOTA_EXCEEDED_ERR)
         alert('Quota exceeded!')
-  
-@getData = ->
-  #something
 
+@getData = ->
+  if _.size(localStorage) > 0
+    makeList = document.createElement("ul")
+    $("#items").append makeList
+    _.each(_.keys(localStorage), (key) ->
+      makeListItem = document.createElement("li")
+      makeList.appendChild makeListItem
+      value       = localStorage.getItem(key)
+      billObj     = JSON.parse value
+      makeSubList = document.createElement("ul")
+      makeListItem.appendChild makeSubList
+      _.each(billObj, (bill) ->
+        makeSubListItem = document.createElement("li")
+        makeSubList.appendChild makeSubListItem
+        optSubText = bill[0]+" "+bill[1]
+        makeSubListItem.innerHTML = optSubText
+        true
+      )
+      true
+    )
+    $("#items").css "visibility", "visible"
+    true
+  
 @addAccount = (account) ->
   #something
   
@@ -97,15 +117,15 @@ $(document).bind "mobileinit", ->
 
 getAccounts = ->
   accounts   = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
-  liSelect   = document.getElementById("selectAccounts");
-  makeSelect = document.createElement("select");
-  makeSelect.setAttribute("id", "payFrom");
+  liSelect   = document.getElementById("selectAccounts")
+  makeSelect = document.createElement("select")
+  makeSelect.setAttribute("id", "payFrom")
   for account in accounts
-    makeOpt = document.createElement("option");
-    makeOpt.setAttribute("value", account);
-    makeOpt.innerHTML = account;
-    makeSelect.appendChild(makeOpt);
-  liSelect.appendChild(makeSelect);
+    makeOpt = document.createElement("option")
+    makeOpt.setAttribute("value", account)
+    makeOpt.innerHTML = account
+    makeSelect.appendChild(makeOpt)
+  liSelect.appendChild(makeSelect)
   return
 
 currentDate = ->

@@ -1,16 +1,15 @@
+/*
+Deliverable 1
+Author: Jeremy Fox
+Created For: VFW Online
+Simple HTML5 / Javascript Mobile Web Form
+*/
+
+/*
+Main Metheds
+*/
+
 (function() {
-
-  /*
-  Deliverable 1
-  Author: Jeremy Fox
-  Created For: VFW Online
-  Simple HTML5 / Javascript Mobile Web Form
-  */
-
-  /*
-  Main Metheds
-  */
-
   var add0, currentDate, getAccounts, getFavValue, stopEvent, validateRequiredFields;
 
   this.storeData = function() {
@@ -39,7 +38,33 @@
     }
   };
 
-  this.getData = function() {};
+  this.getData = function() {
+    var makeList;
+    if (_.size(localStorage) > 0) {
+      makeList = document.createElement("ul");
+      $("#items").append(makeList);
+      _.each(_.keys(localStorage), function(key) {
+        var billObj, makeListItem, makeSubList, value;
+        makeListItem = document.createElement("li");
+        makeList.appendChild(makeListItem);
+        value = localStorage.getItem(key);
+        billObj = JSON.parse(value);
+        makeSubList = document.createElement("ul");
+        makeListItem.appendChild(makeSubList);
+        _.each(billObj, function(bill) {
+          var makeSubListItem, optSubText;
+          makeSubListItem = document.createElement("li");
+          makeSubList.appendChild(makeSubListItem);
+          optSubText = bill[0] + " " + bill[1];
+          makeSubListItem.innerHTML = optSubText;
+          return true;
+        });
+        return true;
+      });
+      $("#items").css("visibility", "visible");
+      return true;
+    }
+  };
 
   this.addAccount = function(account) {};
 
