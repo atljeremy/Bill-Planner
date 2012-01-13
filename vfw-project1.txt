@@ -1,4 +1,4 @@
-Git Repo: https://github.com/atljeremy/VFW-Project-1
+Git Repo: https://github.com/atljeremy/VFW-Project-1 (This will be the repo used for the entire course… I guess I should have named it differently. Also note, I am creating tags for each project submission during this course. Click on the "tags" link on the github repo page to view and/or download the project in its respect state.)
 gh-pages URL's:
 http://atljeremy.github.com
 http://atljeremy.github.com/VFW-Project-1

@@ -193,6 +193,14 @@ li {
   Input Styles
 *********************************************************/
 input {
+  color: #000000 !important;
+  font-family: Helvetica, Verdana, Arial, sans-serif;
+  font-size: 20px;
+  margin-left: 5px;
+}
+
+textarea {
+  color: #000000 !important;
   font-family: Helvetica, Verdana, Arial, sans-serif;
   font-size: 20px;
   margin-left: 5px;
