@@ -29,9 +29,10 @@ Main Metheds
     try
       localStorage.setItem itemId, JSON.stringify(item)
       alert("Bill Added!")
+      @setDataState()
+      return
     catch e
-      if (e == QUOTA_EXCEEDED_ERR)
-        alert('Quota exceeded!')
+      alert e
 
 @getData = ->
   if _.size(localStorage) > 0
@@ -53,12 +54,31 @@ Main Metheds
       )
       true
     )
-    $("#items").css "visibility", "visible"
     true
   
 @addAccount = (account) ->
   #something
-  
+
+@clearStorage = () ->
+  localStorage.clear();
+  alert "All Data Has Been Deleted."
+
+@setDataState = () ->
+  if $("#billForm").css("visibility") == "visible"
+    if localStorage.length > 0
+      hideBillForm()
+      viewItems()
+      getData()
+      $("#displayData").text "Display Form"
+      return
+    else
+      alert "Nothing To Display. Please Add A New Bill And Try Again."
+  else if $("#billForm").css("visibility") == "hidden"
+    hideItems()
+    $("#displayData").text "Display Data"
+    viewBillForm()
+    return
+
 $("#billForm").live "submit", (e) ->
   stopEvent(e)
   formdata = $(this).serialize()
@@ -106,6 +126,22 @@ stopEvent = (event) ->
     event.originalEvent.keyCode = 0
     event.originalEvent.cancelBubble = true
     event.originalEvent.returnValue = false
+    
+viewItems = ->
+  $("#items").css "visibility", "visible"
+  return
+  
+hideItems = ->
+  $("#items").css "visibility", "hidden"
+  return
+  
+viewBillForm = ->
+  $("#billForm").css "visibility", "visible"
+  return
+  
+hideBillForm = ->
+  $("#billForm").css "visibility", "hidden"
+  return
 
 ###
 Bind to jQueries mobileinit

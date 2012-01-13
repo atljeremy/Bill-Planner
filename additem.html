@@ -86,8 +86,8 @@ additem.html
         </form>
     	
       	<section class="center">
-          <div data-role="controlgroup" data-type="horizontal">
-            <a href="#" data-role="button">Clear Stored Data</a><a href="#" data-role="button" onclick="getData()">Display Data</a>
+          <div data-role="controlgroup" data-type="horizontal" id="links">
+            <a href="#" data-role="button" id="clearData" onclick="clearStorage()">Clear Stored Data</a><a href="#" data-role="button" id="displayData" onclick="setDataState()">Display Data</a>
           </div>
       	</section>
       	

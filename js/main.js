@@ -1,16 +1,17 @@
-/*
-Deliverable 1
-Author: Jeremy Fox
-Created For: VFW Online
-Simple HTML5 / Javascript Mobile Web Form
-*/
-
-/*
-Main Metheds
-*/
-
 (function() {
-  var add0, currentDate, getAccounts, getFavValue, stopEvent, validateRequiredFields;
+
+  /*
+  Deliverable 1
+  Author: Jeremy Fox
+  Created For: VFW Online
+  Simple HTML5 / Javascript Mobile Web Form
+  */
+
+  /*
+  Main Metheds
+  */
+
+  var add0, currentDate, getAccounts, getFavValue, hideBillForm, hideItems, stopEvent, validateRequiredFields, viewBillForm, viewItems;
 
   this.storeData = function() {
     var item, itemId, message, messages, newDate;
@@ -31,9 +32,10 @@ Main Metheds
       item.remember = ["Remember This Payment:", getFavValue()];
       try {
         localStorage.setItem(itemId, JSON.stringify(item));
-        return alert("Bill Added!");
+        alert("Bill Added!");
+        this.setDataState();
       } catch (e) {
-        if (e === QUOTA_EXCEEDED_ERR) return alert('Quota exceeded!');
+        return alert(e);
       }
     }
   };
@@ -61,12 +63,33 @@ Main Metheds
         });
         return true;
       });
-      $("#items").css("visibility", "visible");
       return true;
     }
   };
 
   this.addAccount = function(account) {};
+
+  this.clearStorage = function() {
+    localStorage.clear();
+    return alert("All Data Has Been Deleted.");
+  };
+
+  this.setDataState = function() {
+    if ($("#billForm").css("visibility") === "visible") {
+      if (localStorage.length > 0) {
+        hideBillForm();
+        viewItems();
+        getData();
+        $("#displayData").text("Display Form");
+      } else {
+        return alert("Nothing To Display. Please Add A New Bill And Try Again.");
+      }
+    } else if ($("#billForm").css("visibility") === "hidden") {
+      hideItems();
+      $("#displayData").text("Display Data");
+      viewBillForm();
+    }
+  };
 
   $("#billForm").live("submit", function(e) {
     var formdata;
@@ -137,6 +160,22 @@ Main Metheds
       event.originalEvent.cancelBubble = true;
       return event.originalEvent.returnValue = false;
     }
+  };
+
+  viewItems = function() {
+    $("#items").css("visibility", "visible");
+  };
+
+  hideItems = function() {
+    $("#items").css("visibility", "hidden");
+  };
+
+  viewBillForm = function() {
+    $("#billForm").css("visibility", "visible");
+  };
+
+  hideBillForm = function() {
+    $("#billForm").css("visibility", "hidden");
   };
 
   /*
