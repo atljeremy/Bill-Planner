@@ -1,17 +1,59 @@
+/*
+Deliverable 3
+Author: Jeremy Fox
+Created For: VFW Online
+Simple HTML5 / Javascript Mobile Web Form
+*/
+
+/*
+Variables
+*/
+
 (function() {
+  var add0, currentDate, destroyDataSet, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, validateRequiredFields, viewBillForm, viewItems,
+    _this = this;
+
+  this.dataViewState = false;
+
+  this.hasDataBeenDisplayed = false;
+
+  this.invalidateData = false;
 
   /*
-  Deliverable 1
-  Author: Jeremy Fox
-  Created For: VFW Online
-  Simple HTML5 / Javascript Mobile Web Form
+  State Control Methods
   */
+
+  setViewState = function(state) {
+    return _this.dataViewState = state;
+  };
+
+  getViewState = function() {
+    return _this.dataViewState;
+  };
+
+  setDataDisplayed = function(val) {
+    return _this.hasDataBeenDisplayed = val;
+  };
+
+  getDataDisplayed = function() {
+    return _this.hasDataBeenDisplayed;
+  };
+
+  setInvalidated = function(val) {
+    return _this.invalidateData = val;
+  };
+
+  getInvalidated = function() {
+    return _this.invalidateData;
+  };
+
+  destroyDataSet = function() {
+    return $("#items").empty();
+  };
 
   /*
   Main Metheds
   */
-
-  var add0, currentDate, getAccounts, getFavValue, hideBillForm, hideItems, stopEvent, validateRequiredFields, viewBillForm, viewItems;
 
   this.storeData = function() {
     var item, itemId, message, messages, newDate;
@@ -32,15 +74,16 @@
       item.remember = ["Remember This Payment:", getFavValue()];
       try {
         localStorage.setItem(itemId, JSON.stringify(item));
+        setInvalidated(true);
         alert("Bill Added!");
-        this.setDataState();
+        this.displayData();
       } catch (e) {
         return alert(e);
       }
     }
   };
 
-  this.getData = function() {
+  getData = function() {
     var makeList;
     if (_.size(localStorage) > 0) {
       makeList = document.createElement("ul");
@@ -52,6 +95,7 @@
         value = localStorage.getItem(key);
         billObj = JSON.parse(value);
         makeSubList = document.createElement("ul");
+        makeSubList.setAttribute("class", "bill");
         makeListItem.appendChild(makeSubList);
         _.each(billObj, function(bill) {
           var makeSubListItem, optSubText;
@@ -72,23 +116,6 @@
   this.clearStorage = function() {
     localStorage.clear();
     return alert("All Data Has Been Deleted.");
-  };
-
-  this.setDataState = function() {
-    if ($("#billForm").css("visibility") === "visible") {
-      if (localStorage.length > 0) {
-        hideBillForm();
-        viewItems();
-        getData();
-        $("#displayData").text("Display Form");
-      } else {
-        return alert("Nothing To Display. Please Add A New Bill And Try Again.");
-      }
-    } else if ($("#billForm").css("visibility") === "hidden") {
-      hideItems();
-      $("#displayData").text("Display Data");
-      viewBillForm();
-    }
   };
 
   $("#billForm").live("submit", function(e) {
@@ -163,19 +190,43 @@
   };
 
   viewItems = function() {
-    $("#items").css("visibility", "visible");
+    $("#items").css("display", "inline-block");
   };
 
   hideItems = function() {
-    $("#items").css("visibility", "hidden");
+    $("#items").css("display", "none");
   };
 
   viewBillForm = function() {
-    $("#billForm").css("visibility", "visible");
+    $("#billForm").css("display", "inline");
   };
 
   hideBillForm = function() {
-    $("#billForm").css("visibility", "hidden");
+    $("#billForm").css("display", "none");
+  };
+
+  this.displayData = function() {
+    if (localStorage.length > 0) {
+      if (getViewState()) {
+        setViewState(false);
+        hideItems();
+        viewBillForm();
+        $("#displayData").text("Display Data");
+      } else {
+        setViewState(true);
+        hideBillForm();
+        viewItems();
+        if (getDataDisplayed() === false || getInvalidated()) {
+          destroyDataSet();
+          getData();
+          setDataDisplayed(true);
+          setInvalidated(false);
+        }
+        $("#displayData").text("Display Form");
+      }
+    } else {
+      alert("Nothing To Display. Please Add A New Bill And Try Again.");
+    }
   };
 
   /*

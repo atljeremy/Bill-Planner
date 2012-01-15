@@ -8,7 +8,33 @@ Simple HTML5 / Javascript Mobile Web Form
 ###
 Variables
 ###
-@dataViewState = false
+@dataViewState        = false #false = bills (in localStorage) not visible. true = bills visible
+@hasDataBeenDisplayed = false #Keeps track of whether or not localStorage has been display, if so, there is no reason to re-query localStorage, just show the previously viewed data.
+@invalidateData       = false #set this to true when we need to force the app to re-query localStorage for new data.
+
+###
+State Control Methods
+###
+setViewState = (state) =>
+  @dataViewState = state
+
+getViewState = () =>
+  return @dataViewState
+  
+setDataDisplayed = (val) =>
+  @hasDataBeenDisplayed = val
+
+getDataDisplayed = () =>
+  return @hasDataBeenDisplayed
+  
+setInvalidated = (val) =>
+  @invalidateData = val
+
+getInvalidated = () =>
+  return @invalidateData
+  
+destroyDataSet = () ->
+  $("#items").empty()
 
 ###
 Main Metheds
@@ -33,28 +59,48 @@ Main Metheds
   
     try
       localStorage.setItem itemId, JSON.stringify(item)
+      setInvalidated(true)
       alert("Bill Added!")
-      setViewState()
-      @getData()
+      @displayData()
       return
     catch e
       alert e
 
-@getData = ->
+getData = ->
   if _.size(localStorage) > 0
+    #Create unordered list
     makeList = document.createElement("ul")
+    #Add list to "items" div
     $("#items").append makeList
+    
+    #for each item in localStorage do the following
     _.each(_.keys(localStorage), (key) ->
+      #Make a list item
       makeListItem = document.createElement("li")
+      #Add the list item to the Unordered list
       makeList.appendChild makeListItem
+      #Get the value of the item in localStorage
       value       = localStorage.getItem(key)
+      #parse the value's JSON
       billObj     = JSON.parse value
+      #create a new Unordered list within the original Unordered list
       makeSubList = document.createElement("ul")
+      
+      #set class attribute for the new Unordered list for styling
+      makeSubList.setAttribute("class", "bill")
+      
+      #Add the new Unordered list to the list item of original Unordered list
       makeListItem.appendChild makeSubList
+      
+      #for each bill in the billObj do the following
       _.each(billObj, (bill) ->
+        #Make a list item
         makeSubListItem = document.createElement("li")
+        #Add the list item to the new Unordered list
         makeSubList.appendChild makeSubListItem
+        #Create the text to display for each line
         optSubText = bill[0]+" "+bill[1]
+        #Add the text to the new list item
         makeSubListItem.innerHTML = optSubText
         true
       )
@@ -64,14 +110,6 @@ Main Metheds
   
 @addAccount = (account) ->
   #something
-  
-@setViewAndGetData = ->
-  console.log getViewState()
-  if getViewState()
-    #do nothing
-  else
-    @getData()
-    return
 
 @clearStorage = () ->
   localStorage.clear();
@@ -104,17 +142,11 @@ getFavValue = ->
 
 validateRequiredFields = ->
   message = []
-  
   message.push "Please Enter Your Name." if $("#name").val() == null or $("#name").val() == "" 
-  
   message.push "Please Enter Who You Would Like To Pay." if $("#payTo").val() == null or $("#payTo").val() == ""
-  
   message.push "Please Enter The Amount To Pay." if $("#payAmount").val() == null or $("#payAmount").val() == 0
-  
   message.push "Please Enter The Account To Pay From." if $("#payFrom").val() == null or $("#payFrom").val() == "" or $("#payFrom").val() == "-- Choose Account --"
-  
   message.push "Please Enter The Date You Would Like To Make This Payment." if $("#payOn").val() == null or $("#payOn").val() == ""
-  
   return message
 
 stopEvent = (event) ->
@@ -126,40 +158,45 @@ stopEvent = (event) ->
     event.originalEvent.returnValue = false
     
 viewItems = ->
-  $("#items").css "visibility", "visible"
+  $("#items").css "display", "inline-block"
   return
   
 hideItems = ->
-  $("#items").css "visibility", "hidden"
+  $("#items").css "display", "none"
   return
   
 viewBillForm = ->
-  $("#billForm").css "visibility", "visible"
+  $("#billForm").css "display", "inline"
   return
   
 hideBillForm = ->
-  $("#billForm").css "visibility", "hidden"
+  $("#billForm").css "display", "none"
   return
   
-setViewState = () =>
-  if $("#billForm").css("visibility") == "visible"
-    if localStorage.length > 0
-      hideBillForm()
-      viewItems()
-      @dataViewState = true
-      $("#displayData").text "Display Form"
+@displayData = () =>
+  if localStorage.length > 0
+    if getViewState()
+      #Bills are visible, show form
+      setViewState(false)
+      hideItems()
+      viewBillForm()
+      $("#displayData").text "Display Data"
       return
     else
-      alert "Nothing To Display. Please Add A New Bill And Try Again."
-  else if $("#billForm").css("visibility") == "hidden"
-    hideItems()
-    $("#displayData").text "Display Data"
-    viewBillForm()
-    @dataViewState = false
+      #Form is visible, show bills
+      setViewState(true)
+      hideBillForm()
+      viewItems()
+      if getDataDisplayed() == false or getInvalidated()
+        destroyDataSet()
+        getData()
+        setDataDisplayed(true)
+        setInvalidated(false)
+      $("#displayData").text "Display Form"
+      return
+  else
+    alert "Nothing To Display. Please Add A New Bill And Try Again."
     return
-
-getViewState = () =>
-  retrun @dataViewState
 
 ###
 Bind to jQueries mobileinit
