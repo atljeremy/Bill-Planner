@@ -1,9 +1,14 @@
 ###
-Deliverable 1
+Deliverable 3
 Author: Jeremy Fox
 Created For: VFW Online
 Simple HTML5 / Javascript Mobile Web Form
 ###
+
+###
+Variables
+###
+@dataViewState = false
 
 ###
 Main Metheds
@@ -29,7 +34,8 @@ Main Metheds
     try
       localStorage.setItem itemId, JSON.stringify(item)
       alert("Bill Added!")
-      @setDataState()
+      setViewState()
+      @getData()
       return
     catch e
       alert e
@@ -58,26 +64,18 @@ Main Metheds
   
 @addAccount = (account) ->
   #something
+  
+@setViewAndGetData = ->
+  console.log getViewState()
+  if getViewState()
+    #do nothing
+  else
+    @getData()
+    return
 
 @clearStorage = () ->
   localStorage.clear();
   alert "All Data Has Been Deleted."
-
-@setDataState = () ->
-  if $("#billForm").css("visibility") == "visible"
-    if localStorage.length > 0
-      hideBillForm()
-      viewItems()
-      getData()
-      $("#displayData").text "Display Form"
-      return
-    else
-      alert "Nothing To Display. Please Add A New Bill And Try Again."
-  else if $("#billForm").css("visibility") == "hidden"
-    hideItems()
-    $("#displayData").text "Display Data"
-    viewBillForm()
-    return
 
 $("#billForm").live "submit", (e) ->
   stopEvent(e)
@@ -142,6 +140,26 @@ viewBillForm = ->
 hideBillForm = ->
   $("#billForm").css "visibility", "hidden"
   return
+  
+setViewState = () =>
+  if $("#billForm").css("visibility") == "visible"
+    if localStorage.length > 0
+      hideBillForm()
+      viewItems()
+      @dataViewState = true
+      $("#displayData").text "Display Form"
+      return
+    else
+      alert "Nothing To Display. Please Add A New Bill And Try Again."
+  else if $("#billForm").css("visibility") == "hidden"
+    hideItems()
+    $("#displayData").text "Display Data"
+    viewBillForm()
+    @dataViewState = false
+    return
+
+getViewState = () =>
+  retrun @dataViewState
 
 ###
 Bind to jQueries mobileinit
