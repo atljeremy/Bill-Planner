@@ -23,6 +23,16 @@ additem.html
     
     <!-- My CSS -->
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
+    
+    <!-- Underscore is a utility-belt library for JavaScript that provides a lot of the functional programming support -->
+    <script src="js/underscore.js"></script>
+    
+    <!-- jQuery - required for jQuery Mobile -->
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <!-- My JS -->
+    <script src="js/main.js"></script>
+    <!-- jQuery Mobile JS -->
+    <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
 
   </head>
 
@@ -84,25 +94,15 @@ additem.html
     	</div><!-- /content -->
     	
     	<div data-role="footer">
-    		<h4>&copy; My Company 2012</h4>
+    		<h2>&copy; My Company 2012</h2>
     	</div><!-- /footer -->
   	
+      <script type="text/javascript">
+        $.mobile.accounts();
+        $.mobile.date();
+      </script>
+  	
     </div><!-- /page -->
-    
-    <!-- Underscore is a utility-belt library for JavaScript that provides a lot of the functional programming support -->
-    <script src="js/underscore.js"></script>
-    
-    <!-- jQuery - required for jQuery Mobile -->
-    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-    <!-- My JS -->
-    <script src="js/main.js"></script>
-    <!-- jQuery Mobile JS -->
-    <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
-    
-    <script type="text/javascript">
-      $.mobile.accounts();
-      $.mobile.date();
-    </script>
     
   </body>
 </html>

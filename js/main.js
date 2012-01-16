@@ -10,7 +10,7 @@ Variables
 */
 
 (function() {
-  var add0, currentDate, destroyDataSet, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, validateRequiredFields, viewBillForm, viewItems,
+  var add0, currentDate, destroyDataSet, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, validateDate, validateRequiredFields, viewBillForm, viewItems,
     _this = this;
 
   this.dataViewState = false;
@@ -89,13 +89,21 @@ Variables
       makeList = document.createElement("ul");
       $("#items").append(makeList);
       _.each(_.keys(localStorage), function(key) {
-        var billObj, makeListItem, makeSubList, value;
+        var billObj, makeDeleteIcon, makeEditIcon, makeListItem, makeSubList, value;
         makeListItem = document.createElement("li");
         makeList.appendChild(makeListItem);
         value = localStorage.getItem(key);
         billObj = JSON.parse(value);
         makeSubList = document.createElement("ul");
         makeSubList.setAttribute("class", "bill");
+        makeEditIcon = document.createElement("img");
+        makeEditIcon.setAttribute("src", "i/pencil.png");
+        makeEditIcon.setAttribute("class", "editIcon");
+        makeDeleteIcon = document.createElement("img");
+        makeDeleteIcon.setAttribute("src", "i/x.png");
+        makeDeleteIcon.setAttribute("class", "deleteIcon");
+        makeSubList.appendChild(makeEditIcon);
+        makeSubList.appendChild(makeDeleteIcon);
         makeListItem.appendChild(makeSubList);
         _.each(billObj, function(bill) {
           var makeSubListItem, optSubText;
@@ -176,7 +184,41 @@ Variables
     if ($("#payOn").val() === null || $("#payOn").val() === "") {
       message.push("Please Enter The Date You Would Like To Make This Payment.");
     }
+    if (validateDate($("#payOn").val())) {
+      message.push("Please Enter A Valid Date.");
+    }
     return message;
+  };
+
+  validateDate = function(date) {
+    var OPERATOR, currentTime, dateArray, day, invalidDate, matchDate, month, year;
+    invalidDate = false;
+    OPERATOR = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+    matchDate = date.match(OPERATOR);
+    if (matchDate.length <= 0) invalidDate = true;
+    console.log(invalidDate);
+    currentTime = new Date();
+    month = new String(currentTime.getMonth() + 1);
+    day = new String(currentTime.getDate());
+    year = new String(currentTime.getFullYear());
+    dateArray = _.toArray(date.split("-"));
+    if (dateArray[0] < year) {
+      invalidDate = true;
+      console.log("Entered Year =" + dateArray[0] + ". Current Year =" + year);
+    }
+    if (dateArray[1] < add0(month)) {
+      invalidDate = true;
+      console.log("Entered Month =" + dateArray[1] + ". Current Month =" + add0(month));
+    }
+    if (dateArray[2] < add0(day) && dateArray[1] === add0(month)) {
+      invalidDate = true;
+      console.log("Entered Day =" + dateArray[2] + ". Current Day =" + add0(day));
+    }
+    if (invalidDate !== null || invalidDate !== "" && _.isBoolean(invalidDate)) {
+      return invalidDate;
+    } else {
+      return alert("ERROR: Please Try Again.");
+    }
   };
 
   stopEvent = function(event) {

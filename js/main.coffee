@@ -89,6 +89,24 @@ getData = ->
       #set class attribute for the new Unordered list for styling
       makeSubList.setAttribute("class", "bill")
       
+      #Create a new img view for edit icon
+      makeEditIcon = document.createElement("img")
+      
+      #Set src and class attribute on edit icon img view
+      makeEditIcon.setAttribute("src", "i/pencil.png")
+      makeEditIcon.setAttribute("class", "editIcon")
+      
+      #Create a new img view for delete icon
+      makeDeleteIcon = document.createElement("img")
+            
+      #Set src and class attribute on delete icon img view
+      makeDeleteIcon.setAttribute("src", "i/x.png")
+      makeDeleteIcon.setAttribute("class", "deleteIcon")
+      
+      #Add icons to subList
+      makeSubList.appendChild makeEditIcon
+      makeSubList.appendChild makeDeleteIcon
+      
       #Add the new Unordered list to the list item of original Unordered list
       makeListItem.appendChild makeSubList
       
@@ -142,12 +160,53 @@ getFavValue = ->
 
 validateRequiredFields = ->
   message = []
-  message.push "Please Enter Your Name." if $("#name").val() == null or $("#name").val() == "" 
+  #Validate Name
+  message.push "Please Enter Your Name." if $("#name").val() == null or $("#name").val() == ""
+  #Validate Pay To
   message.push "Please Enter Who You Would Like To Pay." if $("#payTo").val() == null or $("#payTo").val() == ""
+  #Validate Pay Amount
   message.push "Please Enter The Amount To Pay." if $("#payAmount").val() == null or $("#payAmount").val() == 0
+  #Validate Pay From
   message.push "Please Enter The Account To Pay From." if $("#payFrom").val() == null or $("#payFrom").val() == "" or $("#payFrom").val() == "-- Choose Account --"
+  #Validate Payment Date
   message.push "Please Enter The Date You Would Like To Make This Payment." if $("#payOn").val() == null or $("#payOn").val() == ""
+  message.push "Please Enter A Valid Date." if validateDate($("#payOn").val())
   return message
+  
+validateDate = (date) ->
+  invalidDate = false
+
+  OPERATOR = ///^
+  [0-9]{4}-                  #Checks year format and length
+  (0[1-9]|1[0-2])-           #Checks month format and lenth
+  (0[1-9]|[1-2][0-9]|3[0-1]) #Check day format and length
+  $///
+  
+  matchDate = date.match(OPERATOR)
+  invalidDate = true if matchDate.length <= 0
+  console.log invalidDate
+  
+  currentTime = new Date()
+  month = new String(currentTime.getMonth()+1)
+  day = new String(currentTime.getDate())
+  year = new String(currentTime.getFullYear())
+  
+  dateArray = _.toArray(date.split("-"))
+  
+  if dateArray[0] < year
+    invalidDate = true
+    console.log "Entered Year =" + dateArray[0] + ". Current Year =" + year
+  if dateArray[1] < add0(month)
+    invalidDate = true
+    console.log "Entered Month =" + dateArray[1] + ". Current Month =" + add0(month)
+  if dateArray[2] < add0(day) and dateArray[1] == add0(month)
+    invalidDate = true
+    console.log "Entered Day =" + dateArray[2] + ". Current Day =" + add0(day)
+  
+  if invalidDate != null or invalidDate != "" and _.isBoolean(invalidDate)
+    return invalidDate
+  else
+    alert "ERROR: Please Try Again."
 
 stopEvent = (event) ->
   event.preventDefault()
@@ -225,4 +284,4 @@ currentDate = ->
   day = currentTime.getDate()
   year = currentTime.getFullYear()
   showDate = year + "-" + add0(month) + "-" + add0(day)
-  document.getElementById("payOn").value=showDate 
+  document.getElementById("payOn").value=showDate
