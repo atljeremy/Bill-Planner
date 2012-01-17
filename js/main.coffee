@@ -85,23 +85,35 @@ getData = ->
       billObj     = JSON.parse value
       #create a new Unordered list within the original Unordered list
       makeSubList = document.createElement("ul")
-      
+
       #set class attribute for the new Unordered list for styling
       makeSubList.setAttribute("class", "bill")
-      
+
       #Create a new img view for edit icon
       makeEditIcon = document.createElement("img")
-      
-      #Set src and class attribute on edit icon img view
+
+      #Set src, class and id attribute on edit icon img view
       makeEditIcon.setAttribute("src", "i/pencil.png")
       makeEditIcon.setAttribute("class", "editIcon")
-      
+      makeEditIcon.setAttribute("id", "edit-"+key)
+
+      #Set click listener on edit icon
+      $("#edit-"+key).live("click", ->
+        editItem(key)
+      )
+
       #Create a new img view for delete icon
       makeDeleteIcon = document.createElement("img")
-            
-      #Set src and class attribute on delete icon img view
+
+      #Set src, class and id attribute on delete icon img view
       makeDeleteIcon.setAttribute("src", "i/x.png")
       makeDeleteIcon.setAttribute("class", "deleteIcon")
+      makeDeleteIcon.setAttribute("id", "delete-"+key)
+
+      #Set click listener on delete icon
+      $("#delete-"+key).live("click", ->
+        deleteItem(key)
+      )
       
       #Add icons to subList
       makeSubList.appendChild makeEditIcon
@@ -125,6 +137,39 @@ getData = ->
       true
     )
     true
+    
+editItem = (key) ->
+  value = localStorage.getItem key
+  bill = JSON.parse value
+  
+  @displayData()
+  
+  ###
+  Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
+  to set the values. We have to use the native javascipt method
+  document.getElementById("objectId").value = "something"
+  ###
+  document.getElementById('name').value = bill.name[1]
+  document.getElementById('payTo').value = bill.payto[1]
+  document.getElementById('payAmount').value = bill.amount[1]
+  document.getElementById('payFrom').value = bill.account[1]
+  document.getElementById('payOn').value = bill.payon[1]
+  document.getElementById('notes').value = bill.notes[1]
+  radios = document.forms[0].remember
+  for radio in radios
+    if radio.value == "Yes" and bill.remember[1] == "Yes"
+      radio.setAttribute "checked", "checked"
+      document.getElementById("labelNo").setAttribute "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c"
+      document.getElementById("labelYes").setAttribute "class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active"
+      console.log "Yes Checked"
+    else if radio.value == "No" and bill.remember[1] == "No"
+      radio.setAttribute "checked", "checked"
+      document.getElementById("labelYes").setAttribute "class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c"
+      document.getElementById("labelNo").setAttribute "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c"
+      console.log "No Checked"
+  
+deleteItem = (key) ->
+  alert "delete item " + key
   
 @addAccount = (account) ->
   #something

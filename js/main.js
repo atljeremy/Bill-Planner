@@ -10,7 +10,7 @@ Variables
 */
 
 (function() {
-  var add0, currentDate, destroyDataSet, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, validateDate, validateRequiredFields, viewBillForm, viewItems,
+  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, validateDate, validateRequiredFields, viewBillForm, viewItems,
     _this = this;
 
   this.dataViewState = false;
@@ -99,9 +99,17 @@ Variables
         makeEditIcon = document.createElement("img");
         makeEditIcon.setAttribute("src", "i/pencil.png");
         makeEditIcon.setAttribute("class", "editIcon");
+        makeEditIcon.setAttribute("id", "edit-" + key);
+        $("#edit-" + key).live("click", function() {
+          return editItem(key);
+        });
         makeDeleteIcon = document.createElement("img");
         makeDeleteIcon.setAttribute("src", "i/x.png");
         makeDeleteIcon.setAttribute("class", "deleteIcon");
+        makeDeleteIcon.setAttribute("id", "delete-" + key);
+        $("#delete-" + key).live("click", function() {
+          return deleteItem(key);
+        });
         makeSubList.appendChild(makeEditIcon);
         makeSubList.appendChild(makeDeleteIcon);
         makeListItem.appendChild(makeSubList);
@@ -117,6 +125,47 @@ Variables
       });
       return true;
     }
+  };
+
+  editItem = function(key) {
+    var bill, radio, radios, value, _i, _len, _results;
+    value = localStorage.getItem(key);
+    bill = JSON.parse(value);
+    this.displayData();
+    /*
+      Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
+      to set the values. We have to use the native javascipt method
+      document.getElementById("objectId").value = "something"
+    */
+    document.getElementById('name').value = bill.name[1];
+    document.getElementById('payTo').value = bill.payto[1];
+    document.getElementById('payAmount').value = bill.amount[1];
+    document.getElementById('payFrom').value = bill.account[1];
+    document.getElementById('payOn').value = bill.payon[1];
+    document.getElementById('notes').value = bill.notes[1];
+    radios = document.forms[0].remember;
+    _results = [];
+    for (_i = 0, _len = radios.length; _i < _len; _i++) {
+      radio = radios[_i];
+      if (radio.value === "Yes" && bill.remember[1] === "Yes") {
+        radio.setAttribute("checked", "checked");
+        document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c");
+        document.getElementById("labelYes").setAttribute("class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active");
+        _results.push(console.log("Yes Checked"));
+      } else if (radio.value === "No" && bill.remember[1] === "No") {
+        radio.setAttribute("checked", "checked");
+        document.getElementById("labelYes").setAttribute("class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c");
+        document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c");
+        _results.push(console.log("No Checked"));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+
+  deleteItem = function(key) {
+    return alert("delete item " + key);
   };
 
   this.addAccount = function(account) {};
