@@ -191,7 +191,13 @@ editItem = (key) =>
       document.getElementById("labelNo").setAttribute "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c"
   
 deleteItem = (key) ->
-  alert "delete item " + key
+  ask = confirm "Are you sure you want to delete this bill?"
+  if ask
+    localStorage.removeItem key
+    alert "Bill deleted!"
+    window.location.reload()
+  else
+    alert "Bill was not deleted"
   
 @addAccount = (account) ->
   #something
@@ -313,20 +319,18 @@ hideBillForm = ->
       return
     else
       #Form is visible, show bills
-      setTimeout(->
-        console.log "Transitioning to show bills"
-        setViewState(true)
-        hideBillForm()
-        viewItems()
-        if getDataDisplayed() == false or getInvalidated()
-          destroyDataSet()
-          getData()
-          setDataDisplayed(true)
-          setInvalidated(false)
-        $("#displayData").text "Display Form"
-        console.log "We should now see bills view"
-        return
-      , 1000)
+      console.log "Transitioning to show bills"
+      setViewState(true)
+      hideBillForm()
+      viewItems()
+      if getDataDisplayed() == false or getInvalidated()
+        destroyDataSet()
+        getData()
+        setDataDisplayed(true)
+        setInvalidated(false)
+      $("#displayData").text "Display Form"
+      console.log "We should now see bills view"
+      return
   else
     alert "Nothing To Display. Please Add A New Bill And Try Again."
     return

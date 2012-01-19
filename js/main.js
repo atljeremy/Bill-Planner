@@ -129,10 +129,10 @@
         makeSubList.appendChild(makeEditIcon);
         makeSubList.appendChild(makeDeleteIcon);
         makeListItem.appendChild(makeSubList);
-        $("#edit-" + key).click("click", function() {
+        $("#edit-" + key).click("click", function(e) {
           return editItem(key);
         });
-        $("#delete-" + key).click("click", function() {
+        $("#delete-" + key).click("click", function(e) {
           return deleteItem(key);
         });
         _.each(billObj, function(bill) {
@@ -187,7 +187,15 @@
   };
 
   deleteItem = function(key) {
-    return alert("delete item " + key);
+    var ask;
+    ask = confirm("Are you sure you want to delete this bill?");
+    if (ask) {
+      localStorage.removeItem(key);
+      alert("Bill deleted!");
+      return $("#items").refresh();
+    } else {
+      return alert("Bill was not deleted");
+    }
   };
 
   this.addAccount = function(account) {};
@@ -328,20 +336,18 @@
         $("#displayData").text("Display Data");
         console.log("We should now see bill form");
       } else {
-        return setTimeout(function() {
-          console.log("Transitioning to show bills");
-          setViewState(true);
-          hideBillForm();
-          viewItems();
-          if (getDataDisplayed() === false || getInvalidated()) {
-            destroyDataSet();
-            getData();
-            setDataDisplayed(true);
-            setInvalidated(false);
-          }
-          $("#displayData").text("Display Form");
-          console.log("We should now see bills view");
-        }, 1000);
+        console.log("Transitioning to show bills");
+        setViewState(true);
+        hideBillForm();
+        viewItems();
+        if (getDataDisplayed() === false || getInvalidated()) {
+          destroyDataSet();
+          getData();
+          setDataDisplayed(true);
+          setInvalidated(false);
+        }
+        $("#displayData").text("Display Form");
+        console.log("We should now see bills view");
       }
     } else {
       alert("Nothing To Display. Please Add A New Bill And Try Again.");
