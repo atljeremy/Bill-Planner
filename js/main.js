@@ -1,17 +1,18 @@
-/*
-Deliverable 3
-Author: Jeremy Fox
-Created For: VFW Online
-Simple HTML5 / Javascript Mobile Web Form
-*/
-
-/*
-Variables
-*/
-
 (function() {
-  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, validateDate, validateRequiredFields, viewBillForm, viewItems,
-    _this = this;
+
+  /*
+  Deliverable 3
+  Author: Jeremy Fox
+  Created For: VFW Online
+  Simple HTML5 / Javascript Mobile Web Form
+  */
+
+  /*
+  Variables
+  */
+
+  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems;
+  var _this = this;
 
   this.dataViewState = false;
 
@@ -96,6 +97,7 @@ Variables
         localStorage.setItem(itemId, JSON.stringify(item));
         setInvalidated(true);
         alert("Bill Added!");
+        _this.setKeyToEdit(0);
         _this.displayData();
       } catch (e) {
         return alert(e);
@@ -120,19 +122,19 @@ Variables
         makeEditIcon.setAttribute("src", "i/pencil.png");
         makeEditIcon.setAttribute("class", "editIcon");
         makeEditIcon.setAttribute("id", "edit-" + key);
-        $("#edit-" + key).live("click", function() {
-          return editItem(key);
-        });
         makeDeleteIcon = document.createElement("img");
         makeDeleteIcon.setAttribute("src", "i/x.png");
         makeDeleteIcon.setAttribute("class", "deleteIcon");
         makeDeleteIcon.setAttribute("id", "delete-" + key);
-        $("#delete-" + key).live("click", function() {
-          return deleteItem(key);
-        });
         makeSubList.appendChild(makeEditIcon);
         makeSubList.appendChild(makeDeleteIcon);
         makeListItem.appendChild(makeSubList);
+        $("#edit-" + key).click("click", function() {
+          return editItem(key);
+        });
+        $("#delete-" + key).click("click", function() {
+          return deleteItem(key);
+        });
         _.each(billObj, function(bill) {
           var makeSubListItem, optSubText;
           makeSubListItem = document.createElement("li");
@@ -172,13 +174,11 @@ Variables
       if (radio.value === "Yes" && bill.remember[1] === "Yes") {
         radio.setAttribute("checked", "checked");
         document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c");
-        document.getElementById("labelYes").setAttribute("class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active");
-        _results.push(console.log("Yes Checked"));
+        _results.push(document.getElementById("labelYes").setAttribute("class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active"));
       } else if (radio.value === "No" && bill.remember[1] === "No") {
         radio.setAttribute("checked", "checked");
         document.getElementById("labelYes").setAttribute("class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c");
-        document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c");
-        _results.push(console.log("No Checked"));
+        _results.push(document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c"));
       } else {
         _results.push(void 0);
       }
@@ -321,25 +321,35 @@ Variables
   this.displayData = function() {
     if (localStorage.length > 0) {
       if (getViewState()) {
+        console.log("Transitioning to Bill Form");
         setViewState(false);
         hideItems();
         viewBillForm();
         $("#displayData").text("Display Data");
+        console.log("We should now see bill form");
       } else {
-        setViewState(true);
-        hideBillForm();
-        viewItems();
-        if (getDataDisplayed() === false || getInvalidated()) {
-          destroyDataSet();
-          getData();
-          setDataDisplayed(true);
-          setInvalidated(false);
-        }
-        $("#displayData").text("Display Form");
+        return setTimeout(function() {
+          console.log("Transitioning to show bills");
+          setViewState(true);
+          hideBillForm();
+          viewItems();
+          if (getDataDisplayed() === false || getInvalidated()) {
+            destroyDataSet();
+            getData();
+            setDataDisplayed(true);
+            setInvalidated(false);
+          }
+          $("#displayData").text("Display Form");
+          console.log("We should now see bills view");
+        }, 1000);
       }
     } else {
       alert("Nothing To Display. Please Add A New Bill And Try Again.");
     }
+  };
+
+  unBindClickListeners = function() {
+    return $(document).unbind("click");
   };
 
   /*

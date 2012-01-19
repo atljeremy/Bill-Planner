@@ -80,6 +80,7 @@ Main Metheds
       localStorage.setItem itemId, JSON.stringify(item)
       setInvalidated(true)
       alert("Bill Added!")
+      @setKeyToEdit(0)
       @displayData()
       return
     catch e
@@ -87,6 +88,7 @@ Main Metheds
 
 getData = ->
   if _.size(localStorage) > 0
+  
     #Create unordered list
     makeList = document.createElement("ul")
     #Add list to "items" div
@@ -116,11 +118,6 @@ getData = ->
       makeEditIcon.setAttribute("class", "editIcon")
       makeEditIcon.setAttribute("id", "edit-"+key)
 
-      #Set click listener on edit icon
-      $("#edit-"+key).live("click", ->
-        editItem(key)
-      )
-
       #Create a new img view for delete icon
       makeDeleteIcon = document.createElement("img")
 
@@ -128,11 +125,6 @@ getData = ->
       makeDeleteIcon.setAttribute("src", "i/x.png")
       makeDeleteIcon.setAttribute("class", "deleteIcon")
       makeDeleteIcon.setAttribute("id", "delete-"+key)
-
-      #Set click listener on delete icon
-      $("#delete-"+key).live("click", ->
-        deleteItem(key)
-      )
       
       #Add icons to subList
       makeSubList.appendChild makeEditIcon
@@ -140,6 +132,16 @@ getData = ->
       
       #Add the new Unordered list to the list item of original Unordered list
       makeListItem.appendChild makeSubList
+      
+      #Set click listener on edit icon
+      $("#edit-"+key).click("click", (e) ->
+        editItem(key)
+      )
+      
+      #Set click listener on delete icon
+      $("#delete-"+key).click("click", (e) ->
+        deleteItem(key)
+      )
       
       #for each bill in the billObj do the following
       _.each(billObj, (bill) ->
@@ -183,12 +185,10 @@ editItem = (key) =>
       radio.setAttribute "checked", "checked"
       document.getElementById("labelNo").setAttribute "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c"
       document.getElementById("labelYes").setAttribute "class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active"
-      console.log "Yes Checked"
     else if radio.value == "No" and bill.remember[1] == "No"
       radio.setAttribute "checked", "checked"
       document.getElementById("labelYes").setAttribute "class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c"
       document.getElementById("labelNo").setAttribute "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c"
-      console.log "No Checked"
   
 deleteItem = (key) ->
   alert "delete item " + key
@@ -299,30 +299,40 @@ hideBillForm = ->
   $("#billForm").css "display", "none"
   return
   
-@displayData = () =>
+@displayData = () ->
   if localStorage.length > 0
+  
     if getViewState()
       #Bills are visible, show form
+      console.log "Transitioning to Bill Form"
       setViewState(false)
       hideItems()
       viewBillForm()
       $("#displayData").text "Display Data"
+      console.log "We should now see bill form"
       return
     else
       #Form is visible, show bills
-      setViewState(true)
-      hideBillForm()
-      viewItems()
-      if getDataDisplayed() == false or getInvalidated()
-        destroyDataSet()
-        getData()
-        setDataDisplayed(true)
-        setInvalidated(false)
-      $("#displayData").text "Display Form"
-      return
+      setTimeout(->
+        console.log "Transitioning to show bills"
+        setViewState(true)
+        hideBillForm()
+        viewItems()
+        if getDataDisplayed() == false or getInvalidated()
+          destroyDataSet()
+          getData()
+          setDataDisplayed(true)
+          setInvalidated(false)
+        $("#displayData").text "Display Form"
+        console.log "We should now see bills view"
+        return
+      , 1000)
   else
     alert "Nothing To Display. Please Add A New Bill And Try Again."
     return
+    
+unBindClickListeners = () ->
+  $(document).unbind("click")
 
 ###
 Bind to jQueries mobileinit
