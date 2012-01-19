@@ -19,6 +19,8 @@ Variables
 
   this.invalidateData = false;
 
+  this.keyToEdit = 0;
+
   /*
   State Control Methods
   */
@@ -52,13 +54,31 @@ Variables
   };
 
   /*
+  Getter and Setter for key to edit / delete
+  */
+
+  this.getKeyToEdit = function() {
+    return _this.keyToEdit;
+  };
+
+  this.setKeyToEdit = function(key) {
+    return _this.keyToEdit = key;
+  };
+
+  /*
   Main Metheds
   */
 
   this.storeData = function() {
     var item, itemId, message, messages, newDate;
+    console.log("store data get key to edit: " + _this.getKeyToEdit());
     newDate = new Date();
-    itemId = newDate.getTime();
+    if (_this.getKeyToEdit() === 0 || _this.getKeyToEdit() === "") {
+      itemId = newDate.getTime();
+    } else {
+      itemId = _this.getKeyToEdit();
+    }
+    console.log("Store data Item Id: " + itemId);
     messages = validateRequiredFields();
     if (!_.isEmpty(messages)) {
       message = messages.join('\n');
@@ -76,7 +96,7 @@ Variables
         localStorage.setItem(itemId, JSON.stringify(item));
         setInvalidated(true);
         alert("Bill Added!");
-        this.displayData();
+        _this.displayData();
       } catch (e) {
         return alert(e);
       }
@@ -131,7 +151,9 @@ Variables
     var bill, radio, radios, value, _i, _len, _results;
     value = localStorage.getItem(key);
     bill = JSON.parse(value);
-    this.displayData();
+    _this.setKeyToEdit(key);
+    console.log("Edit Item: " + _this.getKeyToEdit());
+    _this.displayData();
     /*
       Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
       to set the values. We have to use the native javascipt method

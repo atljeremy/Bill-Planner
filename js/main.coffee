@@ -11,6 +11,7 @@ Variables
 @dataViewState        = false #false = bills (in localStorage) not visible. true = bills visible
 @hasDataBeenDisplayed = false #Keeps track of whether or not localStorage has been display, if so, there is no reason to re-query localStorage, just show the previously viewed data.
 @invalidateData       = false #set this to true when we need to force the app to re-query localStorage for new data.
+@keyToEdit            = 0 #The key of the item in localStorage we want to edit
 
 ###
 State Control Methods
@@ -35,14 +36,32 @@ getInvalidated = () =>
   
 destroyDataSet = () ->
   $("#items").empty()
+  
+###
+Getter and Setter for key to edit / delete
+###
+@getKeyToEdit = () =>
+  return @keyToEdit
+  
+@setKeyToEdit = (key) =>
+  @keyToEdit = key
 
 ###
 Main Metheds
 ###
-@storeData = ->
+@storeData = () =>
+
+  console.log "store data get key to edit: "+@getKeyToEdit()
+
   newDate = new Date()
-  itemId = newDate.getTime()
-  
+
+  if @getKeyToEdit() == 0 or @getKeyToEdit() == ""
+    itemId = newDate.getTime()
+  else
+    itemId = @getKeyToEdit()
+    
+  console.log "Store data Item Id: "+itemId
+
   messages = validateRequiredFields()
   unless _.isEmpty(messages)
     message = messages.join('\n')
@@ -138,9 +157,12 @@ getData = ->
     )
     true
     
-editItem = (key) ->
+editItem = (key) =>
   value = localStorage.getItem key
   bill = JSON.parse value
+  
+  @setKeyToEdit(key)
+  console.log "Edit Item: "+@getKeyToEdit()
   
   @displayData()
   
