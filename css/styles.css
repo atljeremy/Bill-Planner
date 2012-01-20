@@ -2,7 +2,7 @@
   HTML Element Styles
 *********************************************************/
 a {
-  color: #000;
+  color: #FFF;
 }
 
 ul {
@@ -16,6 +16,10 @@ ul {
 
 li {
   margin-bottom: 20px;
+}
+
+legend {
+  padding-bottom: 5px; 
 }
 
 /*********************************************************
@@ -311,15 +315,11 @@ h1 {
 }
 
 h2 {
-  font-size: 15px;
+  font-size: 20px;
   text-shadow: 2px 2px 4px #000;
   filter: dropshadow(color=#000, offx=2, offy=2);
 }
 
 .billField {
   font-weight: bold;
-}
-
-.billValue {
-  
 }

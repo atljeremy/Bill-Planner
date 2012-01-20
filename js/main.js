@@ -1,17 +1,18 @@
-/*
-Deliverable 3
-Author: Jeremy Fox
-Created For: VFW Online
-Simple HTML5 / Javascript Mobile Web Form
-*/
-
-/*
-Variables
-*/
-
 (function() {
-  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
-    _this = this;
+
+  /*
+  Deliverable 3
+  Author: Jeremy Fox
+  Created For: VFW Online
+  Simple HTML5 / Javascript Mobile Web Form
+  */
+
+  /*
+  Variables
+  */
+
+  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems;
+  var _this = this;
 
   this.dataViewState = false;
 
@@ -157,6 +158,7 @@ Variables
     value = localStorage.getItem(key);
     bill = JSON.parse(value);
     _this.setKeyToEdit(key);
+    $("h2").html("Your Editing a Bill - <a href=\"additem.html\" data-ajax=\"false\" >Cancel</a>");
     _this.displayData();
     /*
       Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")

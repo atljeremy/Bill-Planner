@@ -173,6 +173,8 @@ editItem = (key) =>
   
   @setKeyToEdit(key)
   
+  $("h2").html("Your Editing a Bill - <a href=\"additem.html\" data-ajax=\"false\" >Cancel</a>")
+  
   @displayData()
   
   ###
