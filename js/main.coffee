@@ -38,7 +38,7 @@ destroyDataSet = () ->
   $("#items").empty()
   
 ###
-Getter and Setter for key to edit / delete
+Getter and Setter for key to edit
 ###
 @getKeyToEdit = () =>
   return @keyToEdit
@@ -51,16 +51,12 @@ Main Metheds
 ###
 @storeData = () =>
 
-  console.log "store data get key to edit: "+@getKeyToEdit()
-
   newDate = new Date()
 
   if @getKeyToEdit() == 0 or @getKeyToEdit() == ""
     itemId = newDate.getTime()
   else
     itemId = @getKeyToEdit()
-    
-  console.log "Store data Item Id: "+itemId
 
   messages = validateRequiredFields()
   unless _.isEmpty(messages)
@@ -145,14 +141,26 @@ getData = ->
       
       #for each bill in the billObj do the following
       _.each(billObj, (bill) ->
+      
         #Make a list item
         makeSubListItem = document.createElement("li")
+        
         #Add the list item to the new Unordered list
         makeSubList.appendChild makeSubListItem
+        
         #Create the text to display for each line
-        optSubText = bill[0]+" "+bill[1]
+        field = document.createElement("span")
+        value = document.createElement("span")
+        
+        field.setAttribute("class", "billField")
+        value.setAttribute("class", "billValue")
+                        
         #Add the text to the new list item
-        makeSubListItem.innerHTML = optSubText
+        makeSubListItem.appendChild field
+        makeSubListItem.appendChild value
+        
+        field.innerHTML = bill[0] + " "
+        value.innerHTML = bill[1]
         true
       )
       true
@@ -164,7 +172,6 @@ editItem = (key) =>
   bill = JSON.parse value
   
   @setKeyToEdit(key)
-  console.log "Edit Item: "+@getKeyToEdit()
   
   @displayData()
   
@@ -257,7 +264,6 @@ validateDate = (date) ->
   
   matchDate = date.match(OPERATOR)
   invalidDate = true if matchDate.length <= 0
-  console.log invalidDate
   
   currentTime = new Date()
   month = new String(currentTime.getMonth()+1)
@@ -307,19 +313,15 @@ hideBillForm = ->
   
 @displayData = () ->
   if localStorage.length > 0
-  
     if getViewState()
       #Bills are visible, show form
-      console.log "Transitioning to Bill Form"
       setViewState(false)
       hideItems()
       viewBillForm()
       $("#displayData").text "Display Data"
-      console.log "We should now see bill form"
       return
     else
       #Form is visible, show bills
-      console.log "Transitioning to show bills"
       setViewState(true)
       hideBillForm()
       viewItems()
@@ -329,7 +331,6 @@ hideBillForm = ->
         setDataDisplayed(true)
         setInvalidated(false)
       $("#displayData").text "Display Form"
-      console.log "We should now see bills view"
       return
   else
     alert "Nothing To Display. Please Add A New Bill And Try Again."

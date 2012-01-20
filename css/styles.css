@@ -315,3 +315,11 @@ h2 {
   text-shadow: 2px 2px 4px #000;
   filter: dropshadow(color=#000, offx=2, offy=2);
 }
+
+.billField {
+  font-weight: bold;
+}
+
+.billValue {
+  
+}

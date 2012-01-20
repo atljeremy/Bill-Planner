@@ -1,18 +1,17 @@
+/*
+Deliverable 3
+Author: Jeremy Fox
+Created For: VFW Online
+Simple HTML5 / Javascript Mobile Web Form
+*/
+
+/*
+Variables
+*/
+
 (function() {
-
-  /*
-  Deliverable 3
-  Author: Jeremy Fox
-  Created For: VFW Online
-  Simple HTML5 / Javascript Mobile Web Form
-  */
-
-  /*
-  Variables
-  */
-
-  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems;
-  var _this = this;
+  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
+    _this = this;
 
   this.dataViewState = false;
 
@@ -55,7 +54,7 @@
   };
 
   /*
-  Getter and Setter for key to edit / delete
+  Getter and Setter for key to edit
   */
 
   this.getKeyToEdit = function() {
@@ -72,14 +71,12 @@
 
   this.storeData = function() {
     var item, itemId, message, messages, newDate;
-    console.log("store data get key to edit: " + _this.getKeyToEdit());
     newDate = new Date();
     if (_this.getKeyToEdit() === 0 || _this.getKeyToEdit() === "") {
       itemId = newDate.getTime();
     } else {
       itemId = _this.getKeyToEdit();
     }
-    console.log("Store data Item Id: " + itemId);
     messages = validateRequiredFields();
     if (!_.isEmpty(messages)) {
       message = messages.join('\n');
@@ -136,11 +133,17 @@
           return deleteItem(key);
         });
         _.each(billObj, function(bill) {
-          var makeSubListItem, optSubText;
+          var field, makeSubListItem;
           makeSubListItem = document.createElement("li");
           makeSubList.appendChild(makeSubListItem);
-          optSubText = bill[0] + " " + bill[1];
-          makeSubListItem.innerHTML = optSubText;
+          field = document.createElement("span");
+          value = document.createElement("span");
+          field.setAttribute("class", "billField");
+          value.setAttribute("class", "billValue");
+          makeSubListItem.appendChild(field);
+          makeSubListItem.appendChild(value);
+          field.innerHTML = bill[0] + " ";
+          value.innerHTML = bill[1];
           return true;
         });
         return true;
@@ -154,7 +157,6 @@
     value = localStorage.getItem(key);
     bill = JSON.parse(value);
     _this.setKeyToEdit(key);
-    console.log("Edit Item: " + _this.getKeyToEdit());
     _this.displayData();
     /*
       Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
@@ -192,7 +194,7 @@
     if (ask) {
       localStorage.removeItem(key);
       alert("Bill deleted!");
-      return $("#items").refresh();
+      return window.location.reload();
     } else {
       return alert("Bill was not deleted");
     }
@@ -275,7 +277,6 @@
     OPERATOR = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
     matchDate = date.match(OPERATOR);
     if (matchDate.length <= 0) invalidDate = true;
-    console.log(invalidDate);
     currentTime = new Date();
     month = new String(currentTime.getMonth() + 1);
     day = new String(currentTime.getDate());
@@ -329,14 +330,11 @@
   this.displayData = function() {
     if (localStorage.length > 0) {
       if (getViewState()) {
-        console.log("Transitioning to Bill Form");
         setViewState(false);
         hideItems();
         viewBillForm();
         $("#displayData").text("Display Data");
-        console.log("We should now see bill form");
       } else {
-        console.log("Transitioning to show bills");
         setViewState(true);
         hideBillForm();
         viewItems();
@@ -347,7 +345,6 @@
           setInvalidated(false);
         }
         $("#displayData").text("Display Form");
-        console.log("We should now see bills view");
       }
     } else {
       alert("Nothing To Display. Please Add A New Bill And Try Again.");
