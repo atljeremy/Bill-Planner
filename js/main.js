@@ -158,7 +158,7 @@
     value = localStorage.getItem(key);
     bill = JSON.parse(value);
     _this.setKeyToEdit(key);
-    $("h2").html("Your Editing a Bill - <a href=\"additem.html\" data-ajax=\"false\" >Cancel</a>");
+    $("legend").html("<h2>Your Editing a Bill - <a href=\"additem.html\" data-ajax=\"false\" >Cancel</a></h2>");
     _this.displayData();
     /*
       Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
