@@ -112,7 +112,7 @@ getData = ->
 
       #Set src, class and id attribute on edit icon img view
       makeEditIcon.setAttribute("src", "i/pencil.png")
-      makeEditIcon.setAttribute("class", "editIcon")
+      makeEditIcon.setAttribute("class", "icons")
       makeEditIcon.setAttribute("id", "edit-"+key)
 
       #Create a new img view for delete icon
@@ -120,12 +120,30 @@ getData = ->
 
       #Set src, class and id attribute on delete icon img view
       makeDeleteIcon.setAttribute("src", "i/x.png")
-      makeDeleteIcon.setAttribute("class", "deleteIcon")
+      makeDeleteIcon.setAttribute("class", "icons")
       makeDeleteIcon.setAttribute("id", "delete-"+key)
+      
+      #Create a new img view for account icon
+      makeAccountIcon = document.createElement("img")
+
+      #Set src, class and id attribute on delete icon img view
+      OPERATOR = ///
+      ((Checking)|(Savings)|(Credit\sCard))+
+      ///g
+      account = billObj.account[1]
+      accountMatch = account.match(OPERATOR)
+      switch accountMatch
+        when "Checking" then makeAccountIcon.setAttribute("src", "i/checking.png") alert "Checking"
+        when "Savings" then makeAccountIcon.setAttribute("src", "i/savings.png") alert "Savings"
+        when "Credit Card" then makeAccountIcon.setAttribute("src", "i/creditcard.png") alert "Credit Card"
+      
+      makeAccountIcon.setAttribute("class", "icons")
+      makeAccountIcon.setAttribute("id", "account-"+key)
       
       #Add icons to subList
       makeSubList.appendChild makeEditIcon
       makeSubList.appendChild makeDeleteIcon
+      makeSubList.appendChild makeAccountIcon
       
       #Add the new Unordered list to the list item of original Unordered list
       makeListItem.appendChild makeSubList
