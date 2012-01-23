@@ -77,6 +77,7 @@ Main Metheds
       setInvalidated(true)
       alert("Bill Added!")
       @setKeyToEdit(0)
+      $("legend").html("<h2>Create a New Bill</h2>")
       @displayData()
       return
     catch e
@@ -268,9 +269,12 @@ validateDate = (date) ->
   invalidDate = true if matchDate.length <= 0
   
   currentTime = new Date()
-  month = new String(currentTime.getMonth()+1)
-  day = new String(currentTime.getDate())
-  year = new String(currentTime.getFullYear())
+  month = ""
+  month = currentTime.getMonth()+1
+  day   = ""
+  day   = currentTime.getDate()
+  year  = ""
+  year  = currentTime.getFullYear()
   
   dateArray = _.toArray(date.split("-"))
   

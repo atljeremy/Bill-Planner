@@ -1,18 +1,17 @@
+/*
+Deliverable 3
+Author: Jeremy Fox
+Created For: VFW Online
+Simple HTML5 / Javascript Mobile Web Form
+*/
+
+/*
+Variables
+*/
+
 (function() {
-
-  /*
-  Deliverable 3
-  Author: Jeremy Fox
-  Created For: VFW Online
-  Simple HTML5 / Javascript Mobile Web Form
-  */
-
-  /*
-  Variables
-  */
-
-  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems;
-  var _this = this;
+  var add0, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, setDataDisplayed, setInvalidated, setViewState, stopEvent, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
+    _this = this;
 
   this.dataViewState = false;
 
@@ -280,9 +279,12 @@
     matchDate = date.match(OPERATOR);
     if (matchDate.length <= 0) invalidDate = true;
     currentTime = new Date();
-    month = new String(currentTime.getMonth() + 1);
-    day = new String(currentTime.getDate());
-    year = new String(currentTime.getFullYear());
+    month = "";
+    month = currentTime.getMonth() + 1;
+    day = "";
+    day = currentTime.getDate();
+    year = "";
+    year = currentTime.getFullYear();
     dateArray = _.toArray(date.split("-"));
     if (dateArray[0] < year) {
       invalidDate = true;
