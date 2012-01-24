@@ -12,6 +12,7 @@ Variables
 @hasDataBeenDisplayed = false #Keeps track of whether or not localStorage has been display, if so, there is no reason to re-query localStorage, just show the previously viewed data.
 @invalidateData       = false #set this to true when we need to force the app to re-query localStorage for new data.
 @keyToEdit            = 0 #The key of the item in localStorage we want to edit
+billAccounts          = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
 
 ###
 State Control Methods
@@ -104,7 +105,7 @@ getData = ->
       #create a new Unordered list within the original Unordered list
       makeSubList = document.createElement("ul")
 
-      #set class attribute for the new Unordered list for styling
+      #set class and id attribute for the new Unordered list for styling
       makeSubList.setAttribute("class", "bill")
 
       #Create a new img view for edit icon
@@ -131,11 +132,12 @@ getData = ->
       ((Checking)|(Savings)|(Credit\sCard))+
       ///g
       account = billObj.account[1]
+      console.log account
       accountMatch = account.match(OPERATOR)
-      switch accountMatch
-        when "Checking" then makeAccountIcon.setAttribute("src", "i/checking.png") alert "Checking"
-        when "Savings" then makeAccountIcon.setAttribute("src", "i/savings.png") alert "Savings"
-        when "Credit Card" then makeAccountIcon.setAttribute("src", "i/creditcard.png") alert "Credit Card"
+      switch accountMatch[0]
+        when "Checking" then makeAccountIcon.setAttribute("src", "i/checking.png")
+        when "Savings" then makeAccountIcon.setAttribute("src", "i/savings.png")
+        when "Credit Card" then makeAccountIcon.setAttribute("src", "i/creditcard.png")
       
       makeAccountIcon.setAttribute("class", "icons")
       makeAccountIcon.setAttribute("id", "account-"+key)
@@ -158,11 +160,19 @@ getData = ->
         deleteItem(key)
       )
       
+      #Set click listener on account icon
+      $("#account-"+key).click("click", (e) ->
+        showAccount(key)
+      )
+      
       #for each bill in the billObj do the following
       _.each(billObj, (bill) ->
       
         #Make a list item
         makeSubListItem = document.createElement("li")
+        
+        if bill[0] == "From Account:"
+          makeSubListItem.setAttribute("id", "li-account-"+key)
         
         #Add the list item to the new Unordered list
         makeSubList.appendChild makeSubListItem
@@ -173,6 +183,7 @@ getData = ->
         
         field.setAttribute("class", "billField")
         value.setAttribute("class", "billValue")
+          
                         
         #Add the text to the new list item
         makeSubListItem.appendChild field
@@ -226,7 +237,19 @@ deleteItem = (key) ->
     window.location.reload()
   else
     alert "Bill was not deleted"
-  
+    
+showAccount = (key) ->
+  $("#li-account-"+key).animate
+    opacity: 0.00
+  , 500, ->
+    $("#li-account-"+key).animate
+      opacity: 1.00
+    , 500, ->
+      return
+
+#   $("#li-account-"+key).css("background-color", "#F00")
+#   $("#li-account-"+key).css("background-color", "#F00")
+
 @addAccount = (account) ->
   #something
 
@@ -372,11 +395,10 @@ $(document).bind "mobileinit", ->
   return
 
 getAccounts = ->
-  accounts   = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
   liSelect   = document.getElementById("selectAccounts")
   makeSelect = document.createElement("select")
   makeSelect.setAttribute("id", "payFrom")
-  for account in accounts
+  for account in billAccounts
     makeOpt = document.createElement("option")
     makeOpt.setAttribute("value", account)
     makeOpt.innerHTML = account
