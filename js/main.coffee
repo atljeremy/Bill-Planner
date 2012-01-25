@@ -107,6 +107,7 @@ getData = ->
 
       #set class and id attribute for the new Unordered list for styling
       makeSubList.setAttribute("class", "bill")
+      makeSubList.setAttribute("id", "bill-"+key)
 
       #Create a new img view for edit icon
       makeEditIcon = document.createElement("img")
@@ -131,6 +132,7 @@ getData = ->
       OPERATOR = ///
       ((Checking)|(Savings)|(Credit\sCard))+
       ///g
+
       account = billObj.account[1]
       console.log account
       accountMatch = account.match(OPERATOR)
@@ -232,9 +234,12 @@ editItem = (key) =>
 deleteItem = (key) ->
   ask = confirm "Are you sure you want to delete this bill?"
   if ask
+    $("#bill-"+key).animate
+      opacity: 0.00
+      height: 'toggle'
+    , 700
     localStorage.removeItem key
-    alert "Bill deleted!"
-    window.location.reload()
+    setInvalidated(true)
   else
     alert "Bill was not deleted"
     
@@ -246,9 +251,6 @@ showAccount = (key) ->
       opacity: 1.00
     , 500, ->
       return
-
-#   $("#li-account-"+key).css("background-color", "#F00")
-#   $("#li-account-"+key).css("background-color", "#F00")
 
 @addAccount = (account) ->
   #something
