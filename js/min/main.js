@@ -150,13 +150,13 @@ Variables
       accountMatch = account.match(OPERATOR);
       switch (accountMatch[0]) {
         case "Checking":
-          makeAccountIcon.setAttribute("src", "i/checking.png");
+          makeAccountIcon.setAttribute("src", "i/thumb_checking.png");
           break;
         case "Savings":
-          makeAccountIcon.setAttribute("src", "i/savings.png");
+          makeAccountIcon.setAttribute("src", "i/thumb_savings.png");
           break;
         case "Credit Card":
-          makeAccountIcon.setAttribute("src", "i/creditcard.png");
+          makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png");
       }
       makeAccountIcon.setAttribute("class", "icons");
       makeAccountIcon.setAttribute("id", "account-" + key);

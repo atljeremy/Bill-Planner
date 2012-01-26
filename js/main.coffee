@@ -150,9 +150,9 @@ qryBills = (storage, from) ->
     console.log account
     accountMatch = account.match(OPERATOR)
     switch accountMatch[0]
-      when "Checking" then makeAccountIcon.setAttribute("src", "i/checking.png")
-      when "Savings" then makeAccountIcon.setAttribute("src", "i/savings.png")
-      when "Credit Card" then makeAccountIcon.setAttribute("src", "i/creditcard.png")
+      when "Checking" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
+      when "Savings" then makeAccountIcon.setAttribute("src", "i/thumb_savings.png")
+      when "Credit Card" then makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png")
     
     makeAccountIcon.setAttribute("class", "icons")
     makeAccountIcon.setAttribute("id", "account-"+key)
