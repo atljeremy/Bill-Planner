@@ -1,10 +1,10 @@
 //////////////////////////////////////////////////////////
 //  Variables
 //////////////////////////////////////////////////////////
-border-radius()
-  -webkit-border-radius arguments
-  -moz-border-radius arguments
-  border-radius arguments
+border-radius(args)
+  -webkit-border-radius args
+  -moz-border-radius args
+  border-radius args
 
 //////////////////////////////////////////////////////////
 //  HTML Element Styles
@@ -115,7 +115,6 @@ legend
   color #000
   text-align center
   padding 5px
-  background #FF0000
   width 130px
   height 130px
   border-radius 6px
@@ -208,50 +207,50 @@ textarea
   font-size 20px
   margin-left 5px
 
-inputrequired 
+input:required 
   font-family Helvetica, Verdana, Arial, sans-serif
   margin-left 5px
   background rgb(226,226,226)
-  background -moz-linear-gradient(top,  rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%)
+  background -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%)
   background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,1)), color-stop(51%,rgba(209,209,209,1)), color-stop(100%,rgba(254,254,254,1)))
-  background -webkit-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
-  background -o-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
-  background -ms-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
-  background linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -webkit-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -o-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -ms-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
 
 input[required] 
   font-family Helvetica, Verdana, Arial, sans-serif
   margin-left 5px
   background rgb(226,226,226)
-  background -moz-linear-gradient(top,  rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%)
+  background -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%)
   background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,1)), color-stop(51%,rgba(209,209,209,1)), color-stop(100%,rgba(254,254,254,1)))
-  background -webkit-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
-  background -o-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
-  background -ms-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
-  background linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -webkit-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -o-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -ms-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
 
-inputfocusinvalid 
+input:focus:invalid 
   font-family Helvetica, Verdana, Arial, sans-serif
   margin-left 5px
   background rgb(214,145,145)
-  background -moz-linear-gradient(top,  rgba(214,145,145,1) 0%, rgba(206,80,80,1) 50%, rgba(173,32,32,1) 51%, rgba(216,101,101,1) 100%)
+  background -moz-linear-gradient(top, rgba(214,145,145,1) 0%, rgba(206,80,80,1) 50%, rgba(173,32,32,1) 51%, rgba(216,101,101,1) 100%)
   background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(214,145,145,1)), color-stop(50%,rgba(206,80,80,1)), color-stop(51%,rgba(173,32,32,1)), color-stop(100%,rgba(216,101,101,1)))
-  background -webkit-linear-gradient(top,  rgba(214,145,145,1) 0%,rgba(206,80,80,1) 50%,rgba(173,32,32,1) 51%,rgba(216,101,101,1) 100%)
-  background -o-linear-gradient(top,  rgba(214,145,145,1) 0%,rgba(206,80,80,1) 50%,rgba(173,32,32,1) 51%,rgba(216,101,101,1) 100%)
-  background -ms-linear-gradient(top,  rgba(214,145,145,1) 0%,rgba(206,80,80,1) 50%,rgba(173,32,32,1) 51%,rgba(216,101,101,1) 100%)
-  background linear-gradient(top,  rgba(214,145,145,1) 0%,rgba(206,80,80,1) 50%,rgba(173,32,32,1) 51%,rgba(216,101,101,1) 100%)
+  background -webkit-linear-gradient(top, rgba(214,145,145,1) 0%,rgba(206,80,80,1) 50%,rgba(173,32,32,1) 51%,rgba(216,101,101,1) 100%)
+  background -o-linear-gradient(top, rgba(214,145,145,1) 0%,rgba(206,80,80,1) 50%,rgba(173,32,32,1) 51%,rgba(216,101,101,1) 100%)
+  background -ms-linear-gradient(top, rgba(214,145,145,1) 0%,rgba(206,80,80,1) 50%,rgba(173,32,32,1) 51%,rgba(216,101,101,1) 100%)
+  background linear-gradient(top, rgba(214,145,145,1) 0%,rgba(206,80,80,1) 50%,rgba(173,32,32,1) 51%,rgba(216,101,101,1) 100%)
   box-shadow none
 
-inputfocusvalid 
+input:focus:valid 
   font-family Helvetica, Verdana, Arial, sans-serif
   margin-left 5px
   background rgb(235,241,246)
-  background -moz-linear-gradient(top,  rgba(235,241,246,1) 0%, rgba(171,211,238,1) 50%, rgba(137,195,235,1) 51%, rgba(213,235,251,1) 100%)
+  background -moz-linear-gradient(top, rgba(235,241,246,1) 0%, rgba(171,211,238,1) 50%, rgba(137,195,235,1) 51%, rgba(213,235,251,1) 100%)
   background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(235,241,246,1)), color-stop(50%,rgba(171,211,238,1)), color-stop(51%,rgba(137,195,235,1)), color-stop(100%,rgba(213,235,251,1)))
-  background -webkit-linear-gradient(top,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%)
-  background -o-linear-gradient(top,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%)
-  background -ms-linear-gradient(top,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%)
-  background linear-gradient(top,  rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%)
+  background -webkit-linear-gradient(top, rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%)
+  background -o-linear-gradient(top, rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%)
+  background -ms-linear-gradient(top, rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%)
+  background linear-gradient(top, rgba(235,241,246,1) 0%,rgba(171,211,238,1) 50%,rgba(137,195,235,1) 51%,rgba(213,235,251,1) 100%)
 
 //////////////////////////////////////////////////////////
 //  Text Styles
