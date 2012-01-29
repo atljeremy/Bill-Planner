@@ -51,7 +51,6 @@ Getter and Setter for key to edit
 Main Metheds
 ###
 @storeData = () =>
-
   newDate = new Date()
 
   if @getKeyToEdit() == 0 or @getKeyToEdit() == ""
