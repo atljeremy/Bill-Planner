@@ -82,12 +82,26 @@ Main Metheds
       return
     catch e
       alert e
+      
+storeJsonData = () =>
+  _.each(_.keys(@json), (key) ->
+    item = @json[key]
+
+    try
+      localStorage.setItem key, JSON.stringify(item)
+      return
+    catch e
+      alert e
+  )
+  setInvalidated(true)
+  getData()
 
 getData = ->
     if _.size(localStorage) > 0
       qryBills(localStorage, "localStorage")
     else
-      qryBills(@json, "json")
+      storeJsonData()
+      # qryBills(@json, "json")
    
 qryBills = (storage, from) ->
   #Create unordered list
@@ -146,7 +160,6 @@ qryBills = (storage, from) ->
     ///g
 
     account = billObj.account[1]
-    console.log account
     accountMatch = account.match(OPERATOR)
     switch accountMatch[0]
       when "Checking" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")

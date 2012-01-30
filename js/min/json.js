@@ -4,7 +4,7 @@
     "123456789": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Jackson EMC"],
-      "amount": ["Amount:", "$157.00"],
+      "amount": ["Amount:", "157"],
       "account": ["From Account:", "Wells Fargo - Checking"],
       "payon": ["Pay On:", "2012-05-15"],
       "notes": ["Notes:", "Electric bill"],
@@ -13,7 +13,7 @@
     "987654321": {
       "name": ["Name:", "Jane Doe"],
       "payto": ["Pay To:", "Comcast"],
-      "amount": ["Amount:", "$187.00"],
+      "amount": ["Amount:", "187"],
       "account": ["From Account:", "Bank of America - Checking"],
       "payon": ["Pay On:", "2012-06-24"],
       "notes": ["Notes:", "Tv/Internet bill. Need to call Comcast and ask about adding telephone VOIP service."],
@@ -22,7 +22,7 @@
     "123234545": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Kaiser Permanente"],
-      "amount": ["Amount:", "$635.00"],
+      "amount": ["Amount:", "635"],
       "account": ["From Account:", "Wells Fargo - Credit Card"],
       "payon": ["Pay On:", "2012-07-05"],
       "notes": ["Notes:", "Medical bill for delivery of our child."],
@@ -31,7 +31,7 @@
     "789456123": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Jackson EMC"],
-      "amount": ["Amount:", "$157.00"],
+      "amount": ["Amount:", "157"],
       "account": ["From Account:", "Wells Fargo - Checking"],
       "payon": ["Pay On:", "2012-05-15"],
       "notes": ["Notes:", "Electric bill"],
@@ -40,7 +40,7 @@
     "456123458": {
       "name": ["Name:", "Jane Doe"],
       "payto": ["Pay To:", "Comcast"],
-      "amount": ["Amount:", "$500.00"],
+      "amount": ["Amount:", "500"],
       "account": ["From Account:", "Bank of America - Savings"],
       "payon": ["Pay On:", "2012-09-24"],
       "notes": ["Notes:", "Transfer to checking account from savings.."],
@@ -49,7 +49,7 @@
     "963852741": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Kaiser Permanente"],
-      "amount": ["Amount:", "$635.00"],
+      "amount": ["Amount:", "635"],
       "account": ["From Account:", "Wells Fargo - Credit Card"],
       "payon": ["Pay On:", "2012-07-05"],
       "notes": ["Notes:", "Medical bill for delivery of our child."],
@@ -58,7 +58,7 @@
     "741852963": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Jackson EMC"],
-      "amount": ["Amount:", "$157.00"],
+      "amount": ["Amount:", "157"],
       "account": ["From Account:", "Wells Fargo - Checking"],
       "payon": ["Pay On:", "2012-05-15"],
       "notes": ["Notes:", "Electric bill"],
@@ -67,7 +67,7 @@
     "159357852": {
       "name": ["Name:", "Jane Doe"],
       "payto": ["Pay To:", "Comcast"],
-      "amount": ["Amount:", "$187.00"],
+      "amount": ["Amount:", "187"],
       "account": ["From Account:", "Bank of America - Checking"],
       "payon": ["Pay On:", "2012-06-24"],
       "notes": ["Notes:", "Tv/Internet bill. Need to call Comcast and ask about adding telephone VOIP service."],
@@ -76,7 +76,7 @@
     "654258963": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Kaiser Permanente"],
-      "amount": ["Amount:", "$635.00"],
+      "amount": ["Amount:", "635"],
       "account": ["From Account:", "Wells Fargo - Credit Card"],
       "payon": ["Pay On:", "2012-07-05"],
       "notes": ["Notes:", "Medical bill for delivery of our child."],
@@ -85,7 +85,7 @@
     "963741852": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Jackson EMC"],
-      "amount": ["Amount:", "$157.00"],
+      "amount": ["Amount:", "157"],
       "account": ["From Account:", "Wells Fargo - Checking"],
       "payon": ["Pay On:", "2012-05-15"],
       "notes": ["Notes:", "Electric bill"],
@@ -94,7 +94,7 @@
     "741963852": {
       "name": ["Name:", "Jane Doe"],
       "payto": ["Pay To:", "Comcast"],
-      "amount": ["Amount:", "$187.00"],
+      "amount": ["Amount:", "187"],
       "account": ["From Account:", "Bank of America - Checking"],
       "payon": ["Pay On:", "2012-06-24"],
       "notes": ["Notes:", "Tv/Internet bill. Need to call Comcast and ask about adding telephone VOIP service."],
@@ -103,7 +103,7 @@
     "321987654": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Kaiser Permanente"],
-      "amount": ["Amount:", "$635.00"],
+      "amount": ["Amount:", "635"],
       "account": ["From Account:", "Wells Fargo - Credit Card"],
       "payon": ["Pay On:", "2012-07-05"],
       "notes": ["Notes:", "Medical bill for delivery of our child."],
@@ -112,7 +112,7 @@
     "369874123": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Jackson EMC"],
-      "amount": ["Amount:", "$157.00"],
+      "amount": ["Amount:", "157"],
       "account": ["From Account:", "Wells Fargo - Checking"],
       "payon": ["Pay On:", "2012-05-15"],
       "notes": ["Notes:", "Electric bill"],
@@ -121,7 +121,7 @@
     "569874563": {
       "name": ["Name:", "Jane Doe"],
       "payto": ["Pay To:", "Comcast"],
-      "amount": ["Amount:", "$187.00"],
+      "amount": ["Amount:", "187"],
       "account": ["From Account:", "Bank of America - Checking"],
       "payon": ["Pay On:", "2012-06-24"],
       "notes": ["Notes:", "Tv/Internet bill. Need to call Comcast and ask about adding telephone VOIP service."],
@@ -130,7 +130,7 @@
     "123654785": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Kaiser Permanente"],
-      "amount": ["Amount:", "$635.00"],
+      "amount": ["Amount:", "635"],
       "account": ["From Account:", "Wells Fargo - Credit Card"],
       "payon": ["Pay On:", "2012-07-05"],
       "notes": ["Notes:", "Medical bill for delivery of our child."],
@@ -139,7 +139,7 @@
     "856985698": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Jackson EMC"],
-      "amount": ["Amount:", "$157.00"],
+      "amount": ["Amount:", "157"],
       "account": ["From Account:", "Wells Fargo - Checking"],
       "payon": ["Pay On:", "2012-05-15"],
       "notes": ["Notes:", "Electric bill"],
@@ -148,7 +148,7 @@
     "458745874": {
       "name": ["Name:", "Jane Doe"],
       "payto": ["Pay To:", "Comcast"],
-      "amount": ["Amount:", "$187.00"],
+      "amount": ["Amount:", "187"],
       "account": ["From Account:", "Bank of America - Checking"],
       "payon": ["Pay On:", "2012-06-24"],
       "notes": ["Notes:", "Tv/Internet bill. Need to call Comcast and ask about adding telephone VOIP service."],
@@ -157,7 +157,7 @@
     "125412541": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Kaiser Permanente"],
-      "amount": ["Amount:", "$635.00"],
+      "amount": ["Amount:", "635"],
       "account": ["From Account:", "Wells Fargo - Credit Card"],
       "payon": ["Pay On:", "2012-07-05"],
       "notes": ["Notes:", "Medical bill for delivery of our child."],
@@ -166,7 +166,7 @@
     "365236589": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Jackson EMC"],
-      "amount": ["Amount:", "$157.00"],
+      "amount": ["Amount:", "157"],
       "account": ["From Account:", "Wells Fargo - Checking"],
       "payon": ["Pay On:", "2012-05-15"],
       "notes": ["Notes:", "Electric bill"],
@@ -175,7 +175,7 @@
     "258525852": {
       "name": ["Name:", "John Doe"],
       "payto": ["Pay To:", "Jackson EMC"],
-      "amount": ["Amount:", "$157.00"],
+      "amount": ["Amount:", "157"],
       "account": ["From Account:", "Wells Fargo - Checking"],
       "payon": ["Pay On:", "2012-05-15"],
       "notes": ["Notes:", "Electric bill"],
