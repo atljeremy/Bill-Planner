@@ -387,6 +387,8 @@ hideBillForm = ->
     hideItems()
     viewBillForm()
     $("#displayData").text "Display Data"
+    $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
+    
     return
   else
     #Form is visible, show bills
@@ -399,6 +401,7 @@ hideBillForm = ->
       setDataDisplayed(true)
       setInvalidated(false)
     $("#displayData").text "Display Form"
+    $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
     return
     
 unBindClickListeners = () ->
