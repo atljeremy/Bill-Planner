@@ -37,13 +37,20 @@ index.html
   
     	<div data-role="header">
         <a href="" class="hidden"></a>
-    		<h1>Bill Planner</h1>
-    		<a href="additem.html">
-        <img src="i/plus.png" alt="Add A New Bill"/>
+        <h1 id="headerBranding">Bill Planner</h1>
+    		<a href="#">
+        <img id="billSearch" src="i/search.png" alt="Search Bills"/>
         </a>
     	</div><!-- /header -->
     
     	<div data-role="content">
+    	
+        <!-- Search Form To Replace Header Branding -->
+        <div id="searchFormContainer">
+    		  <form action="#" method="post" id="searchForm" data-ajax="false">
+    		    <input type="text" id="searchTerm" required maxlength="25" placeholder="Enter Search Term" />
+    		  </form>
+    		</div>
     	
         <!-- unoSlider markup -->
         <ul id="unoslider" class="unoslider">

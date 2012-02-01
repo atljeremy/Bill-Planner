@@ -302,6 +302,14 @@ $("#billForm").live "submit", (e) ->
     success: ->
       storeData()
   return false
+  
+$("#billSearch").click("click", (e) ->
+  #Need to show search form textview and hide header branding
+  $("#searchFormContainer").css "display", "block"
+  $("#searchFormContainer").animate
+    opacity: 1.00
+  , 1000
+)
 
 ###
 Helper Methods
