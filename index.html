@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<!--
+Deliverable 1
+Author: Jeremy Fox
+Created For: MIU Online
+Feature, Search, Browse
+index.html
+-->
+
+<html class="ui-mobile-rendering">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="keywords" content="bill planner, bill, planner, planning, bills" />
+    <meta name="description" content="Bill Planner is a mobile web application that helps you stay on track!" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;" />
+    <meta name="HandheldFriendly" content="true" />
+    <title>Bill Planner</title>
+    
+    <!-- jQuery Mobile CSS -->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+    
+    <!-- unoSlider CSS -->
+    <link rel="stylesheet" href="css/unoslider.css" />
+    <!-- unoSlider theme CSS -->
+    <link rel="stylesheet" href="css/themes/smooth/theme.css"
+    
+    <!-- My CSS -->
+    <link rel="stylesheet" href="css/min/styles.css" type="text/css" />
+
+  </head>
+
+  <body id="PAGETOP">
+
+    <div data-role="page" id="home" data-dom-cache="true" data-theme="c">
+  
+    	<div data-role="header">
+        <a href="" class="hidden"></a>
+        <h1 id="headerBranding">Bill Planner</h1>
+    		<a href="#">
+        <img id="billSearch" src="i/search.png" alt="Search Bills"/>
+        </a>
+    	</div><!-- /header -->
+    
+    	<div data-role="content">
+    	
+        <!-- Search Form To Replace Header Branding -->
+        <div id="searchFormContainer">
+    		  <form action="#" method="post" id="searchForm" data-ajax="false">
+    		    <input type="text" id="searchTerm" required maxlength="25" placeholder="Enter Search Term" />
+    		  </form>
+    		</div>
+    	
+        <!-- unoSlider markup -->
+        <ul id="unoslider" class="unoslider">
+        	<li><a href="additem.html"><img src="i/cta-bills.png" /></a></li>
+        	<li><img src="i/cta-accounts.png" /></li>
+        </ul>
+      
+        <div id="grid">
+          <div class="row">
+            <div class="cell">
+              <a href="additem.html"><div class="gridBlock"><img src="i/plus_lg.png" alt="Add A Bill"/></div></a>
+            </div>
+            <div class="cell">
+              <a href="#"><div class="gridBlock"><img src="i/bills_lg.png" alt="View Bills"/></div></a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="cell">
+              <a href="#"><div class="gridBlock"><img src="i/wallet_lg.png" alt="Manage Accounts"/></div></a>
+            </div>
+            <div class="cell">
+              <a href="#"><div class="gridBlock"><img src="i/question_lg.png" alt="Need help? Get Answer."/></div></a>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /content -->
+    
+      <div data-role="footer">
+        <h4>&copy; Jeremy Fox 2012</h4>
+      </div> <!-- /footer -->
+      
+    </div> <!-- /page -->
+    
+    <!-- Underscore is a utility-belt library for JavaScript that provides a lot of the functional programming support -->
+    <script src="js/underscore-v1.2.4.js"></script>
+    
+    <!-- jQuery - required for jQuery Mobile -->
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <!-- unoSlider JS -->
+    <script src="js/min/unoslider.js"></script>
+    <!-- My JS -->
+    <script src="js/min/json.js"></script>
+    <script src="js/min/main.js"></script>
+    <!-- jQuery Mobile JS -->
+    <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+
+    <!-- unoSlider initializer -->
+		<script type='text/javascript'> 
+		  $(document).ready(function(){ 
+				$('#unoslider').unoslider({
+				  navigation: false,
+				  animation: {  
+            transition: 'slide_out', 
+            variation: 'right',
+            speed: 1000
+          },
+          slideshow: {
+            speed: 5
+          },
+          block: {
+            vertical: 1,
+            horizontal: 1
+          }
+				});
+		  });
+		</script>
+    
+  </body>
+</html>
