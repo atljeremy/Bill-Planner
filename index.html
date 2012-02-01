@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 
 <!--
-Deliverable 3
+Deliverable 1
 Author: Jeremy Fox
-Created For: VFW Online
-Simple HTML5 / Javascript Mobile Web Form
+Created For: MIU Online
+Feature, Search, Browse
 index.html
 -->
 
@@ -20,6 +20,11 @@ index.html
     
     <!-- jQuery Mobile CSS -->
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+    
+    <!-- unoSlider CSS -->
+    <link rel="stylesheet" href="css/unoslider.css" />
+    <!-- unoSlider theme CSS -->
+    <link rel="stylesheet" href="css/themes/smooth/theme.css"
     
     <!-- My CSS -->
     <link rel="stylesheet" href="css/min/styles.css" type="text/css" />
@@ -38,9 +43,13 @@ index.html
         </a>
     	</div><!-- /header -->
     
-    	<div data-role="content">	
-
-        Let <b>Bill Planner</b> help you stay on track! Let's get started…<br /><br />
+    	<div data-role="content">
+    	
+        <!-- unoSlider markup -->
+        <ul id="unoslider" class="unoslider">
+        	<li><a href="additem.html"><img src="i/cta-bills.png" /></a></li>
+        	<li><img src="i/cta-accounts.png" /></li>
+        </ul>
       
         <div id="grid">
           <div class="row">
@@ -64,7 +73,7 @@ index.html
       </div> <!-- /content -->
     
       <div data-role="footer">
-        <h4>&copy; My Company 2012</h4>
+        <h4>&copy; Jeremy Fox 2012</h4>
       </div> <!-- /footer -->
       
     </div> <!-- /page -->
@@ -74,11 +83,34 @@ index.html
     
     <!-- jQuery - required for jQuery Mobile -->
     <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <!-- unoSlider JS -->
+    <script src="js/min/unoslider.js"></script>
     <!-- My JS -->
     <script src="js/min/json.js"></script>
     <script src="js/min/main.js"></script>
     <!-- jQuery Mobile JS -->
     <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+
+    <!-- unoSlider initializer -->
+		<script type='text/javascript'> 
+		  $(document).ready(function(){ 
+				$('#unoslider').unoslider({
+				  navigation: false,
+				  animation: {  
+            transition: 'slide_out', 
+            variation: 'right',
+            speed: 1000
+          },
+          slideshow: {
+            speed: 5
+          },
+          block: {
+            vertical: 1,
+            horizontal: 1
+          }
+				});
+		  });
+		</script>
     
   </body>
 </html>
