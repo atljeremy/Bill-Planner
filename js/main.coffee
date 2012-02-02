@@ -304,11 +304,48 @@ $("#billForm").live "submit", (e) ->
   return false
   
 $("#billSearch").click("click", (e) ->
-  #Need to show search form textview and hide header branding
   $("#searchFormContainer").css "display", "block"
   $("#searchFormContainer").animate
     opacity: 1.00
   , 1000
+  
+  $("#billSearch").animate
+    opacity: 0.00
+  , 500
+  setTimeout(->
+    $("#billSearch").css "display", "none"
+  , 500)
+  
+  setTimeout(->
+    $("#billSearchHide").css "display", "inline"
+
+    $("#billSearchHide").animate
+      opacity: 1.00
+    , 500
+  , 500)
+)
+
+$("#billSearchHide").click("click", (e) ->
+  $("#searchFormContainer").animate
+    opacity: 0.00
+  , 1000
+  setTimeout(->
+    $("#searchFormContainer").css "display", "none"
+  , 1000)
+  
+  $("#billSearchHide").animate
+    opacity: 0.00
+  , 500
+  setTimeout(->
+    $("#billSearchHide").css "display", "none"
+  , 500)
+  
+  setTimeout(->
+    $("#billSearch").css "display", "inline"
+    $("#billSearch").animate
+      opacity: 1.00
+    , 500
+  , 500)
 )
 
 ###
