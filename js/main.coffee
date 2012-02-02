@@ -348,6 +348,17 @@ $("#billSearchHide").click("click", (e) ->
   , 500)
 )
 
+$("#viewBills").click("click", (e) =>
+  stopEvent(e)
+  setTimeout(->
+    @displayData()
+  , 500)
+  $.mobile.changePage( "additem.html",
+    transition: "slideup"
+    showLoadMsg: true
+  )
+)
+
 ###
 Helper Methods
 ###
