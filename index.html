@@ -40,6 +40,7 @@ index.html
         <h1 id="headerBranding">Bill Planner</h1>
     		<a href="#">
         <img id="billSearch" src="i/search.png" alt="Search Bills"/>
+        <img id="billSearchHide" src="i/search-hide.png" alt="Search Bills"/>
         </a>
     	</div><!-- /header -->
     
@@ -54,25 +55,46 @@ index.html
     	
         <!-- unoSlider markup -->
         <ul id="unoslider" class="unoslider">
-        	<li><a href="additem.html"><img src="i/cta-bills.png" /></a></li>
-        	<li><img src="i/cta-accounts.png" /></li>
+        	<li><img id="cta-bills" src="i/cta-bills.png" /></li>
+        	<li><img id="cta-accounts" src="i/cta-accounts.png" /></li>
         </ul>
-      
+
         <div id="grid">
+          <span class="sectionHeader">Browse</span>
           <div class="row">
             <div class="cell">
-              <a href="additem.html"><div class="gridBlock"><img src="i/plus_lg.png" alt="Add A Bill"/></div></a>
+              <a href="#">
+                <div id="addBill" class="gridBlock">
+                  <img class="gridIcon" src="i/plus_lg.png" alt="Add A Bill"/>
+                  <span class="gridText">Add A Bill</span>
+                </div>
+              </a>
             </div>
             <div class="cell">
-              <a href="#"><div class="gridBlock"><img src="i/bills_lg.png" alt="View Bills"/></div></a>
+              <a href="#">
+                <div id="viewBills" class="gridBlock">
+                  <img class="gridIcon" src="i/bills_lg.png" alt="View Bills"/>
+                  <span class="gridText">View Bills</span>
+                </div>
+              </a>
             </div>
           </div>
           <div class="row">
             <div class="cell">
-              <a href="#"><div class="gridBlock"><img src="i/wallet_lg.png" alt="Manage Accounts"/></div></a>
+              <a href="#">
+                <div class="gridBlock">
+                  <img class="gridIcon" src="i/wallet_lg.png" alt="Manage Accounts"/>
+                  <span class="gridText">Accounts</span>
+                </div>
+              </a>
             </div>
             <div class="cell">
-              <a href="#"><div class="gridBlock"><img src="i/question_lg.png" alt="Need help? Get Answer."/></div></a>
+              <a href="#">
+                <div class="gridBlock">
+                  <img class="gridIcon" src="i/question_lg.png" alt="Need help? Get Answer."/>
+                  <span class="gridText">FAQ's</span>
+                </div>
+              </a>
             </div>
           </div>
         </div>

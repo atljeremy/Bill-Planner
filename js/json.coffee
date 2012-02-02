@@ -1,7 +1,20 @@
-# Deliverable 4 (JSON)
-# Author: Jeremy Fox
-# Created For: VFW Online
-# JSON Object for use in Project 4 (CRUD APP)
+###
+Deliverable 4 (JSON)
+Author: Jeremy Fox
+Created For: VFW Online
+JSON Object for use in Project 4 (CRUD APP)
+###
+
+###
+6 Account Types
+
+Wells Fargo - Checking
+Bank of America - Checking
+Wells Fargo - Credit Card
+Bank of America - Credit Card
+Bank of America - Savings
+Wells Fargo - Savings
+###
 
 @json =
   "123456789":
@@ -89,7 +102,7 @@
       "name"     : ["Name:",                  "John Doe"]
       "payto"    : ["Pay To:",                "Kaiser Permanente"]
       "amount"   : ["Amount:",                "635"]
-      "account"  : ["From Account:",          "Wells Fargo - Credit Card"]
+      "account"  : ["From Account:",          "Wells Fargo - Savings"]
       "payon"    : ["Pay On:",                "2012-07-05"]
       "notes"    : ["Notes:",                 "Medical bill for delivery of our child."]
       "remember" : ["Remember This Payment:", "No"]
@@ -179,7 +192,7 @@
       "name"     : ["Name:",                  "John Doe"]
       "payto"    : ["Pay To:",                "Kaiser Permanente"]
       "amount"   : ["Amount:",                "635"]
-      "account"  : ["From Account:",          "Wells Fargo - Credit Card"]
+      "account"  : ["From Account:",          "Bank of America - Credit Card"]
       "payon"    : ["Pay On:",                "2012-07-05"]
       "notes"    : ["Notes:",                 "Medical bill for delivery of our child."]
       "remember" : ["Remember This Payment:", "No"]

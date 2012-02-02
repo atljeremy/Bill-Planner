@@ -22,6 +22,7 @@ mHeightWidth(args)
 //////////////////////////////////////////////////////////
 a 
   color #FFF
+  text-decoration none
 
 ul
   list-style none
@@ -48,6 +49,7 @@ legend
   font-family Helvetica, Verdana, Arial, sans-serif
   background-image url('../../i/linen.jpg')
   margin 0px
+  padding 0px
 
 // jQuery Mobile Header & Footer Elements
 .ui-header, .ui-footer, .ui-page-fullscreen .ui-header, .ui-page-fullscreen .ui-footer 
@@ -97,6 +99,10 @@ legend
   top 5px
   margin auto auto auto 35px
   z-index 9999
+  
+#billSearchHide
+  display none
+  opacity 0.00
 
 .sectionHeader
   display block
@@ -117,7 +123,7 @@ legend
 
 #grid
 	width 320px
-	margin-top 0px
+	margin-top 85px
 	overflow scroll
 	clear both
 
@@ -133,7 +139,7 @@ legend
 .gridBlock
   color #000
   text-align center
-  padding 30px
+  padding 20px 29px 20px 29px
   mHeightWidth 130px
   border-radius 6px
   background rgb(226,226,226)
@@ -143,6 +149,18 @@ legend
   background -o-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
   background -ms-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
   background linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  
+.gridIcon
+  display block
+  clear both
+  
+.gridText
+  color #333
+  display block
+  clear both
+  text-shadow 1px 1px 1px #FFF
+  filter dropshadow(color=#555, offx=1, offy=1)
+  text-decoration none
 
 #footer 
   font-size 10px

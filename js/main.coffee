@@ -304,11 +304,79 @@ $("#billForm").live "submit", (e) ->
   return false
   
 $("#billSearch").click("click", (e) ->
-  #Need to show search form textview and hide header branding
   $("#searchFormContainer").css "display", "block"
   $("#searchFormContainer").animate
     opacity: 1.00
   , 1000
+  
+  $("#billSearch").animate
+    opacity: 0.00
+  , 500
+  setTimeout(->
+    $("#billSearch").css "display", "none"
+  , 500)
+  
+  setTimeout(->
+    $("#billSearchHide").css "display", "inline"
+
+    $("#billSearchHide").animate
+      opacity: 1.00
+    , 500
+  , 500)
+)
+
+$("#billSearchHide").click("click", (e) ->
+  $("#searchFormContainer").animate
+    opacity: 0.00
+  , 1000
+  setTimeout(->
+    $("#searchFormContainer").css "display", "none"
+  , 1000)
+  
+  $("#billSearchHide").animate
+    opacity: 0.00
+  , 500
+  setTimeout(->
+    $("#billSearchHide").css "display", "none"
+  , 500)
+  
+  setTimeout(->
+    $("#billSearch").css "display", "inline"
+    $("#billSearch").animate
+      opacity: 1.00
+    , 500
+  , 500)
+)
+
+$("#viewBills").click("click", (e) =>
+  stopEvent(e)
+  setTimeout(->
+    @displayData(true, false)
+  , 500)
+  $.mobile.changePage( "additem.html",
+    transition: "slideup"
+    showLoadMsg: true
+  )
+)
+
+$("#addBill").click("click", (e) =>
+  stopEvent(e)
+  setTimeout(->
+    @displayData(false, true)
+  , 500)
+  $.mobile.changePage( "additem.html",
+    showLoadMsg: true
+  )
+)
+
+$("#cta-bills").click("click", (e) =>
+  stopEvent(e)
+  setTimeout(->
+    @displayData(false, true)
+  , 500)
+  $.mobile.changePage( "additem.html",
+    showLoadMsg: true
+  )
 )
 
 ###
@@ -401,29 +469,50 @@ hideBillForm = ->
   $("#billForm").css "display", "none"
   return
   
-@displayData = () ->
-  if getViewState()
+@displayData = (showBills, showForm) =>
+  bills = (if showBills isnt null or showBills isnt "" then showBills else false)
+  form  = (if showForm isnt null or showForm isnt "" then showForm else false)
+
+  if form
     #Bills are visible, show form
-    setViewState(false)
-    hideItems()
-    viewBillForm()
-    $("#displayData").text "Display Data"
-    $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
-    
+    @showForm()
     return
+
+  else if bills
+    #Form is visible, show bills
+    @showBills()
+    return
+    
+  else if getViewState()
+    #Bills are visible, show form
+    @showForm()
+    return
+  
   else
     #Form is visible, show bills
-    setViewState(true)
-    hideBillForm()
-    viewItems()
-    if getDataDisplayed() == false or getInvalidated()
-      destroyDataSet()
-      getData()
-      setDataDisplayed(true)
-      setInvalidated(false)
-    $("#displayData").text "Display Form"
-    $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
+    @showBills()
     return
+    
+@showForm = () ->
+  setViewState(false)
+  hideItems()
+  viewBillForm()
+  $("#displayData").text "Display Data"
+  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
+  return
+  
+@showBills = () ->
+  setViewState(true)
+  hideBillForm()
+  viewItems()
+  if getDataDisplayed() == false or getInvalidated()
+    destroyDataSet()
+    getData()
+    setDataDisplayed(true)
+    setInvalidated(false)
+  $("#displayData").text "Display Form"
+  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
+  return
     
 unBindClickListeners = () ->
   $(document).unbind("click")

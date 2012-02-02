@@ -1,11 +1,12 @@
 /* Unoslide container */
 .unoslider {
   list-style: none;
-  position: relative;
-  top: -15px;
-	width: 960px;
-  height: 350px;
-  margin: 0 auto;
+  position: absolute;
+  top: 51px;
+	width: 320px;
+  height: 100px;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0;
 }
 .unoslider li {
