@@ -343,10 +343,30 @@ Variables
   $("#viewBills").click("click", function(e) {
     stopEvent(e);
     setTimeout(function() {
-      return this.displayData();
+      return this.displayData(true, false);
     }, 500);
     return $.mobile.changePage("additem.html", {
       transition: "slideup",
+      showLoadMsg: true
+    });
+  });
+
+  $("#addBill").click("click", function(e) {
+    stopEvent(e);
+    setTimeout(function() {
+      return this.displayData(false, true);
+    }, 500);
+    return $.mobile.changePage("additem.html", {
+      showLoadMsg: true
+    });
+  });
+
+  $("#cta-bills").click("click", function(e) {
+    stopEvent(e);
+    setTimeout(function() {
+      return this.displayData(false, true);
+    }, 500);
+    return $.mobile.changePage("additem.html", {
       showLoadMsg: true
     });
   });
@@ -459,26 +479,41 @@ Variables
     $("#billForm").css("display", "none");
   };
 
-  this.displayData = function() {
-    if (getViewState()) {
-      setViewState(false);
-      hideItems();
-      viewBillForm();
-      $("#displayData").text("Display Data");
-      $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
+  this.displayData = function(showBills, showForm) {
+    var bills, form;
+    bills = (showBills !== null || showBills !== "" ? showBills : false);
+    form = (showForm !== null || showForm !== "" ? showForm : false);
+    if (form) {
+      _this.showForm();
+    } else if (bills) {
+      _this.showBills();
+    } else if (getViewState()) {
+      _this.showForm();
     } else {
-      setViewState(true);
-      hideBillForm();
-      viewItems();
-      if (getDataDisplayed() === false || getInvalidated()) {
-        destroyDataSet();
-        getData();
-        setDataDisplayed(true);
-        setInvalidated(false);
-      }
-      $("#displayData").text("Display Form");
-      $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
+      _this.showBills();
     }
+  };
+
+  this.showForm = function() {
+    setViewState(false);
+    hideItems();
+    viewBillForm();
+    $("#displayData").text("Display Data");
+    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
+  };
+
+  this.showBills = function() {
+    setViewState(true);
+    hideBillForm();
+    viewItems();
+    if (getDataDisplayed() === false || getInvalidated()) {
+      destroyDataSet();
+      getData();
+      setDataDisplayed(true);
+      setInvalidated(false);
+    }
+    $("#displayData").text("Display Form");
+    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
   };
 
   unBindClickListeners = function() {
