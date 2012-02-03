@@ -1,8 +1,8 @@
 ###
-Deliverable 4 (JSON)
+Deliverable 1 (JSON)
 Author: Jeremy Fox
-Created For: VFW Online
-JSON Object for use in Project 4 (CRUD APP)
+Created For: MiU Online
+JSON Object for use with Bill Planner (CRUD APP)
 ###
 
 ###

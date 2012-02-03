@@ -1,8 +1,8 @@
 
 /*
-Deliverable 3
+Deliverable 1
 Author: Jeremy Fox
-Created For: VFW Online
+Created For: MiU Online
 Simple HTML5 / Javascript Mobile Web Form
 */
 
