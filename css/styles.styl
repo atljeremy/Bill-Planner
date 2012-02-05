@@ -23,6 +23,11 @@ mHeightWidth(args)
 a 
   color #FFF
   text-decoration none
+  
+a, .bill
+  color #000
+  font-weight bold
+  
 
 ul
   list-style none
@@ -182,39 +187,90 @@ legend
   bottom 0px
   z-index 1000
 
-.center 
+.center
   text-align center
   margin 15px 0px 5px 0px
 
-.hidden 
+.hidden
   visibility hidden
 
-#items 
+#itemsSection
   display none
-  padding 10px
-  width 95%
-  margin-left auto
-  margin-right auto
-  border-radius 10px
-  background -moz-linear-gradient(top,  rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.40) 100%)
-  background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.40)), color-stop(100%,rgba(0,0,0,0.40)))
-  background -webkit-linear-gradient(top,  rgba(0,0,0,0.40) 0%,rgba(0,0,0,0.40) 100%)
-  background -o-linear-gradient(top,  rgba(0,0,0,0.40) 0%,rgba(0,0,0,0.40) 100%)
-  background -ms-linear-gradient(top,  rgba(0,0,0,0.40) 0%,rgba(0,0,0,0.40) 100%)
-  background linear-gradient(top,  rgba(0,0,0,0.40) 0%,rgba(0,0,0,0.40) 100%)
+  padding 0px
+  width 90%
+  margin auto
 
-.bill 
-  color #000000
-  border 1px solid #cccccc
-  border-radius 10px
-  padding 10px
-  margin 0px, auto, 10px, auto
-  background -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.5) 100%)
-  background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0.5)))
-  background -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.5) 100%)
-  background -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.5) 100%)
-  background -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.5) 100%)
-  background linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.5) 100%)
+#items
+  padding 0px
+  width 100%
+  margin auto
+
+#itemsHeader
+  color #000
+  font-weight bold
+  font-size 2.0em
+  text-align center
+  padding 15px 20px 15px 20px
+  margin 0px
+  width 100%
+  margin auto
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  -moz-border-radius-topleft: 8px;
+  -moz-border-radius-topright: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background: rgb(184,225,252);
+  background: -moz-linear-gradient(top,  rgba(184,225,252,1) 0%, rgba(169,210,243,1) 10%, rgba(144,186,228,1) 25%, rgba(144,188,234,1) 37%, rgba(144,191,240,1) 50%, rgba(107,168,229,1) 51%, rgba(162,218,245,1) 83%, rgba(189,243,253,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(184,225,252,1)), color-stop(10%,rgba(169,210,243,1)), color-stop(25%,rgba(144,186,228,1)), color-stop(37%,rgba(144,188,234,1)), color-stop(50%,rgba(144,191,240,1)), color-stop(51%,rgba(107,168,229,1)), color-stop(83%,rgba(162,218,245,1)), color-stop(100%,rgba(189,243,253,1)));
+  background: -webkit-linear-gradient(top,  rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%);
+  background: -o-linear-gradient(top,  rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%);
+  background: linear-gradient(top,  rgba(184,225,252,1) 0%,rgba(169,210,243,1) 10%,rgba(144,186,228,1) 25%,rgba(144,188,234,1) 37%,rgba(144,191,240,1) 50%,rgba(107,168,229,1) 51%,rgba(162,218,245,1) 83%,rgba(189,243,253,1) 100%);
+
+.bill
+  padding 20px
+  margin 0px
+  width 100%
+  border-top 1px solid #444
+  background rgb(226,226,226)
+  background -moz-linear-gradient(top,  rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%)
+  background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,1)), color-stop(51%,rgba(209,209,209,1)), color-stop(100%,rgba(254,254,254,1)))
+  background -webkit-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -o-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -ms-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  
+.lastBill
+  padding 20px
+  margin 0px
+  width 100%
+  border-top 1px solid #444
+  -webkit-border-bottom-right-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-bottomright: 8px;
+  -moz-border-radius-bottomleft: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background rgb(226,226,226)
+  background -moz-linear-gradient(top,  rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%)
+  background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,1)), color-stop(51%,rgba(209,209,209,1)), color-stop(100%,rgba(254,254,254,1)))
+  background -webkit-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -o-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background -ms-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+  background linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%)
+
+//  color #000000
+//  border 1px solid #cccccc
+//  border-radius 10px
+//  padding 10px
+//  margin 0px, auto, 10px, auto
+//  background -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.5) 100%)
+//  background -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0.5)))
+//  background -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.5) 100%)
+//  background -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.5) 100%)
+//  background -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.5) 100%)
+//  background linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.5) 100%)
 
 .icons
   background #222
@@ -227,6 +283,15 @@ legend
   float right
   padding 10px
   margin-bottom 10px
+  
+.listIcons
+  width 25px
+  height 20px
+  display block
+  position relative
+  right 0px
+  clear both
+  float right
 
 //////////////////////////////////////////////////////////
 //  Input Styles

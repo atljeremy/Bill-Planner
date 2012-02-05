@@ -129,83 +129,33 @@ Variables
   };
 
   qryBills = function(storage, from) {
-    var makeList;
-    makeList = document.createElement("ul");
-    $("#items").append(makeList);
-    _.each(_.keys(storage), function(key) {
-      var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeListItem, makeSubList, value;
+    var i;
+    i = 1;
+    return _.each(_.keys(storage), function(key) {
+      var billObj, makeDeleteIcon, makeLink, makeListItem, payTo, value;
       makeListItem = document.createElement("li");
-      makeList.appendChild(makeListItem);
-      if (from === "localStorage") {
-        value = storage.getItem(key);
-      } else {
-        value = storage[key];
-      }
-      if (from === "localStorage") {
-        billObj = JSON.parse(value);
-      } else {
-        billObj = value;
-      }
-      makeSubList = document.createElement("ul");
-      makeSubList.setAttribute("class", "bill");
-      makeSubList.setAttribute("id", "bill-" + key);
-      makeEditIcon = document.createElement("img");
-      makeEditIcon.setAttribute("src", "i/pencil.png");
-      makeEditIcon.setAttribute("class", "icons");
-      makeEditIcon.setAttribute("id", "edit-" + key);
+      makeListItem.setAttribute("id", "li-key-" + key);
       makeDeleteIcon = document.createElement("img");
       makeDeleteIcon.setAttribute("src", "i/x.png");
-      makeDeleteIcon.setAttribute("class", "icons");
+      makeDeleteIcon.setAttribute("class", "listIcons");
       makeDeleteIcon.setAttribute("id", "delete-" + key);
-      makeAccountIcon = document.createElement("img");
-      OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
-      account = billObj.account[1];
-      accountMatch = account.match(OPERATOR);
-      switch (accountMatch[0]) {
-        case "Checking":
-          makeAccountIcon.setAttribute("src", "i/thumb_checking.png");
-          break;
-        case "Savings":
-          makeAccountIcon.setAttribute("src", "i/thumb_savings.png");
-          break;
-        case "Credit Card":
-          makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png");
+      if (_.size(storage) === i) {
+        makeListItem.setAttribute("class", "lastBill");
+      } else {
+        makeListItem.setAttribute("class", "bill");
       }
-      makeAccountIcon.setAttribute("class", "icons");
-      makeAccountIcon.setAttribute("id", "account-" + key);
-      makeSubList.appendChild(makeEditIcon);
-      makeSubList.appendChild(makeDeleteIcon);
-      makeSubList.appendChild(makeAccountIcon);
-      makeListItem.appendChild(makeSubList);
-      $("#edit-" + key).click("click", function(e) {
-        return editItem(key);
-      });
-      $("#delete-" + key).click("click", function(e) {
-        return deleteItem(key);
-      });
-      $("#account-" + key).click("click", function(e) {
-        return showAccount(key);
-      });
-      _.each(billObj, function(bill) {
-        var field, makeSubListItem;
-        makeSubListItem = document.createElement("li");
-        if (bill[0] === "From Account:") {
-          makeSubListItem.setAttribute("id", "li-account-" + key);
-        }
-        makeSubList.appendChild(makeSubListItem);
-        field = document.createElement("span");
-        value = document.createElement("span");
-        field.setAttribute("class", "billField");
-        value.setAttribute("class", "billValue");
-        makeSubListItem.appendChild(field);
-        makeSubListItem.appendChild(value);
-        field.innerHTML = bill[0] + " ";
-        value.innerHTML = bill[1];
-        return true;
-      });
-      return true;
+      makeLink = document.createElement("a");
+      makeLink.setAttribute("href", "#");
+      makeListItem.appendChild(makeLink);
+      makeListItem.appendChild(makeDeleteIcon);
+      $("#items").append(makeListItem);
+      value = storage.getItem(key);
+      billObj = JSON.parse(value);
+      payTo = billObj.payto[1];
+      makeLink.innerHTML = payTo;
+      console.log(i);
+      return i++;
     });
-    return true;
   };
 
   editItem = function(key) {
@@ -464,11 +414,11 @@ Variables
   };
 
   viewItems = function() {
-    $("#items").css("display", "inline-block");
+    $("#itemsSection").css("display", "inline-block");
   };
 
   hideItems = function() {
-    $("#items").css("display", "none");
+    $("#itemsSection").css("display", "none");
   };
 
   viewBillForm = function() {

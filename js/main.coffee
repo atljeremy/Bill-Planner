@@ -102,127 +102,167 @@ getData = ->
     else
       storeJsonData()
       # qryBills(@json, "json")
-   
+
 qryBills = (storage, from) ->
-  #Create unordered list
-  makeList = document.createElement("ul")
-  #Add list to "items" div
-  $("#items").append makeList
-  #for each item in localStorage do the following
+
+  i = 1
   _.each(_.keys(storage), (key) ->
-    #Make a list item
+    
     makeListItem = document.createElement("li")
-    #Add the list item to the Unordered list
-    makeList.appendChild makeListItem
+    makeListItem.setAttribute("id", "li-key-"+key)
     
-    if from == "localStorage"
-      #Get the value of the item in storage
-      value = storage.getItem(key)
-    else
-      value = storage[key]
-    
-    if from == "localStorage"
-      #parse the value's JSON
-      billObj = JSON.parse value
-    else
-      #parse the value's JSON
-      billObj = value
-    
-    #create a new Unordered list within the original Unordered list
-    makeSubList = document.createElement("ul")
-  
-    #set class and id attribute for the new Unordered list for styling
-    makeSubList.setAttribute("class", "bill")
-    makeSubList.setAttribute("id", "bill-"+key)
-  
-    #Create a new img view for edit icon
-    makeEditIcon = document.createElement("img")
-  
-    #Set src, class and id attribute on edit icon img view
-    makeEditIcon.setAttribute("src", "i/pencil.png")
-    makeEditIcon.setAttribute("class", "icons")
-    makeEditIcon.setAttribute("id", "edit-"+key)
-  
     #Create a new img view for delete icon
     makeDeleteIcon = document.createElement("img")
-  
+    
     #Set src, class and id attribute on delete icon img view
     makeDeleteIcon.setAttribute("src", "i/x.png")
-    makeDeleteIcon.setAttribute("class", "icons")
+    makeDeleteIcon.setAttribute("class", "listIcons")
     makeDeleteIcon.setAttribute("id", "delete-"+key)
     
-    #Create a new img view for account icon
-    makeAccountIcon = document.createElement("img")
-  
-    #Set src, class and id attribute on delete icon img view
-    OPERATOR = ///
-    ((Checking)|(Savings)|(Credit\sCard))+
-    ///g
+    if(_.size(storage) == i)
+      makeListItem.setAttribute("class", "lastBill")
+    else
+      makeListItem.setAttribute("class", "bill")
+    
+    makeLink = document.createElement("a")
+    makeLink.setAttribute("href", "#")
+    makeListItem.appendChild makeLink
+    makeListItem.appendChild makeDeleteIcon
 
-    account = billObj.account[1]
-    accountMatch = account.match(OPERATOR)
-    switch accountMatch[0]
-      when "Checking" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
-      when "Savings" then makeAccountIcon.setAttribute("src", "i/thumb_savings.png")
-      when "Credit Card" then makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png")
+    $("#items").append makeListItem
     
-    makeAccountIcon.setAttribute("class", "icons")
-    makeAccountIcon.setAttribute("id", "account-"+key)
+    value = storage.getItem(key)
+    billObj = JSON.parse value
     
-    #Add icons to subList
-    makeSubList.appendChild makeEditIcon
-    makeSubList.appendChild makeDeleteIcon
-    makeSubList.appendChild makeAccountIcon
+    payTo = billObj.payto[1]
     
-    #Add the new Unordered list to the list item of original Unordered list
-    makeListItem.appendChild makeSubList
+    makeLink.innerHTML = payTo
     
-    #Set click listener on edit icon
-    $("#edit-"+key).click("click", (e) ->
-      editItem(key)
-    )
+    console.log i
     
-    #Set click listener on delete icon
-    $("#delete-"+key).click("click", (e) ->
-      deleteItem(key)
-    )
-    
-    #Set click listener on account icon
-    $("#account-"+key).click("click", (e) ->
-      showAccount(key)
-    )
-    
-    #for each bill in the billObj do the following
-    _.each(billObj, (bill) ->
-    
-      #Make a list item
-      makeSubListItem = document.createElement("li")
-      
-      if bill[0] == "From Account:"
-        makeSubListItem.setAttribute("id", "li-account-"+key)
-      
-      #Add the list item to the new Unordered list
-      makeSubList.appendChild makeSubListItem
-      
-      #Create the text to display for each line
-      field = document.createElement("span")
-      value = document.createElement("span")
-      
-      field.setAttribute("class", "billField")
-      value.setAttribute("class", "billValue")
-        
-                      
-      #Add the text to the new list item
-      makeSubListItem.appendChild field
-      makeSubListItem.appendChild value
-      
-      field.innerHTML = bill[0] + " "
-      value.innerHTML = bill[1]
-      true
-    )
-    true
+    i++
   )
-  true    
+   
+# qryBills = (storage, from) ->
+#   #Create unordered list
+#   makeList = document.createElement("ul")
+#   #Add list to "items" div
+#   $("#items").append makeList
+#   #for each item in localStorage do the following
+#   _.each(_.keys(storage), (key) ->
+#     #Make a list item
+#     makeListItem = document.createElement("li")
+#     #Add the list item to the Unordered list
+#     makeList.appendChild makeListItem
+#     
+#     if from == "localStorage"
+#       #Get the value of the item in storage
+#       value = storage.getItem(key)
+#     else
+#       value = storage[key]
+#     
+#     if from == "localStorage"
+#       #parse the value's JSON
+#       billObj = JSON.parse value
+#     else
+#       #parse the value's JSON
+#       billObj = value
+#     
+#     #create a new Unordered list within the original Unordered list
+#     makeSubList = document.createElement("ul")
+#   
+#     #set class and id attribute for the new Unordered list for styling
+#     makeSubList.setAttribute("class", "bill")
+#     makeSubList.setAttribute("id", "bill-"+key)
+#   
+#     #Create a new img view for edit icon
+#     makeEditIcon = document.createElement("img")
+#   
+#     #Set src, class and id attribute on edit icon img view
+#     makeEditIcon.setAttribute("src", "i/pencil.png")
+#     makeEditIcon.setAttribute("class", "icons")
+#     makeEditIcon.setAttribute("id", "edit-"+key)
+#   
+#     #Create a new img view for delete icon
+#     makeDeleteIcon = document.createElement("img")
+#   
+#     #Set src, class and id attribute on delete icon img view
+#     makeDeleteIcon.setAttribute("src", "i/x.png")
+#     makeDeleteIcon.setAttribute("class", "icons")
+#     makeDeleteIcon.setAttribute("id", "delete-"+key)
+#     
+#     #Create a new img view for account icon
+#     makeAccountIcon = document.createElement("img")
+#   
+#     #Set src, class and id attribute on delete icon img view
+#     OPERATOR = ///
+#     ((Checking)|(Savings)|(Credit\sCard))+
+#     ///g
+# 
+#     account = billObj.account[1]
+#     accountMatch = account.match(OPERATOR)
+#     switch accountMatch[0]
+#       when "Checking" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
+#       when "Savings" then makeAccountIcon.setAttribute("src", "i/thumb_savings.png")
+#       when "Credit Card" then makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png")
+#     
+#     makeAccountIcon.setAttribute("class", "icons")
+#     makeAccountIcon.setAttribute("id", "account-"+key)
+#     
+#     #Add icons to subList
+#     makeSubList.appendChild makeEditIcon
+#     makeSubList.appendChild makeDeleteIcon
+#     makeSubList.appendChild makeAccountIcon
+#     
+#     #Add the new Unordered list to the list item of original Unordered list
+#     makeListItem.appendChild makeSubList
+#     
+#     #Set click listener on edit icon
+#     $("#edit-"+key).click("click", (e) ->
+#       editItem(key)
+#     )
+#     
+#     #Set click listener on delete icon
+#     $("#delete-"+key).click("click", (e) ->
+#       deleteItem(key)
+#     )
+#     
+#     #Set click listener on account icon
+#     $("#account-"+key).click("click", (e) ->
+#       showAccount(key)
+#     )
+#     
+#     #for each bill in the billObj do the following
+#     _.each(billObj, (bill) ->
+#     
+#       #Make a list item
+#       makeSubListItem = document.createElement("li")
+#       
+#       if bill[0] == "From Account:"
+#         makeSubListItem.setAttribute("id", "li-account-"+key)
+#       
+#       #Add the list item to the new Unordered list
+#       makeSubList.appendChild makeSubListItem
+#       
+#       #Create the text to display for each line
+#       field = document.createElement("span")
+#       value = document.createElement("span")
+#       
+#       field.setAttribute("class", "billField")
+#       value.setAttribute("class", "billValue")
+#         
+#                       
+#       #Add the text to the new list item
+#       makeSubListItem.appendChild field
+#       makeSubListItem.appendChild value
+#       
+#       field.innerHTML = bill[0] + " "
+#       value.innerHTML = bill[1]
+#       true
+#     )
+#     true
+#   )
+#   true    
 
 editItem = (key) =>
   value = localStorage.getItem key
@@ -454,11 +494,11 @@ stopEvent = (event) ->
     event.originalEvent.returnValue = false
     
 viewItems = ->
-  $("#items").css "display", "inline-block"
+  $("#itemsSection").css "display", "inline-block"
   return
   
 hideItems = ->
-  $("#items").css "display", "none"
+  $("#itemsSection").css "display", "none"
   return
   
 viewBillForm = ->
