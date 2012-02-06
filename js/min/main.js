@@ -1,14 +1,17 @@
+
 /*
 Deliverable 1
 Author: Jeremy Fox
 Created For: MiU Online
 Simple HTML5 / Javascript Mobile Web Form
-*//*
+*/
+
+/*
 Variables
 */
 
 (function() {
-  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, setDataDisplayed, setInvalidated, setViewState, showAccount, stopEvent, storeJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
+  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, showAccount, showBillDetails, stopEvent, storeJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
     _this = this;
 
   this.dataViewState = false;
@@ -20,6 +23,8 @@ Variables
   this.keyToEdit = 0;
 
   billAccounts = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
+
+  this.detailsKey = "";
 
   /*
   State Control Methods
@@ -49,8 +54,20 @@ Variables
     return _this.invalidateData;
   };
 
+  setDetailsKey = function(key) {
+    return _this.detailsKey = key;
+  };
+
+  getDetailsKey = function() {
+    return _this.detailsKey;
+  };
+
   destroyDataSet = function() {
     return $("#items").empty();
+  };
+
+  destroyDetailsDataSet = function() {
+    return $("#itemDetails").empty();
   };
 
   /*
@@ -129,11 +146,11 @@ Variables
     var i;
     i = 1;
     return _.each(_.keys(storage), function(key) {
-      var billObj, makeDeleteIcon, makeLink, makeListItem, payTo, value;
+      var billObj, makeDeleteIcon, makeLink, makeListItem, payAmount, payDate, payTo, value;
       makeListItem = document.createElement("li");
       makeListItem.setAttribute("id", "li-key-" + key);
       makeDeleteIcon = document.createElement("img");
-      makeDeleteIcon.setAttribute("src", "i/x.png");
+      makeDeleteIcon.setAttribute("src", "i/arrow.png");
       makeDeleteIcon.setAttribute("class", "listIcons");
       makeDeleteIcon.setAttribute("id", "delete-" + key);
       if (_.size(storage) === i) {
@@ -146,11 +163,20 @@ Variables
       makeListItem.appendChild(makeLink);
       makeListItem.appendChild(makeDeleteIcon);
       $("#items").append(makeListItem);
+      $("#li-key-" + key).click("click", function(e) {
+        stopEvent(e);
+        setDetailsKey(key);
+        $.mobile.changePage("details.html", {
+          showLoadMsg: true
+        });
+        return false;
+      });
       value = storage.getItem(key);
       billObj = JSON.parse(value);
-      payTo = billObj.payto[1];
-      makeLink.innerHTML = payTo;
-      console.log(i);
+      payTo = billObj.payto[0] + " " + billObj.payto[1];
+      payAmount = "$" + billObj.amount[1];
+      payDate = "(" + billObj.payon[1] + ")";
+      makeLink.innerHTML = payTo + " " + payAmount + " " + payDate;
       return i++;
     });
   };
@@ -231,6 +257,10 @@ Variables
     localStorage.clear();
     return alert("All Data Has Been Deleted.");
   };
+
+  /*
+  Click Events
+  */
 
   $("#billForm").live("submit", function(e) {
     var formdata;
@@ -474,6 +504,7 @@ Variables
   $(document).bind("mobileinit", function() {
     $.mobile.accounts = getAccounts;
     $.mobile.date = currentDate;
+    $.mobile.details = showBillDetails;
   });
 
   getAccounts = function() {
@@ -499,6 +530,76 @@ Variables
     year = currentTime.getFullYear();
     showDate = year + "-" + add0(month) + "-" + add0(day);
     return document.getElementById("payOn").value = showDate;
+  };
+
+  showBillDetails = function(key) {
+    var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeList, makeListItem, makeSubList, value;
+    key = (key !== void 0 ? key : getDetailsKey());
+    destroyDetailsDataSet();
+    makeList = document.createElement("ul");
+    $("#itemDetails").append(makeList);
+    makeListItem = document.createElement("li");
+    makeList.appendChild(makeListItem);
+    value = localStorage[key];
+    billObj = JSON.parse(value);
+    makeSubList = document.createElement("ul");
+    makeSubList.setAttribute("id", "bill-" + key);
+    makeEditIcon = document.createElement("img");
+    makeEditIcon.setAttribute("src", "i/pencil.png");
+    makeEditIcon.setAttribute("class", "icons");
+    makeEditIcon.setAttribute("id", "edit-" + key);
+    makeDeleteIcon = document.createElement("img");
+    makeDeleteIcon.setAttribute("src", "i/x.png");
+    makeDeleteIcon.setAttribute("class", "icons");
+    makeDeleteIcon.setAttribute("id", "delete-" + key);
+    makeAccountIcon = document.createElement("img");
+    OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
+    account = billObj.account[1];
+    accountMatch = account.match(OPERATOR);
+    switch (accountMatch[0]) {
+      case "Checking":
+        makeAccountIcon.setAttribute("src", "i/thumb_checking.png");
+        break;
+      case "Savings":
+        makeAccountIcon.setAttribute("src", "i/thumb_savings.png");
+        break;
+      case "Credit Card":
+        makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png");
+    }
+    makeAccountIcon.setAttribute("class", "icons");
+    makeAccountIcon.setAttribute("id", "account-" + key);
+    makeSubList.appendChild(makeEditIcon);
+    makeSubList.appendChild(makeDeleteIcon);
+    makeSubList.appendChild(makeAccountIcon);
+    makeListItem.appendChild(makeSubList);
+    $("#edit-" + key).click("click", function(e) {
+      return editItem(key);
+    });
+    $("#delete-" + key).click("click", function(e) {
+      alert("here");
+      return deleteItem(key);
+    });
+    $("#account-" + key).click("click", function(e) {
+      return showAccount(key);
+    });
+    _.each(billObj, function(bill) {
+      var field, makeSubListItem;
+      makeSubListItem = document.createElement("li");
+      if (bill[0] === "From Account:") {
+        makeSubListItem.setAttribute("id", "li-account-" + key);
+      }
+      makeSubList.appendChild(makeSubListItem);
+      field = document.createElement("span");
+      value = document.createElement("span");
+      field.setAttribute("class", "billField");
+      value.setAttribute("class", "billValue");
+      makeSubListItem.appendChild(field);
+      makeSubListItem.appendChild(value);
+      field.innerHTML = bill[0] + " ";
+      value.innerHTML = bill[1];
+      return true;
+    });
+    return true;
   };
 
 }).call(this);

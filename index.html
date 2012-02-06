@@ -121,7 +121,7 @@ index.html
     <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
 
     <!-- unoSlider initializer -->
-		<script type='text/javascript'> 
+    <script type='text/javascript'>
 		  $(document).ready(function(){ 
 				$('#unoslider').unoslider({
 				  navigation: false,
@@ -139,7 +139,11 @@ index.html
           }
 				});
 		  });
-		</script>
+		  
+      $('#details').live('pageshow',function(e){
+        $.mobile.details();
+      });
+    </script>
     
   </body>
 </html>
