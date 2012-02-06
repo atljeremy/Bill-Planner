@@ -36,12 +36,6 @@ setInvalidated = (val) =>
 getInvalidated = () =>
   return @invalidateData
   
-setDetailsKey = (key) =>
-  @detailsKey = key
-  
-getDetailsKey = () =>
-  return @detailsKey
-  
 destroyDataSet = () ->
   $("#items").empty()
   
@@ -56,6 +50,15 @@ Getter and Setter for key to edit
   
 @setKeyToEdit = (key) =>
   @keyToEdit = key
+  
+###
+Getter and Setter for details key
+###
+setDetailsKey = (key) =>
+  @detailsKey = key
+  
+getDetailsKey = () =>
+  return @detailsKey
 
 ###
 Main Metheds
@@ -127,7 +130,6 @@ qryBills = (storage, from) ->
     #Set src, class and id attribute on delete icon img view
     makeDeleteIcon.setAttribute("src", "i/arrow.png")
     makeDeleteIcon.setAttribute("class", "listIcons")
-    makeDeleteIcon.setAttribute("id", "delete-"+key)
     
     if(_.size(storage) == i)
       makeListItem.setAttribute("class", "lastBill")
@@ -289,9 +291,15 @@ editItem = (key) =>
   
   @setKeyToEdit(key)
   
-  $("legend").html("<h2>Your Editing a Bill - <a href=\"additem.html\" data-ajax=\"false\" >Cancel</a></h2>")
+  $("legend").html("<h2>Your Editing a Bill - <a href=\"#\" id=\"cancelEdit\" data-ajax=\"false\" >Cancel</a></h2>")
   
-  @displayData()
+  $("#cancelEdit").click("click", (e) ->
+    $.mobile.changePage( 'additem.html',
+      reloadPage: true,
+      allowSamePageTranstion: true,
+      transition: 'slide'
+    )
+  )
   
   ###
   Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
@@ -304,7 +312,7 @@ editItem = (key) =>
   document.getElementById('payFrom').value = bill.account[1]
   document.getElementById('payOn').value = bill.payon[1]
   document.getElementById('notes').value = bill.notes[1]
-  radios = document.forms[0].remember
+  radios = $("input[type='radio']")
   for radio in radios
     if radio.value == "Yes" and bill.remember[1] == "Yes"
       radio.setAttribute "checked", "checked"
@@ -315,6 +323,12 @@ editItem = (key) =>
       document.getElementById("labelYes").setAttribute "class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c"
       document.getElementById("labelNo").setAttribute "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c"
   
+  history.back()
+  
+  setTimeout(->
+    @displayData()
+  , 500)
+  
 deleteItem = (key) ->
   ask = confirm "Are you sure you want to delete this bill?"
   if ask
@@ -323,17 +337,23 @@ deleteItem = (key) ->
       height: 'toggle'
     , 1000
     
-    if _.size(localStorage) > 1
+    setTimeout(->
       localStorage.removeItem key
       setInvalidated(true)
-    else if _.size(localStorage) == 1
-      localStorage.removeItem key
-      setInvalidated(true)
-      setTimeout(->
-        @displayData()
-      , 1000)
-  else
-    alert "Bill was not deleted"
+      history.back()
+      @displayData(true, false)
+    , 1000)
+    return false
+    
+#     if _.size(localStorage) > 1
+#       localStorage.removeItem key
+#       setInvalidated(true)
+#     else if _.size(localStorage) == 1
+#       localStorage.removeItem key
+#       setInvalidated(true)
+#       setTimeout(->
+#         @displayData()
+#       , 1000)
     
 showAccount = (key) ->
   $("#li-account-"+key).animate
@@ -448,7 +468,7 @@ add0 = (n) ->
   (if n < 10 then "0" + n else "" + n)
 
 getFavValue = ->
-  radios = document.forms[0].remember
+  radios = $("input[type='radio']")
   for radio in radios
     if radio.checked
       rememberValue = ""
@@ -609,8 +629,7 @@ currentDate = ->
   document.getElementById("payOn").value=showDate
   
 showBillDetails = (key) ->
-
-  key = (if key != undefined then key else getDetailsKey())
+  key = (if key isnt undefined then key else getDetailsKey())
   
   destroyDetailsDataSet()
   
@@ -657,11 +676,12 @@ showBillDetails = (key) ->
   ///g
 
   account = billObj.account[1]
-  accountMatch = account.match(OPERATOR)
+  accountMatch = (if account? then account.match(OPERATOR) else "Undefined")
   switch accountMatch[0]
     when "Checking" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
     when "Savings" then makeAccountIcon.setAttribute("src", "i/thumb_savings.png")
     when "Credit Card" then makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png")
+    when "Undefined" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
   
   makeAccountIcon.setAttribute("class", "icons")
   makeAccountIcon.setAttribute("id", "account-"+key)
@@ -681,7 +701,6 @@ showBillDetails = (key) ->
   
   #Set click listener on delete icon
   $("#delete-"+key).click("click", (e) ->
-    alert "here"
     deleteItem(key)
   )
   

@@ -54,14 +54,6 @@ Variables
     return _this.invalidateData;
   };
 
-  setDetailsKey = function(key) {
-    return _this.detailsKey = key;
-  };
-
-  getDetailsKey = function() {
-    return _this.detailsKey;
-  };
-
   destroyDataSet = function() {
     return $("#items").empty();
   };
@@ -80,6 +72,18 @@ Variables
 
   this.setKeyToEdit = function(key) {
     return _this.keyToEdit = key;
+  };
+
+  /*
+  Getter and Setter for details key
+  */
+
+  setDetailsKey = function(key) {
+    return _this.detailsKey = key;
+  };
+
+  getDetailsKey = function() {
+    return _this.detailsKey;
   };
 
   /*
@@ -152,7 +156,6 @@ Variables
       makeDeleteIcon = document.createElement("img");
       makeDeleteIcon.setAttribute("src", "i/arrow.png");
       makeDeleteIcon.setAttribute("class", "listIcons");
-      makeDeleteIcon.setAttribute("id", "delete-" + key);
       if (_.size(storage) === i) {
         makeListItem.setAttribute("class", "lastBill");
       } else {
@@ -182,12 +185,18 @@ Variables
   };
 
   editItem = function(key) {
-    var bill, radio, radios, value, _i, _len, _results;
+    var bill, radio, radios, value, _i, _len;
     value = localStorage.getItem(key);
     bill = JSON.parse(value);
     _this.setKeyToEdit(key);
-    $("legend").html("<h2>Your Editing a Bill - <a href=\"additem.html\" data-ajax=\"false\" >Cancel</a></h2>");
-    _this.displayData();
+    $("legend").html("<h2>Your Editing a Bill - <a href=\"#\" id=\"cancelEdit\" data-ajax=\"false\" >Cancel</a></h2>");
+    $("#cancelEdit").click("click", function(e) {
+      return $.mobile.changePage('additem.html', {
+        reloadPage: true,
+        allowSamePageTranstion: true,
+        transition: 'slide'
+      });
+    });
     /*
       Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
       to set the values. We have to use the native javascipt method
@@ -199,23 +208,23 @@ Variables
     document.getElementById('payFrom').value = bill.account[1];
     document.getElementById('payOn').value = bill.payon[1];
     document.getElementById('notes').value = bill.notes[1];
-    radios = document.forms[0].remember;
-    _results = [];
+    radios = $("input[type='radio']");
     for (_i = 0, _len = radios.length; _i < _len; _i++) {
       radio = radios[_i];
       if (radio.value === "Yes" && bill.remember[1] === "Yes") {
         radio.setAttribute("checked", "checked");
         document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c");
-        _results.push(document.getElementById("labelYes").setAttribute("class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active"));
+        document.getElementById("labelYes").setAttribute("class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active");
       } else if (radio.value === "No" && bill.remember[1] === "No") {
         radio.setAttribute("checked", "checked");
         document.getElementById("labelYes").setAttribute("class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c");
-        _results.push(document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c"));
-      } else {
-        _results.push(void 0);
+        document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c");
       }
     }
-    return _results;
+    history.back();
+    return setTimeout(function() {
+      return this.displayData();
+    }, 500);
   };
 
   deleteItem = function(key) {
@@ -226,18 +235,13 @@ Variables
         opacity: 0.00,
         height: 'toggle'
       }, 1000);
-      if (_.size(localStorage) > 1) {
-        localStorage.removeItem(key);
-        return setInvalidated(true);
-      } else if (_.size(localStorage) === 1) {
+      setTimeout(function() {
         localStorage.removeItem(key);
         setInvalidated(true);
-        return setTimeout(function() {
-          return this.displayData();
-        }, 1000);
-      }
-    } else {
-      return alert("Bill was not deleted");
+        history.back();
+        return this.displayData(true, false);
+      }, 1000);
+      return false;
     }
   };
 
@@ -362,7 +366,7 @@ Variables
 
   getFavValue = function() {
     var radio, radios, rememberValue, _i, _len;
-    radios = document.forms[0].remember;
+    radios = $("input[type='radio']");
     for (_i = 0, _len = radios.length; _i < _len; _i++) {
       radio = radios[_i];
       if (radio.checked) {
@@ -555,7 +559,7 @@ Variables
     makeAccountIcon = document.createElement("img");
     OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
     account = billObj.account[1];
-    accountMatch = account.match(OPERATOR);
+    accountMatch = (account != null ? account.match(OPERATOR) : "Undefined");
     switch (accountMatch[0]) {
       case "Checking":
         makeAccountIcon.setAttribute("src", "i/thumb_checking.png");
@@ -565,6 +569,9 @@ Variables
         break;
       case "Credit Card":
         makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png");
+        break;
+      case "Undefined":
+        makeAccountIcon.setAttribute("src", "i/thumb_checking.png");
     }
     makeAccountIcon.setAttribute("class", "icons");
     makeAccountIcon.setAttribute("id", "account-" + key);
@@ -576,7 +583,6 @@ Variables
       return editItem(key);
     });
     $("#delete-" + key).click("click", function(e) {
-      alert("here");
       return deleteItem(key);
     });
     $("#account-" + key).click("click", function(e) {
