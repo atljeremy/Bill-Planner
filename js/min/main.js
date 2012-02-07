@@ -11,7 +11,7 @@ Variables
 */
 
 (function() {
-  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, showAccount, showBillDetails, stopEvent, storeJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
+  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, showAccount, showBillDetails, stopEvent, storeJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
     _this = this;
 
   this.dataViewState = false;
@@ -146,17 +146,42 @@ Variables
     }
   };
 
-  qryBills = function(storage, from) {
+  setupBills = function() {
+    var billsList, callbackFunc;
+    billsList = [];
+    _.each(_.keys(localStorage), function(key) {
+      var billObj, value;
+      value = localStorage.getItem(key);
+      billObj = JSON.parse(value);
+      billObj.key = key;
+      return billsList.push(billObj);
+    });
+    callbackFunc = function(a, b) {
+      if (a.payon[1] === b.payon[1]) {
+        if (a.payon[1] === b.payon[1]) return 0;
+        return (a.payon[1] < b.payon[1] ? -1 : 1);
+      }
+      if (a.payon[1] < b.payon[1]) {
+        return -1;
+      } else {
+        return 1;
+      }
+    };
+    return billsList.sort(callbackFunc);
+  };
+
+  qryBills = function() {
     var i;
     i = 1;
-    return _.each(_.keys(storage), function(key) {
-      var billObj, makeDeleteIcon, makeLink, makeListItem, payAmount, payDate, payTo, value;
+    return _.each(setupBills(), function(bill) {
+      var key, makeDeleteIcon, makeLink, makeListItem, payAmount, payDate, payTo;
+      key = bill.key;
       makeListItem = document.createElement("li");
       makeListItem.setAttribute("id", "li-key-" + key);
       makeDeleteIcon = document.createElement("img");
       makeDeleteIcon.setAttribute("src", "i/arrow.png");
       makeDeleteIcon.setAttribute("class", "listIcons");
-      if (_.size(storage) === i) {
+      if (_.size(localStorage) === i) {
         makeListItem.setAttribute("class", "lastBill");
       } else {
         makeListItem.setAttribute("class", "bill");
@@ -174,11 +199,9 @@ Variables
         });
         return false;
       });
-      value = storage.getItem(key);
-      billObj = JSON.parse(value);
-      payTo = billObj.payto[0] + " " + billObj.payto[1];
-      payAmount = "$" + billObj.amount[1];
-      payDate = "(" + billObj.payon[1] + ")";
+      payTo = bill.payto[0] + " " + bill.payto[1];
+      payAmount = "$" + bill.amount[1];
+      payDate = "(" + bill.payon[1] + ")";
       makeLink.innerHTML = payTo + " " + payAmount + " " + payDate;
       return i++;
     });

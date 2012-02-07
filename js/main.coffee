@@ -115,11 +115,31 @@ getData = ->
     else
       storeJsonData()
       # qryBills(@json, "json")
+      
+setupBills = ->
+  billsList = []
 
-qryBills = (storage, from) ->
+  _.each(_.keys(localStorage), (key) ->
+    value = localStorage.getItem(key)
+    billObj = JSON.parse value
+    billObj.key = key    
+    billsList.push billObj
+  )
+
+  callbackFunc = (a, b) ->
+    if a.payon[1] is b.payon[1]
+      return 0 if a.payon[1] is b.payon[1]
+      return (if (a.payon[1] < b.payon[1]) then -1 else 1)
+    (if (a.payon[1] < b.payon[1]) then -1 else 1)
+  
+  billsList.sort callbackFunc
+
+qryBills = ->
 
   i = 1
-  _.each(_.keys(storage), (key) ->
+  _.each(setupBills(), (bill) ->
+  
+    key = bill.key
     
     makeListItem = document.createElement("li")
     makeListItem.setAttribute("id", "li-key-"+key)
@@ -131,7 +151,7 @@ qryBills = (storage, from) ->
     makeDeleteIcon.setAttribute("src", "i/arrow.png")
     makeDeleteIcon.setAttribute("class", "listIcons")
     
-    if(_.size(storage) == i)
+    if(_.size(localStorage) == i)
       makeListItem.setAttribute("class", "lastBill")
     else
       makeListItem.setAttribute("class", "bill")
@@ -152,13 +172,10 @@ qryBills = (storage, from) ->
       return false
     )
     
-    value = storage.getItem(key)
-    billObj = JSON.parse value
-    
-    payTo = billObj.payto[0] + " " + billObj.payto[1]
-    payAmount = "$" + billObj.amount[1]
-    payDate = "(" + billObj.payon[1] + ")"
-    
+    payTo = bill.payto[0] + " " + bill.payto[1]
+    payAmount = "$" + bill.amount[1]
+    payDate = "(" + bill.payon[1] + ")"
+
     makeLink.innerHTML = payTo + " " + payAmount + " " + payDate
     
     i++
