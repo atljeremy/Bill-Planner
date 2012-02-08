@@ -96,6 +96,43 @@ Main Metheds
     catch e
       alert e
       
+$(window).scroll ->
+  if $(window).scrollTop() is $(document).height() - $(window).height()
+    $("div#loadmoreajaxloader").show()
+    $.ajax
+      type: "POST"
+      url: "php/load_bills.php"
+      success: (json) ->
+        if getViewState()
+          if json          
+            storeRemoteJsonData(json)
+            
+            setTimeout(->
+              $("div#loadmoreajaxloader").hide()
+            , 2000)
+          else
+            $("div#loadmoreajaxloader").hide()
+        else
+          $("div#loadmoreajaxloader").hide()
+
+storeRemoteJsonData = (json) =>
+  _.each(_.keys(json), (key) ->
+    billIndexKey = key
+    _.each(_.keys(json[key]), (key) ->
+      item = json[billIndexKey]
+      billObject = item[key]
+      
+      try
+        localStorage.setItem key, JSON.stringify(billObject)
+        true
+      catch e
+        alert e
+    )
+  )
+  
+  setInvalidated(true)
+  getData()
+      
 storeJsonData = () =>
   _.each(_.keys(@json), (key) ->
     item = @json[key]

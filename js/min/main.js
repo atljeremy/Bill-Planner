@@ -11,7 +11,7 @@ Variables
 */
 
 (function() {
-  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, showAccount, showBillDetails, stopEvent, storeJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
+  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, showAccount, showBillDetails, stopEvent, storeJsonData, storeRemoteJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
     _this = this;
 
   this.dataViewState = false;
@@ -122,6 +122,50 @@ Variables
         return alert(e);
       }
     }
+  };
+
+  $(window).scroll(function() {
+    if ($(window).scrollTop() === $(document).height() - $(window).height()) {
+      $("div#loadmoreajaxloader").show();
+      return $.ajax({
+        type: "POST",
+        url: "php/load_bills.php",
+        success: function(json) {
+          if (getViewState()) {
+            if (json) {
+              storeRemoteJsonData(json);
+              return setTimeout(function() {
+                return $("div#loadmoreajaxloader").hide();
+              }, 2000);
+            } else {
+              return $("div#loadmoreajaxloader").hide();
+            }
+          } else {
+            return $("div#loadmoreajaxloader").hide();
+          }
+        }
+      });
+    }
+  });
+
+  storeRemoteJsonData = function(json) {
+    _.each(_.keys(json), function(key) {
+      var billIndexKey;
+      billIndexKey = key;
+      return _.each(_.keys(json[key]), function(key) {
+        var billObject, item;
+        item = json[billIndexKey];
+        billObject = item[key];
+        try {
+          localStorage.setItem(key, JSON.stringify(billObject));
+          return true;
+        } catch (e) {
+          return alert(e);
+        }
+      });
+    });
+    setInvalidated(true);
+    return getData();
   };
 
   storeJsonData = function() {
