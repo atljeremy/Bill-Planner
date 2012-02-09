@@ -125,7 +125,7 @@ Variables
   };
 
   $(window).scroll(function() {
-    if ($(window).scrollTop() === $(document).height() - $(window).height()) {
+    if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
       $("div#loadmoreajaxloader").show();
       return $.ajax({
         type: "POST",
@@ -133,10 +133,7 @@ Variables
         success: function(json) {
           if (getViewState()) {
             if (json) {
-              storeRemoteJsonData(json);
-              return setTimeout(function() {
-                return $("div#loadmoreajaxloader").hide();
-              }, 2000);
+              return storeRemoteJsonData(json);
             } else {
               return $("div#loadmoreajaxloader").hide();
             }
@@ -165,6 +162,7 @@ Variables
       });
     });
     setInvalidated(true);
+    $("div#loadmoreajaxloader").hide();
     return getData();
   };
 
@@ -244,6 +242,7 @@ Variables
         return false;
       });
       payTo = bill.payto[0] + " " + bill.payto[1];
+      if (payTo.length >= 23) payTo = payTo.substr(0, 23) + "…";
       payAmount = "$" + bill.amount[1];
       payDate = "(" + bill.payon[1] + ")";
       makeLink.innerHTML = payTo + " " + payAmount + " " + payDate;

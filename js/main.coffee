@@ -97,7 +97,7 @@ Main Metheds
       alert e
       
 $(window).scroll ->
-  if $(window).scrollTop() is $(document).height() - $(window).height()
+  if $(window).scrollTop() >= $(document).height() - $(window).height() - 100
     $("div#loadmoreajaxloader").show()
     $.ajax
       type: "POST"
@@ -106,10 +106,6 @@ $(window).scroll ->
         if getViewState()
           if json          
             storeRemoteJsonData(json)
-            
-            setTimeout(->
-              $("div#loadmoreajaxloader").hide()
-            , 2000)
           else
             $("div#loadmoreajaxloader").hide()
         else
@@ -131,6 +127,7 @@ storeRemoteJsonData = (json) =>
   )
   
   setInvalidated(true)
+  $("div#loadmoreajaxloader").hide()
   getData()
       
 storeJsonData = () =>
@@ -210,6 +207,9 @@ qryBills = ->
     )
     
     payTo = bill.payto[0] + " " + bill.payto[1]
+    if payTo.length >= 23
+      payTo = payTo.substr(0, 23) + "…"
+      
     payAmount = "$" + bill.amount[1]
     payDate = "(" + bill.payon[1] + ")"
 
