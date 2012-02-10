@@ -15,9 +15,9 @@ Variables
 billAccounts          = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
 @detailsKey           = "" # Key used to retreive bill details on details.html
 
-###
+###****************************************************************
 State Control Methods
-###
+****************************************************************###
 setViewState = (state) =>
   @dataViewState = state
 
@@ -42,27 +42,27 @@ destroyDataSet = () ->
 destroyDetailsDataSet = () ->
   $("#itemDetails").empty()
   
-###
+###****************************************************************
 Getter and Setter for key to edit
-###
+****************************************************************###
 @getKeyToEdit = () =>
   return @keyToEdit
   
 @setKeyToEdit = (key) =>
   @keyToEdit = key
   
-###
+###****************************************************************
 Getter and Setter for details key
-###
+****************************************************************###
 setDetailsKey = (key) =>
   @detailsKey = key
   
 getDetailsKey = () =>
   return @detailsKey
 
-###
+###****************************************************************
 Main Metheds
-###
+****************************************************************###
 @storeData = () =>
   newDate = new Date()
 
@@ -169,7 +169,6 @@ setupBills = ->
   billsList.sort callbackFunc
 
 qryBills = ->
-
   i = 1
   _.each(setupBills(), (bill) ->
   
@@ -178,12 +177,23 @@ qryBills = ->
     makeListItem = document.createElement("li")
     makeListItem.setAttribute("id", "li-key-"+key)
     
-    #Create a new img view for delete icon
-    makeDeleteIcon = document.createElement("img")
+    makeThumbIcon = document.createElement("img")
+    makeThumbIcon.setAttribute("class", "listThumbIcons")
     
-    #Set src, class and id attribute on delete icon img view
-    makeDeleteIcon.setAttribute("src", "i/arrow.png")
-    makeDeleteIcon.setAttribute("class", "listIcons")
+    OPERATOR = ///
+    ((Checking)|(Savings)|(Credit\sCard))+
+    ///g
+
+    account = bill.account[1]
+    accountMatch = account.match(OPERATOR)
+    switch accountMatch[0]
+      when "Checking" then makeThumbIcon.setAttribute("src", "i/checking_thumb.png")
+      when "Savings" then makeThumbIcon.setAttribute("src", "i/savings_thumb.png")
+      when "Credit Card" then makeThumbIcon.setAttribute("src", "i/credit_thumb.png")
+    
+    makeArrowIcon = document.createElement("img")
+    makeArrowIcon.setAttribute("src", "i/arrow.png")
+    makeArrowIcon.setAttribute("class", "listArrowIcons")
     
     if(_.size(localStorage) == i)
       makeListItem.setAttribute("class", "lastBill")
@@ -193,12 +203,14 @@ qryBills = ->
     makeLink = document.createElement("a")
     makeLink.setAttribute("href", "#")
     makeListItem.appendChild makeLink
-    makeListItem.appendChild makeDeleteIcon
+    makeListItem.appendChild makeThumbIcon
+    makeListItem.appendChild makeArrowIcon
 
     $("#items").append makeListItem
     
     $("#li-key-"+key).click("click", (e) ->
       stopEvent(e)
+      $(this).removeClass("bill").addClass("billClicked")
       setDetailsKey(key)
       $.mobile.changePage( "details.html",
         showLoadMsg: true
@@ -206,9 +218,9 @@ qryBills = ->
       return false
     )
     
-    payTo = bill.payto[0] + " " + bill.payto[1]
-    if payTo.length >= 23
-      payTo = payTo.substr(0, 23) + "…"
+    payTo = bill.payto[1]
+    if payTo.length >= 20
+      payTo = payTo.substr(0, 20) + "…"
       
     payAmount = "$" + bill.amount[1]
     payDate = "(" + bill.payon[1] + ")"
@@ -425,9 +437,9 @@ showAccount = (key) ->
   localStorage.clear();
   alert "All Data Has Been Deleted."
   
-###
+###****************************************************************
 Click Events
-###
+****************************************************************###
 $("#billForm").live "submit", (e) ->
   stopEvent(e)
   formdata = $(this).serialize()
@@ -488,7 +500,7 @@ $("#viewBills").click("click", (e) =>
   stopEvent(e)
   setTimeout(->
     @displayData(true, false)
-  , 500)
+  , 700)
   $.mobile.changePage( "additem.html",
     transition: "slideup"
     showLoadMsg: true
@@ -515,9 +527,9 @@ $("#cta-bills").click("click", (e) =>
   )
 )
 
-###
+###****************************************************************
 Helper Methods
-###
+****************************************************************###
 add0 = (n) ->
   (if n < 10 then "0" + n else "" + n)
 
@@ -653,9 +665,9 @@ hideBillForm = ->
 unBindClickListeners = () ->
   $(document).unbind("click")
 
-###
+###****************************************************************
 Bind to jQueries mobileinit
-###
+****************************************************************###
 $(document).bind "mobileinit", ->
   $.mobile.accounts = getAccounts
   $.mobile.date     = currentDate
@@ -683,6 +695,14 @@ currentDate = ->
   document.getElementById("payOn").value=showDate
   
 showBillDetails = (key) ->
+
+  # Setup back button listener for details page
+  $("#backToBills").click("click", (e) ->
+    stopEvent(e)
+    history.back()
+    $("#li-key-"+key).removeClass("billClick").addClass("bill")
+  )
+
   key = (if key isnt undefined then key else getDetailsKey())
   
   destroyDetailsDataSet()

@@ -26,8 +26,9 @@ Variables
 
   this.detailsKey = "";
 
-  /*
+  /*****************************************************************
   State Control Methods
+  ****************************************************************
   */
 
   setViewState = function(state) {
@@ -62,8 +63,9 @@ Variables
     return $("#itemDetails").empty();
   };
 
-  /*
+  /*****************************************************************
   Getter and Setter for key to edit
+  ****************************************************************
   */
 
   this.getKeyToEdit = function() {
@@ -74,8 +76,9 @@ Variables
     return _this.keyToEdit = key;
   };
 
-  /*
+  /*****************************************************************
   Getter and Setter for details key
+  ****************************************************************
   */
 
   setDetailsKey = function(key) {
@@ -86,8 +89,9 @@ Variables
     return _this.detailsKey;
   };
 
-  /*
+  /*****************************************************************
   Main Metheds
+  ****************************************************************
   */
 
   this.storeData = function() {
@@ -216,13 +220,28 @@ Variables
     var i;
     i = 1;
     return _.each(setupBills(), function(bill) {
-      var key, makeDeleteIcon, makeLink, makeListItem, payAmount, payDate, payTo;
+      var OPERATOR, account, accountMatch, key, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
       key = bill.key;
       makeListItem = document.createElement("li");
       makeListItem.setAttribute("id", "li-key-" + key);
-      makeDeleteIcon = document.createElement("img");
-      makeDeleteIcon.setAttribute("src", "i/arrow.png");
-      makeDeleteIcon.setAttribute("class", "listIcons");
+      makeThumbIcon = document.createElement("img");
+      makeThumbIcon.setAttribute("class", "listThumbIcons");
+      OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
+      account = bill.account[1];
+      accountMatch = account.match(OPERATOR);
+      switch (accountMatch[0]) {
+        case "Checking":
+          makeThumbIcon.setAttribute("src", "i/checking_thumb.png");
+          break;
+        case "Savings":
+          makeThumbIcon.setAttribute("src", "i/savings_thumb.png");
+          break;
+        case "Credit Card":
+          makeThumbIcon.setAttribute("src", "i/credit_thumb.png");
+      }
+      makeArrowIcon = document.createElement("img");
+      makeArrowIcon.setAttribute("src", "i/arrow.png");
+      makeArrowIcon.setAttribute("class", "listArrowIcons");
       if (_.size(localStorage) === i) {
         makeListItem.setAttribute("class", "lastBill");
       } else {
@@ -231,18 +250,20 @@ Variables
       makeLink = document.createElement("a");
       makeLink.setAttribute("href", "#");
       makeListItem.appendChild(makeLink);
-      makeListItem.appendChild(makeDeleteIcon);
+      makeListItem.appendChild(makeThumbIcon);
+      makeListItem.appendChild(makeArrowIcon);
       $("#items").append(makeListItem);
       $("#li-key-" + key).click("click", function(e) {
         stopEvent(e);
+        $(this).removeClass("bill").addClass("billClicked");
         setDetailsKey(key);
         $.mobile.changePage("details.html", {
           showLoadMsg: true
         });
         return false;
       });
-      payTo = bill.payto[0] + " " + bill.payto[1];
-      if (payTo.length >= 23) payTo = payTo.substr(0, 23) + "…";
+      payTo = bill.payto[1];
+      if (payTo.length >= 20) payTo = payTo.substr(0, 20) + "…";
       payAmount = "$" + bill.amount[1];
       payDate = "(" + bill.payon[1] + ")";
       makeLink.innerHTML = payTo + " " + payAmount + " " + payDate;
@@ -328,8 +349,9 @@ Variables
     return alert("All Data Has Been Deleted.");
   };
 
-  /*
+  /*****************************************************************
   Click Events
+  ****************************************************************
   */
 
   $("#billForm").live("submit", function(e) {
@@ -391,7 +413,7 @@ Variables
     stopEvent(e);
     setTimeout(function() {
       return this.displayData(true, false);
-    }, 500);
+    }, 700);
     return $.mobile.changePage("additem.html", {
       transition: "slideup",
       showLoadMsg: true
@@ -418,8 +440,9 @@ Variables
     });
   });
 
-  /*
+  /*****************************************************************
   Helper Methods
+  ****************************************************************
   */
 
   add0 = function(n) {
@@ -567,8 +590,9 @@ Variables
     return $(document).unbind("click");
   };
 
-  /*
+  /*****************************************************************
   Bind to jQueries mobileinit
+  ****************************************************************
   */
 
   $(document).bind("mobileinit", function() {
@@ -604,6 +628,11 @@ Variables
 
   showBillDetails = function(key) {
     var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeList, makeListItem, makeSubList, value;
+    $("#backToBills").click("click", function(e) {
+      stopEvent(e);
+      history.back();
+      return $("#li-key-" + key).removeClass("billClick").addClass("bill");
+    });
     key = (key !== void 0 ? key : getDetailsKey());
     destroyDetailsDataSet();
     makeList = document.createElement("ul");
