@@ -1,4 +1,10 @@
 <?php
+/*
+Deliverable 2
+Author: Jeremy Fox
+Created For: MIU Online
+load_bills.php
+*/
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
