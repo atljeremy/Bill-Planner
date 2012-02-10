@@ -527,6 +527,16 @@ $("#cta-bills").click("click", (e) =>
   )
 )
 
+$("#searchForm").submit (e) =>
+  stopEvent(e)
+  setTimeout(->
+    @displayData(true, false)
+  , 500)
+  $.mobile.changePage( "additem.html",
+    showLoadMsg: true
+  )
+  false
+
 ###****************************************************************
 Helper Methods
 ****************************************************************###

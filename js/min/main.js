@@ -440,6 +440,17 @@ Variables
     });
   });
 
+  $("#searchForm").submit(function(e) {
+    stopEvent(e);
+    setTimeout(function() {
+      return this.displayData(true, false);
+    }, 500);
+    $.mobile.changePage("additem.html", {
+      showLoadMsg: true
+    });
+    return false;
+  });
+
   /*****************************************************************
   Helper Methods
   ****************************************************************
