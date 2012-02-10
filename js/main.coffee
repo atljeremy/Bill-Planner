@@ -112,6 +112,8 @@ qryBills = (storage, from) ->
   _.each(_.keys(storage), (key) ->
     #Make a list item
     makeListItem = document.createElement("li")
+    makeListItem.setAttribute("id", "master-list-item-"+key)
+    
     #Add the list item to the Unordered list
     makeList.appendChild makeListItem
     
@@ -151,6 +153,14 @@ qryBills = (storage, from) ->
     makeDeleteIcon.setAttribute("class", "icons")
     makeDeleteIcon.setAttribute("id", "delete-"+key)
     
+    #Create a new img view for notes icon
+    makeNotesIcon = document.createElement("img")
+  
+    #Set src, class and id attribute on notes icon img view
+    makeNotesIcon.setAttribute("src", "i/notes.png")
+    makeNotesIcon.setAttribute("class", "icons")
+    makeNotesIcon.setAttribute("id", "notes-"+key)
+    
     #Create a new img view for account icon
     makeAccountIcon = document.createElement("img")
   
@@ -173,9 +183,16 @@ qryBills = (storage, from) ->
     makeSubList.appendChild makeEditIcon
     makeSubList.appendChild makeDeleteIcon
     makeSubList.appendChild makeAccountIcon
-    
+    makeSubList.appendChild makeNotesIcon
+        
     #Add the new Unordered list to the list item of original Unordered list
     makeListItem.appendChild makeSubList
+    
+    makeNotesDiv = document.createElement("div")
+    makeNotesDiv.setAttribute("id", "notes-div-"+key)
+    makeNotesDiv.setAttribute("class", "billNotes")
+    
+    makeListItem.appendChild makeNotesDiv
     
     #Set click listener on edit icon
     $("#edit-"+key).click("click", (e) ->
@@ -192,6 +209,11 @@ qryBills = (storage, from) ->
       showAccount(key)
     )
     
+    #Set click listener on notes icon
+    $("#notes-"+key).click("click", (e) ->
+      $("#notes-div-"+key).removeClass("billNotes").addClass("billNotesShow")
+    )
+    
     #for each bill in the billObj do the following
     _.each(billObj, (bill) ->
     
@@ -200,6 +222,22 @@ qryBills = (storage, from) ->
       
       if bill[0] == "From Account:"
         makeSubListItem.setAttribute("id", "li-account-"+key)
+        
+      if bill[0] == "Notes:"
+        #Create the text to display for each line
+        field = document.createElement("span")
+        value = document.createElement("span")
+        
+        field.setAttribute("class", "billField")
+        value.setAttribute("class", "billValue")
+  
+        #Add the text to the new list item
+        $("#notes-div-"+key).append field
+        $("#notes-div-"+key).append value
+        
+        field.innerHTML = bill[0] + " "
+        value.innerHTML = bill[1]
+        return
       
       #Add the list item to the new Unordered list
       makeSubList.appendChild makeSubListItem
@@ -210,8 +248,7 @@ qryBills = (storage, from) ->
       
       field.setAttribute("class", "billField")
       value.setAttribute("class", "billValue")
-        
-                      
+
       #Add the text to the new list item
       makeSubListItem.appendChild field
       makeSubListItem.appendChild value
@@ -387,6 +424,7 @@ add0 = (n) ->
 
 getFavValue = ->
   radios = document.forms[0].remember
+  console.log radios
   for radio in radios
     if radio.checked
       rememberValue = ""

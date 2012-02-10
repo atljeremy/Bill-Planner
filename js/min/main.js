@@ -133,8 +133,9 @@ Variables
     makeList = document.createElement("ul");
     $("#items").append(makeList);
     _.each(_.keys(storage), function(key) {
-      var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeListItem, makeSubList, value;
+      var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeListItem, makeNotesDiv, makeNotesIcon, makeSubList, value;
       makeListItem = document.createElement("li");
+      makeListItem.setAttribute("id", "master-list-item-" + key);
       makeList.appendChild(makeListItem);
       if (from === "localStorage") {
         value = storage.getItem(key);
@@ -157,6 +158,10 @@ Variables
       makeDeleteIcon.setAttribute("src", "i/x.png");
       makeDeleteIcon.setAttribute("class", "icons");
       makeDeleteIcon.setAttribute("id", "delete-" + key);
+      makeNotesIcon = document.createElement("img");
+      makeNotesIcon.setAttribute("src", "i/notes.png");
+      makeNotesIcon.setAttribute("class", "icons");
+      makeNotesIcon.setAttribute("id", "notes-" + key);
       makeAccountIcon = document.createElement("img");
       OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
       account = billObj.account[1];
@@ -176,7 +181,12 @@ Variables
       makeSubList.appendChild(makeEditIcon);
       makeSubList.appendChild(makeDeleteIcon);
       makeSubList.appendChild(makeAccountIcon);
+      makeSubList.appendChild(makeNotesIcon);
       makeListItem.appendChild(makeSubList);
+      makeNotesDiv = document.createElement("div");
+      makeNotesDiv.setAttribute("id", "notes-div-" + key);
+      makeNotesDiv.setAttribute("class", "billNotes");
+      makeListItem.appendChild(makeNotesDiv);
       $("#edit-" + key).click("click", function(e) {
         return editItem(key);
       });
@@ -186,11 +196,25 @@ Variables
       $("#account-" + key).click("click", function(e) {
         return showAccount(key);
       });
+      $("#notes-" + key).click("click", function(e) {
+        return $("#notes-div-" + key).removeClass("billNotes").addClass("billNotesShow");
+      });
       _.each(billObj, function(bill) {
         var field, makeSubListItem;
         makeSubListItem = document.createElement("li");
         if (bill[0] === "From Account:") {
           makeSubListItem.setAttribute("id", "li-account-" + key);
+        }
+        if (bill[0] === "Notes:") {
+          field = document.createElement("span");
+          value = document.createElement("span");
+          field.setAttribute("class", "billField");
+          value.setAttribute("class", "billValue");
+          $("#notes-div-" + key).append(field);
+          $("#notes-div-" + key).append(value);
+          field.innerHTML = bill[0] + " ";
+          value.innerHTML = bill[1];
+          return;
         }
         makeSubList.appendChild(makeSubListItem);
         field = document.createElement("span");
@@ -386,6 +410,7 @@ Variables
   getFavValue = function() {
     var radio, radios, rememberValue, _i, _len;
     radios = document.forms[0].remember;
+    console.log(radios);
     for (_i = 0, _len = radios.length; _i < _len; _i++) {
       radio = radios[_i];
       if (radio.checked) {
