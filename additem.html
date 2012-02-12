@@ -57,15 +57,15 @@ additem.html
           <fieldset>
             <legend><h2>Create a New Payment</h2></legend>
               <ul>
-                <li><label for="yourName" class="sectionHeader">Your Name:</label><input type="text" id="name" required maxlength="25" title="Enter your name in this field. Maximum of 25 characters." placeholder="John doe" /></li>
+                <li><label for="yourName" class="sectionHeader">Your Name:</label><input type="text" id="name" required maxlength="25" title="Enter your name in this field. Maximum of 25 characters." /></li>
                 
-                <li><label for="payTo" class="sectionHeader">Pay To:</label><input type="text" id="payTo" required maxlength="30" title="Enter payee in this field. Maximum of 30 characters." placeholder="Full Sail University" /></li>
+                <li><label for="payTo" class="sectionHeader">Pay To:</label><input type="text" id="payTo" required maxlength="30" title="Enter payee in this field. Maximum of 30 characters." /></li>
                 
                 <li><label for="payAmount" class="sectionHeader">Pay This Amount:</label><input type="range" id="payAmount" required min="0" max="250" value="0" step="10" name="amount" title="Use slider to select the amount you would like to pay." /></li>
                 
                 <li id="selectAccounts"><label for="payFrom" class="sectionHeader">Pay From:</label></li>
                 
-                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" required class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
+                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" required class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." /></li>
                 
                 <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes"></textarea></li>
                 
@@ -100,7 +100,7 @@ additem.html
   	
       <script type="text/javascript">
         $.mobile.accounts();
-        $.mobile.date();
+        //$.mobile.date(); Commented out to meet requirement for week 3 MIU
       </script>
   	
     </div><!-- /page -->
