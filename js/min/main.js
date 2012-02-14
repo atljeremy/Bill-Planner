@@ -95,36 +95,30 @@ Variables
   */
 
   this.storeData = function() {
-    var item, itemId, message, messages, newDate;
+    var item, itemId, newDate;
     newDate = new Date();
     if (_this.getKeyToEdit() === 0 || _this.getKeyToEdit() === "") {
       itemId = newDate.getTime();
     } else {
       itemId = _this.getKeyToEdit();
     }
-    messages = validateRequiredFields();
-    if (!_.isEmpty(messages)) {
-      message = messages.join('\n');
-      return alert(message);
-    } else {
-      item = {};
-      item.name = ["Name:", $("#name").val()];
-      item.payto = ["Pay To:", $("#payTo").val()];
-      item.amount = ["Amount:", $("#payAmount").val()];
-      item.account = ["From Account:", $("#payFrom").val()];
-      item.payon = ["Pay On:", $("#payOn").val()];
-      item.notes = ["Notes:", $("#notes").val()];
-      item.remember = ["Remember This Payment:", getFavValue()];
-      try {
-        localStorage.setItem(itemId, JSON.stringify(item));
-        setInvalidated(true);
-        alert("Bill Added!");
-        _this.setKeyToEdit(0);
-        $("legend").html("<h2>Create a New Bill</h2>");
-        _this.displayData();
-      } catch (e) {
-        return alert(e);
-      }
+    item = {};
+    item.name = ["Name:", $("#name").val()];
+    item.payto = ["Pay To:", $("#payTo").val()];
+    item.amount = ["Amount:", $("#payAmount").val()];
+    item.account = ["From Account:", $("#payFrom").val()];
+    item.payon = ["Pay On:", $("#payOn").val()];
+    item.notes = ["Notes:", $("#notes").val()];
+    item.remember = ["Remember This Payment:", getFavValue()];
+    try {
+      localStorage.setItem(itemId, JSON.stringify(item));
+      setInvalidated(true);
+      alert("Bill Added!");
+      _this.setKeyToEdit(0);
+      $("legend").html("<h2>Create a New Bill</h2>");
+      _this.displayData();
+    } catch (e) {
+      return alert(e);
     }
   };
 
