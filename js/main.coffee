@@ -13,6 +13,7 @@ Variables
 @invalidateData       = false #set this to true when we need to force the app to re-query localStorage for new data.
 @keyToEdit            = 0 #The key of the item in localStorage we want to edit
 billAccounts          = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
+@inlaysOpen           = []
 
 ###
 State Control Methods
@@ -46,6 +47,19 @@ Getter and Setter for key to edit
   
 @setKeyToEdit = (key) =>
   @keyToEdit = key
+  
+###
+Getter and Setter for key of Inlay(s) that have been opened
+###
+getInlaysOpen = =>
+  return @inlaysOpen
+
+setInlaysOpen = (key) =>
+  @inlaysOpen.push key
+  
+removeInlayKey = (key) =>
+  keyIndex = _.indexOf(@inlaysOpen, key)
+  @inlaysOpen.splice keyIndex, 1
 
 ###
 Main Metheds
@@ -154,12 +168,12 @@ qryBills = (storage, from) ->
     makeDeleteIcon.setAttribute("id", "delete-"+key)
     
     #Create a new img view for notes icon
-    makeNotesIcon = document.createElement("img")
+    makeInlayIcon = document.createElement("img")
   
     #Set src, class and id attribute on notes icon img view
-    makeNotesIcon.setAttribute("src", "i/notes.png")
-    makeNotesIcon.setAttribute("class", "icons")
-    makeNotesIcon.setAttribute("id", "notes-"+key)
+    makeInlayIcon.setAttribute("src", "i/notes.png")
+    makeInlayIcon.setAttribute("class", "icons")
+    makeInlayIcon.setAttribute("id", "inlay-"+key)
     
     #Create a new img view for account icon
     makeAccountIcon = document.createElement("img")
@@ -178,21 +192,23 @@ qryBills = (storage, from) ->
     
     makeAccountIcon.setAttribute("class", "icons")
     makeAccountIcon.setAttribute("id", "account-"+key)
-    
-    #Add icons to subList
-    makeSubList.appendChild makeEditIcon
-    makeSubList.appendChild makeDeleteIcon
-    makeSubList.appendChild makeAccountIcon
-    makeSubList.appendChild makeNotesIcon
         
     #Add the new Unordered list to the list item of original Unordered list
     makeListItem.appendChild makeSubList
     
-    makeNotesDiv = document.createElement("div")
-    makeNotesDiv.setAttribute("id", "notes-div-"+key)
-    makeNotesDiv.setAttribute("class", "billNotes")
+    makeInlayDiv = document.createElement("div")
+    makeInlayDiv.setAttribute("id", "inlay-div-"+key)
+    makeInlayDiv.setAttribute("class", "billNotes")
+    makeInlayUl = document.createElement("ul")
+    makeInlayDiv.appendChild makeInlayUl
     
-    makeListItem.appendChild makeNotesDiv
+    #Add icons to subList
+    makeSubList.appendChild makeInlayIcon
+    makeInlayUl.appendChild makeEditIcon
+    makeInlayUl.appendChild makeDeleteIcon
+    makeInlayUl.appendChild makeAccountIcon
+    
+    makeListItem.appendChild makeInlayDiv
     
     #Set click listener on edit icon
     $("#edit-"+key).click("click", (e) ->
@@ -210,37 +226,32 @@ qryBills = (storage, from) ->
     )
     
     #Set click listener on notes icon
-    $("#notes-"+key).click("click", (e) ->
-      $("#notes-div-"+key).removeClass("billNotes").addClass("billNotesShow")
+    $("#inlay-"+key).click("click", (e) ->
+      openKeys = getInlaysOpen()
+      if openKeys? and openKeys.length != 0
+      
+        if _.indexOf(openKeys, key) != -1
+          console.log "is open " + key
+          removeInlayKey(key)
+          $("#inlay-div-"+key).removeClass("billNotesShow").addClass("billNotes")
+          return
+        else
+          console.log "not open " + key
+          setInlaysOpen(key)
+          $("#inlay-div-"+key).removeClass("billNotes").addClass("billNotesShow")
+          return
+
+      else
+        setInlaysOpen(key)
+        $("#inlay-div-"+key).removeClass("billNotes").addClass("billNotesShow")
     )
     
     #for each bill in the billObj do the following
     _.each(billObj, (bill) ->
     
       #Make a list item
-      makeSubListItem = document.createElement("li")
-      
-      if bill[0] == "From Account:"
-        makeSubListItem.setAttribute("id", "li-account-"+key)
-        
-      if bill[0] == "Notes:"
-        #Create the text to display for each line
-        field = document.createElement("span")
-        value = document.createElement("span")
-        
-        field.setAttribute("class", "billField")
-        value.setAttribute("class", "billValue")
-  
-        #Add the text to the new list item
-        $("#notes-div-"+key).append field
-        $("#notes-div-"+key).append value
-        
-        field.innerHTML = bill[0] + " "
-        value.innerHTML = bill[1]
-        return
-      
-      #Add the list item to the new Unordered list
-      makeSubList.appendChild makeSubListItem
+      makePayToItem = document.createElement("li")
+      makeInlayLi = document.createElement("li")
       
       #Create the text to display for each line
       field = document.createElement("span")
@@ -248,13 +259,37 @@ qryBills = (storage, from) ->
       
       field.setAttribute("class", "billField")
       value.setAttribute("class", "billValue")
-
-      #Add the text to the new list item
-      makeSubListItem.appendChild field
-      makeSubListItem.appendChild value
-      
-      field.innerHTML = bill[0] + " "
-      value.innerHTML = bill[1]
+        
+      switch bill[0]
+        when "Pay To:"
+          makePayToItem.appendChild field
+          makePayToItem.appendChild value
+          
+          field.innerHTML = bill[0] + " "
+          value.innerHTML = bill[1]
+          
+          makeSubList.appendChild makePayToItem
+          return
+        when "From Account:"
+          makeInlayLi.setAttribute("id", "li-account-"+key)
+          
+          makeInlayLi.appendChild field
+          makeInlayLi.appendChild value
+          
+          field.innerHTML = bill[0] + " "
+          value.innerHTML = bill[1]
+          
+          makeInlayUl.appendChild makeInlayLi
+          return
+        else
+          makeInlayLi.appendChild field
+          makeInlayLi.appendChild value
+          
+          field.innerHTML = bill[0] + " "
+          value.innerHTML = bill[1]
+          
+          makeInlayUl.appendChild makeInlayLi
+          return
       true
     )
     true
@@ -300,6 +335,13 @@ deleteItem = (key) ->
       opacity: 0.00
       height: 'toggle'
     , 1000
+    $("#inlay-div-"+key).animate
+      opacity: 0.00
+      height: 'toggle'
+    , 1000
+    setTimeout(->
+      $("#inlay-div-"+key).parent().empty()
+    , 1000)
     
     if _.size(localStorage) > 1
       localStorage.removeItem key

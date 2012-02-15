@@ -11,7 +11,7 @@ Variables
 */
 
 (function() {
-  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, setDataDisplayed, setInvalidated, setViewState, showAccount, stopEvent, storeJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
+  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, editItem, getAccounts, getData, getDataDisplayed, getFavValue, getInlaysOpen, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, removeInlayKey, setDataDisplayed, setInlaysOpen, setInvalidated, setViewState, showAccount, stopEvent, storeJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
     _this = this;
 
   this.dataViewState = false;
@@ -23,6 +23,8 @@ Variables
   this.keyToEdit = 0;
 
   billAccounts = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
+
+  this.inlaysOpen = [];
 
   /*
   State Control Methods
@@ -66,6 +68,24 @@ Variables
 
   this.setKeyToEdit = function(key) {
     return _this.keyToEdit = key;
+  };
+
+  /*
+  Getter and Setter for key of Inlay(s) that have been opened
+  */
+
+  getInlaysOpen = function() {
+    return _this.inlaysOpen;
+  };
+
+  setInlaysOpen = function(key) {
+    return _this.inlaysOpen.push(key);
+  };
+
+  removeInlayKey = function(key) {
+    var keyIndex;
+    keyIndex = _.indexOf(_this.inlaysOpen, key);
+    return _this.inlaysOpen.splice(keyIndex, 1);
   };
 
   /*
@@ -133,7 +153,7 @@ Variables
     makeList = document.createElement("ul");
     $("#items").append(makeList);
     _.each(_.keys(storage), function(key) {
-      var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeListItem, makeNotesDiv, makeNotesIcon, makeSubList, value;
+      var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeInlayDiv, makeInlayIcon, makeInlayUl, makeListItem, makeSubList, value;
       makeListItem = document.createElement("li");
       makeListItem.setAttribute("id", "master-list-item-" + key);
       makeList.appendChild(makeListItem);
@@ -158,10 +178,10 @@ Variables
       makeDeleteIcon.setAttribute("src", "i/x.png");
       makeDeleteIcon.setAttribute("class", "icons");
       makeDeleteIcon.setAttribute("id", "delete-" + key);
-      makeNotesIcon = document.createElement("img");
-      makeNotesIcon.setAttribute("src", "i/notes.png");
-      makeNotesIcon.setAttribute("class", "icons");
-      makeNotesIcon.setAttribute("id", "notes-" + key);
+      makeInlayIcon = document.createElement("img");
+      makeInlayIcon.setAttribute("src", "i/notes.png");
+      makeInlayIcon.setAttribute("class", "icons");
+      makeInlayIcon.setAttribute("id", "inlay-" + key);
       makeAccountIcon = document.createElement("img");
       OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
       account = billObj.account[1];
@@ -178,15 +198,17 @@ Variables
       }
       makeAccountIcon.setAttribute("class", "icons");
       makeAccountIcon.setAttribute("id", "account-" + key);
-      makeSubList.appendChild(makeEditIcon);
-      makeSubList.appendChild(makeDeleteIcon);
-      makeSubList.appendChild(makeAccountIcon);
-      makeSubList.appendChild(makeNotesIcon);
       makeListItem.appendChild(makeSubList);
-      makeNotesDiv = document.createElement("div");
-      makeNotesDiv.setAttribute("id", "notes-div-" + key);
-      makeNotesDiv.setAttribute("class", "billNotes");
-      makeListItem.appendChild(makeNotesDiv);
+      makeInlayDiv = document.createElement("div");
+      makeInlayDiv.setAttribute("id", "inlay-div-" + key);
+      makeInlayDiv.setAttribute("class", "billNotes");
+      makeInlayUl = document.createElement("ul");
+      makeInlayDiv.appendChild(makeInlayUl);
+      makeSubList.appendChild(makeInlayIcon);
+      makeInlayUl.appendChild(makeEditIcon);
+      makeInlayUl.appendChild(makeDeleteIcon);
+      makeInlayUl.appendChild(makeAccountIcon);
+      makeListItem.appendChild(makeInlayDiv);
       $("#edit-" + key).click("click", function(e) {
         return editItem(key);
       });
@@ -196,35 +218,56 @@ Variables
       $("#account-" + key).click("click", function(e) {
         return showAccount(key);
       });
-      $("#notes-" + key).click("click", function(e) {
-        return $("#notes-div-" + key).removeClass("billNotes").addClass("billNotesShow");
+      $("#inlay-" + key).click("click", function(e) {
+        var openKeys;
+        openKeys = getInlaysOpen();
+        if ((openKeys != null) && openKeys.length !== 0) {
+          if (_.indexOf(openKeys, key) !== -1) {
+            console.log("is open " + key);
+            removeInlayKey(key);
+            $("#inlay-div-" + key).removeClass("billNotesShow").addClass("billNotes");
+          } else {
+            console.log("not open " + key);
+            setInlaysOpen(key);
+            $("#inlay-div-" + key).removeClass("billNotes").addClass("billNotesShow");
+          }
+        } else {
+          setInlaysOpen(key);
+          return $("#inlay-div-" + key).removeClass("billNotes").addClass("billNotesShow");
+        }
       });
       _.each(billObj, function(bill) {
-        var field, makeSubListItem;
-        makeSubListItem = document.createElement("li");
-        if (bill[0] === "From Account:") {
-          makeSubListItem.setAttribute("id", "li-account-" + key);
-        }
-        if (bill[0] === "Notes:") {
-          field = document.createElement("span");
-          value = document.createElement("span");
-          field.setAttribute("class", "billField");
-          value.setAttribute("class", "billValue");
-          $("#notes-div-" + key).append(field);
-          $("#notes-div-" + key).append(value);
-          field.innerHTML = bill[0] + " ";
-          value.innerHTML = bill[1];
-          return;
-        }
-        makeSubList.appendChild(makeSubListItem);
+        var field, makeInlayLi, makePayToItem;
+        makePayToItem = document.createElement("li");
+        makeInlayLi = document.createElement("li");
         field = document.createElement("span");
         value = document.createElement("span");
         field.setAttribute("class", "billField");
         value.setAttribute("class", "billValue");
-        makeSubListItem.appendChild(field);
-        makeSubListItem.appendChild(value);
-        field.innerHTML = bill[0] + " ";
-        value.innerHTML = bill[1];
+        switch (bill[0]) {
+          case "Pay To:":
+            makePayToItem.appendChild(field);
+            makePayToItem.appendChild(value);
+            field.innerHTML = bill[0] + " ";
+            value.innerHTML = bill[1];
+            makeSubList.appendChild(makePayToItem);
+            return;
+          case "From Account:":
+            makeInlayLi.setAttribute("id", "li-account-" + key);
+            makeInlayLi.appendChild(field);
+            makeInlayLi.appendChild(value);
+            field.innerHTML = bill[0] + " ";
+            value.innerHTML = bill[1];
+            makeInlayUl.appendChild(makeInlayLi);
+            return;
+          default:
+            makeInlayLi.appendChild(field);
+            makeInlayLi.appendChild(value);
+            field.innerHTML = bill[0] + " ";
+            value.innerHTML = bill[1];
+            makeInlayUl.appendChild(makeInlayLi);
+            return;
+        }
         return true;
       });
       return true;
@@ -276,6 +319,13 @@ Variables
       $("#bill-" + key).animate({
         opacity: 0.00,
         height: 'toggle'
+      }, 1000);
+      $("#inlay-div-" + key).animate({
+        opacity: 0.00,
+        height: 'toggle'
+      }, 1000);
+      setTimeout(function() {
+        return $("#inlay-div-" + key).parent().empty();
       }, 1000);
       if (_.size(localStorage) > 1) {
         localStorage.removeItem(key);
