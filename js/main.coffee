@@ -71,30 +71,30 @@ Main Metheds
   else
     itemId = @getKeyToEdit()
 
-  messages = validateRequiredFields()
-  unless _.isEmpty(messages)
-    message = messages.join('\n')
-    alert message
-  else
-    item = {}
-    item.name     = ["Name:", $("#name").val()]
-    item.payto    = ["Pay To:", $("#payTo").val()]
-    item.amount   = ["Amount:", $("#payAmount").val()]
-    item.account  = ["From Account:", $("#payFrom").val()]
-    item.payon    = ["Pay On:", $("#payOn").val()]
-    item.notes    = ["Notes:", $("#notes").val()]
-    item.remember = ["Remember This Payment:", getFavValue()]
-  
-    try
-      localStorage.setItem itemId, JSON.stringify(item)
-      setInvalidated(true)
-      alert("Bill Added!")
-      @setKeyToEdit(0)
-      $("legend").html("<h2>Create a New Bill</h2>")
-      @displayData()
-      return
-    catch e
-      alert e
+#   messages = validateRequiredFields()
+#   unless _.isEmpty(messages)
+#     message = messages.join('\n')
+#     alert message
+#   else
+  item = {}
+  item.name     = ["Name:", $("#name").val()]
+  item.payto    = ["Pay To:", $("#payTo").val()]
+  item.amount   = ["Amount:", $("#payAmount").val()]
+  item.account  = ["From Account:", $("#payFrom").val()]
+  item.payon    = ["Pay On:", $("#payOn").val()]
+  item.notes    = ["Notes:", $("#notes").val()]
+  item.remember = ["Remember This Payment:", getFavValue()]
+
+  try
+    localStorage.setItem itemId, JSON.stringify(item)
+    setInvalidated(true)
+    alert("Bill Added!")
+    @setKeyToEdit(0)
+    $("legend").html("<h2>Create a New Bill</h2>")
+    @displayData()
+    return
+  catch e
+    alert e
       
 $(window).scroll ->
   if $(window).scrollTop() >= $(document).height() - $(window).height() - 100

@@ -29,11 +29,20 @@ additem.html
     
     <!-- jQuery - required for jQuery Mobile -->
     <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <!-- jQuery Validator -->
+    <script src="js/jquery-validation/jquery.validate.min.js"></script>
     <!-- My JS -->
     <script src="js/min/json.js"></script>
     <script src="js/min/main.js"></script>
     <!-- jQuery Mobile JS -->
     <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+    
+    <!-- Initialize Validator -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+    	$("#billForm").validate();
+    });
+    </script>
 
   </head>
 
@@ -57,27 +66,29 @@ additem.html
           <fieldset>
             <legend><h2>Create a New Payment</h2></legend>
               <ul>
-                <li><label for="yourName" class="sectionHeader">Your Name:</label><input type="text" id="name" required maxlength="25" title="Enter your name in this field. Maximum of 25 characters." placeholder="John doe" /></li>
+                <li><label for="yourName" class="sectionHeader">Your Name:</label><input type="text" id="name" name="name" maxlength="25" title="Enter your name in this field. Maximum of 25 characters." class="required" placeholder="John doe" /></li>
                 
-                <li><label for="payTo" class="sectionHeader">Pay To:</label><input type="text" id="payTo" required maxlength="30" title="Enter payee in this field. Maximum of 30 characters." placeholder="Full Sail University" /></li>
+                <li><label for="payTo" class="sectionHeader">Pay To:</label><input type="text" id="payTo" name="payto" maxlength="30" title="Enter payee in this field. Maximum of 30 characters." class="required" placeholder="Full Sail University" /></li>
                 
-                <li><label for="payAmount" class="sectionHeader">Pay This Amount:</label><input type="range" id="payAmount" required min="0" max="250" value="0" step="10" name="amount" title="Use slider to select the amount you would like to pay." /></li>
+                <li><label for="payAmount" class="sectionHeader">Pay This Amount:</label><input type="range" id="payAmount" name="amount" min="0" max="250" value="100" name="amount" class="required" title="Use slider to select the amount you would like to pay." /></li>
                 
                 <li id="selectAccounts"><label for="payFrom" class="sectionHeader">Pay From:</label></li>
                 
-                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" required class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
+                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
                 
-                <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes"></textarea></li>
+                <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes" placeholder="Payment for Tuition"></textarea></li>
                 
                 <li><label for="rememberGroup" class="sectionHeader">Remember This Payment:</label>
                   <div data-role="controlgroup" data-type="horizontal" id="rememberGroup">
                     <label for="rememberYes" id="labelYes"> Yes </label><input type="radio" id="rememberYes" name="remember" value="Yes"/>
-                    <label for="rememberNo" id="labelNo"> No </label><input type="radio" id="rememberNo" name="remember" value="No"/>
+                    <label for="rememberNo" id="labelNo"> No </label><input type="radio" id="rememberNo" name="remember" value="No" checked="checked"/>
                   </div>
                 </li>
               </ul>
           
-          <input type="submit" id="submitBillForm" value="Add This Bill" />
+          <div id="submitButton">
+            <input type="submit" id="submitBillForm" value="Add This Bill" />
+          </div>
           
           </fieldset>
         </form>
