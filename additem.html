@@ -76,7 +76,7 @@ additem.html
                 
                 <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
                 
-                <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes"></textarea></li>
+                <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes" placeholder="Payment for Tuition"></textarea></li>
                 
                 <li><label for="rememberGroup" class="sectionHeader">Remember This Payment:</label>
                   <div data-role="controlgroup" data-type="horizontal" id="rememberGroup">
@@ -86,7 +86,9 @@ additem.html
                 </li>
               </ul>
           
-          <input type="submit" id="submitBillForm" value="Add This Bill" />
+          <div id="submitButton">
+            <input type="submit" id="submitBillForm" value="Add This Bill" />
+          </div>
           
           </fieldset>
         </form>
