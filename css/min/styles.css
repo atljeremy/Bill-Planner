@@ -8,6 +8,8 @@ legend{padding-bottom:5px}
 .ui-header .ui-btn,.ui-footer .ui-btn,.ui-bar .ui-btn{margin-top:-4px}
 .ui-header .ui-title,.ui-footer .ui-title{font-size:25px;text-shadow:2px 2px 4px #000;filter:dropshadow(#000,2,2);margin-top:10px}
 .ui-controlgroup-horizontal .ui-checkbox,.ui-controlgroup-horizontal .ui-radio{display:inline-block;float:none;margin-right:-5px}
+div#submitButton .ui-btn.ui-btn-corner-all.ui-shadow.ui-btn-up-c{width:85px;float:right}
+div#submitButton .ui-btn.ui-btn-corner-all.ui-shadow.ui-btn-hover-c{width:85px;float:right}
 #header{background-image:url("../../i/header-fade.png");background-repeat:repeat-x;width:100%;height:35px;margin-top:0;padding:10px;position:fixed;top:0;display:block;text-align:center;z-index:1000}
 #searchFormContainer{display:none;opacity:0;position:absolute;top:5px;margin:auto auto auto 35px;z-index:9999}
 #billSearchHide{display:none;opacity:0}
