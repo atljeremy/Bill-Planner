@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-Deliverable 2
+Deliverable 3
 Author: Jeremy Fox
 Created For: MiU Online
 Simple HTML5 / Javascript Mobile Web Form
@@ -37,7 +37,6 @@ additem.html
     <!-- jQuery Mobile JS -->
     <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
     
-    <!-- Initialize Validator -->
     <script type="text/javascript">
     $(document).ready(function() {
     	$("#billForm").validate();
@@ -74,7 +73,7 @@ additem.html
                 
                 <li id="selectAccounts"><label for="payFrom" class="sectionHeader">Pay From:</label></li>
                 
-                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" class="datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
+                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" class="required datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
                 
                 <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes" placeholder="Payment for Tuition"></textarea></li>
                 

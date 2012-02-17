@@ -1,6 +1,6 @@
 
 /*
-Deliverable 2
+Deliverable 3
 Author: Jeremy Fox
 Created For: MiU Online
 Simple HTML5 / Javascript Mobile Web Form
@@ -22,7 +22,7 @@ Variables
 
   this.keyToEdit = 0;
 
-  billAccounts = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
+  billAccounts = ["Please Select An Account", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
 
   this.detailsKey = "";
 
@@ -223,6 +223,7 @@ Variables
       OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
       account = bill.account[1];
       accountMatch = account.match(OPERATOR);
+      console.log(accountMatch);
       switch (accountMatch[0]) {
         case "Checking":
           makeThumbIcon.setAttribute("src", "i/checking_thumb.png");
@@ -232,6 +233,9 @@ Variables
           break;
         case "Credit Card":
           makeThumbIcon.setAttribute("src", "i/credit_thumb.png");
+          break;
+        default:
+          makeThumbIcon.setAttribute("src", "i/checking_thumb.png");
       }
       makeArrowIcon = document.createElement("img");
       makeArrowIcon.setAttribute("src", "i/arrow.png");
@@ -351,15 +355,21 @@ Variables
   $("#billForm").live("submit", function(e) {
     var formdata;
     stopEvent(e);
-    formdata = $(this).serialize();
-    $.ajax({
-      type: "POST",
-      url: "additem.html",
-      data: formdata,
-      success: function() {
-        return storeData();
-      }
-    });
+    if ($("#billForm").valid()) {
+      formdata = $(this).serialize();
+      $.ajax({
+        type: "POST",
+        url: "additem.html",
+        data: formdata,
+        success: function() {
+          return storeData();
+        }
+      });
+    } else {
+      $('html, body').animate({
+        scrollTop: 0
+      }, 0);
+    }
     return false;
   });
 
@@ -410,6 +420,20 @@ Variables
     }, 700);
     return $.mobile.changePage("additem.html", {
       transition: "slideup",
+      showLoadMsg: true
+    });
+  });
+
+  $("#accounts").click("click", function(e) {
+    stopEvent(e);
+    return $.mobile.changePage("accounts.html", {
+      showLoadMsg: true
+    });
+  });
+
+  $("#faq").click("click", function(e) {
+    stopEvent(e);
+    return $.mobile.changePage("faq.html", {
       showLoadMsg: true
     });
   });
@@ -611,6 +635,7 @@ Variables
     liSelect = document.getElementById("selectAccounts");
     makeSelect = document.createElement("select");
     makeSelect.setAttribute("id", "payFrom");
+    makeSelect.setAttribute("class", "required");
     for (_i = 0, _len = billAccounts.length; _i < _len; _i++) {
       account = billAccounts[_i];
       makeOpt = document.createElement("option");
