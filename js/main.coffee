@@ -12,7 +12,7 @@ Variables
 @hasDataBeenDisplayed = false #Keeps track of whether or not localStorage has been display, if so, there is no reason to re-query localStorage, just show the previously viewed data.
 @invalidateData       = false #set this to true when we need to force the app to re-query localStorage for new data.
 @keyToEdit            = 0 #The key of the item in localStorage we want to edit
-billAccounts          = ["-- Choose Account --", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
+billAccounts          = ["Please Select An Account", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
 @detailsKey           = "" # Key used to retreive bill details on details.html
 
 ###****************************************************************
@@ -186,10 +186,12 @@ qryBills = ->
 
     account = bill.account[1]
     accountMatch = account.match(OPERATOR)
+    console.log accountMatch
     switch accountMatch[0]
       when "Checking" then makeThumbIcon.setAttribute("src", "i/checking_thumb.png")
       when "Savings" then makeThumbIcon.setAttribute("src", "i/savings_thumb.png")
       when "Credit Card" then makeThumbIcon.setAttribute("src", "i/credit_thumb.png")
+      else makeThumbIcon.setAttribute("src", "i/checking_thumb.png")
     
     makeArrowIcon = document.createElement("img")
     makeArrowIcon.setAttribute("src", "i/arrow.png")
@@ -442,13 +444,16 @@ Click Events
 ****************************************************************###
 $("#billForm").live "submit", (e) ->
   stopEvent(e)
-  formdata = $(this).serialize()
-  $.ajax
-    type: "POST"
-    url: "additem.html"
-    data: formdata
-    success: ->
-      storeData()
+  if $("#billForm").valid()
+    formdata = $(this).serialize()
+    $.ajax
+      type: "POST"
+      url: "additem.html"
+      data: formdata
+      success: ->
+        storeData()
+  else
+    $('html, body').animate( scrollTop: 0 , 0)
   return false
   
 $("#billSearch").click("click", (e) ->
@@ -503,6 +508,20 @@ $("#viewBills").click("click", (e) =>
   , 700)
   $.mobile.changePage( "additem.html",
     transition: "slideup"
+    showLoadMsg: true
+  )
+)
+
+$("#accounts").click("click", (e) =>
+  stopEvent(e)
+  $.mobile.changePage( "accounts.html",
+    showLoadMsg: true
+  )
+)
+
+$("#faq").click("click", (e) =>
+  stopEvent(e)
+  $.mobile.changePage( "faq.html",
     showLoadMsg: true
   )
 )
@@ -679,15 +698,16 @@ unBindClickListeners = () ->
 Bind to jQueries mobileinit
 ****************************************************************###
 $(document).bind "mobileinit", ->
-  $.mobile.accounts = getAccounts
-  $.mobile.date     = currentDate
-  $.mobile.details  = showBillDetails
+  $.mobile.accounts     = getAccounts
+  $.mobile.date         = currentDate
+  $.mobile.details      = showBillDetails
   return
 
 getAccounts = ->
   liSelect   = document.getElementById("selectAccounts")
   makeSelect = document.createElement("select")
   makeSelect.setAttribute("id", "payFrom")
+  makeSelect.setAttribute("class", "required")
   for account in billAccounts
     makeOpt = document.createElement("option")
     makeOpt.setAttribute("value", account)
