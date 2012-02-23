@@ -20,15 +20,19 @@ accounts.html
     
     <!-- jQuery Mobile CSS -->
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
-    
+    <!-- tabs css -->
+    <link rel="stylesheet" href="css/tabs-styles.css">
     <!-- My CSS -->
     <link rel="stylesheet" href="css/min/styles.css" type="text/css" />
+    <!-- jquery ui -->
+    <link type="text/css" href="css/dark-hive/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
     
     <!-- Underscore is a utility-belt library for JavaScript that provides a lot of the functional programming support -->
     <script src="js/underscore-v1.2.4.js"></script>
-    
     <!-- jQuery - required for jQuery Mobile -->
     <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <!-- jquery ui -->
+    <script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script>
     <!-- jQuery Validator -->
     <script src="js/jquery-validation/jquery.validate.min.js"></script>
     <!-- My JS -->
@@ -36,6 +40,21 @@ accounts.html
     <script src="js/min/main.js"></script>
     <!-- jQuery Mobile JS -->
     <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+    
+    <script type="text/javascript">
+			$(function(){
+	
+				// Tabs
+				$('#tabs').tabs();
+				
+				//hover states on the static widgets
+				$('#dialog_link, ul#icons li').hover(
+					function() { $(this).addClass('ui-state-hover'); }, 
+					function() { $(this).removeClass('ui-state-hover'); }
+				);
+				
+			});
+		</script>
 
   </head>
 
@@ -47,21 +66,36 @@ accounts.html
         <a href="index.html">
           <img src="i/grid.png" alt="Go To Home"/>
         </a>
-    		<h1 id="headerBranding">Bill Planner</h1>
+        <img src="i/bill-planner-logo.png" id="headerBranding" alt="Bill Planner" />
     		<a href="additem.html" data-ajax="false">
           <img src="i/plus.png" alt="Add A New Bill"/>
         </a>
     	</div><!-- /header -->
     
     	<div data-role="content">	
-        Accounts Coming Soon...
+        
+        
+        <div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Current</a></li>
+		<li><a href="#tabs-2">Add</a></li>
+	</ul>
+	<div id="tabs-1">
+		<p>You have set up the following accounts.</p>
+	</div>
+	<div id="tabs-2">
+		<p>Fill in form below to add a new account.</p>
+	</div>
+</div>
+        
+
     	</div><!-- /content -->
-    	
+
     	<div data-role="footer">
     		<h2>&copy; Jeremy Fox 2012</h2>
     	</div><!-- /footer -->
   	
     </div><!-- /page -->
-    
+        
   </body>
 </html>
