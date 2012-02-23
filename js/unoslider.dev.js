@@ -181,7 +181,7 @@
 			// scale images to fit the slider dimensions
 			scaleSlides: function(){
 				var img = slides.find('img').filter(':not(.unoslider_layers img, .unoslider_caption img)');
-				var div = $('<div class="unoslider_slider_area"></div>').css({overflow: 'hidden', width: $this.width(), height: $this.height(), position: 'absolute'});
+				var div = $('<div class="unoslider_slider_area"></div>');//.css({overflow: 'hidden', width: $this.width(), height: $this.height(), position: 'absolute'});
 				
 				// wrap into the div because an overflow
 				img.each(function(){
@@ -194,9 +194,11 @@
 					scale = cfg[activeSlideNum+1].scale;
 				}
 				
-				if(cfg.scale){
+				/*
+if(cfg.scale){
 					img.css({width: '100%', height: '100%' });
 				}
+*/
 
 			},
 			
