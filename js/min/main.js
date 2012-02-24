@@ -186,6 +186,8 @@ Variables
       OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
       account = billObj.account[1];
       accountMatch = account.match(OPERATOR);
+      console.log("account = " + account);
+      console.log("accountMatch = " + accountMatch);
       switch (accountMatch[0]) {
         case "Checking":
           makeAccountIcon.setAttribute("src", "i/thumb_checking.png");
@@ -497,6 +499,7 @@ Variables
 
   validateDate = function(date) {
     var OPERATOR, currentTime, dateArray, day, invalidDate, matchDate, month, year;
+    if (date === null || (date.length = 0 || date === "")) return true;
     invalidDate = false;
     OPERATOR = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
     matchDate = date.match(OPERATOR);

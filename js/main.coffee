@@ -185,6 +185,10 @@ qryBills = (storage, from) ->
 
     account = billObj.account[1]
     accountMatch = account.match(OPERATOR)
+    
+    console.log "account = " + account
+    console.log "accountMatch = " + accountMatch
+    
     switch accountMatch[0]
       when "Checking" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
       when "Savings" then makeAccountIcon.setAttribute("src", "i/thumb_savings.png")
@@ -489,6 +493,8 @@ validateRequiredFields = ->
   return message
   
 validateDate = (date) ->
+  return true if date == null or date.length = 0 or date == ""
+
   invalidDate = false
 
   OPERATOR = ///^
