@@ -620,6 +620,66 @@ Variables
   };
 
   /*****************************************************************
+  Add Account Page Form Methods
+  ****************************************************************
+  */
+
+  this.actBank = function() {
+    console.log($("#accountBank").val());
+    if ($("#accountBank").val() !== null && $("#accountBank").val() !== "") {
+      return $("#actType").removeClass("hide").addClass("show");
+    } else {
+      return alert("Please enter your bank account to conitue.");
+    }
+  };
+
+  this.actType = function() {
+    console.log($("#accountType").val());
+    if ($("#accountType").val() !== null && $("#accountType").val() !== "") {
+      if ($("#accountType").val() === "credit") {
+        return $("#actExp").removeClass("hide").addClass("show");
+      } else {
+        $("#actExp").removeClass("show").addClass("hide");
+        return $("#actNum").removeClass("hide").addClass("show");
+      }
+    } else {
+      return alert("Please enter the account type to conitue.");
+    }
+  };
+
+  this.actExp = function() {
+    console.log($("#accountExpiration").val());
+    if ($("#accountExpiration").val() !== null && $("#accountExpiration").val() !== "") {
+      return $("#actNum").removeClass("hide").addClass("show");
+    } else {
+      return alert("Please enter your credit cards expiration date to conitue.");
+    }
+  };
+
+  this.actNum = function() {
+    console.log($("#accountNumber").val());
+    if ($("#accountNumber").val() !== null && $("#accountNumber").val() !== "") {
+      return $("#accountSubmitBtn").removeClass("hide").addClass("show");
+    } else {
+      return alert("Please enter your credit cards expiration date to conitue.");
+    }
+  };
+
+  $("#accountForm").live("submit", function(e) {
+    var formdata;
+    stopEvent(e);
+    formdata = $(this).serialize();
+    return $.ajax({
+      type: "POST",
+      url: "accounts.html",
+      data: formdata,
+      success: function() {
+        return alert("Your account has been added! --THIS IS NOT ACTUALLING DOING ANYTHING JUST YET!--");
+      }
+    });
+  });
+
+  /*****************************************************************
   Bind to jQueries mobileinit
   ****************************************************************
   */

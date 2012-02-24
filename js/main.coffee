@@ -693,6 +693,51 @@ hideBillForm = ->
     
 unBindClickListeners = () ->
   $(document).unbind("click")
+  
+###****************************************************************
+Add Account Page Form Methods
+****************************************************************###
+@actBank = ->
+  console.log $("#accountBank").val()
+  if $("#accountBank").val() != null and $("#accountBank").val() != ""
+    $("#actType").removeClass("hide").addClass("show")
+  else
+    alert "Please enter your bank account to conitue."
+    
+@actType = ->
+  console.log $("#accountType").val()
+  if $("#accountType").val() != null and $("#accountType").val() != ""
+    if $("#accountType").val() == "credit"
+      $("#actExp").removeClass("hide").addClass("show")
+    else
+      $("#actExp").removeClass("show").addClass("hide")
+      $("#actNum").removeClass("hide").addClass("show")
+  else
+    alert "Please enter the account type to conitue."
+    
+@actExp = ->
+  console.log $("#accountExpiration").val()
+  if $("#accountExpiration").val() != null and $("#accountExpiration").val() != ""
+    $("#actNum").removeClass("hide").addClass("show")
+  else
+    alert "Please enter your credit cards expiration date to conitue."
+    
+@actNum = ->
+  console.log $("#accountNumber").val()
+  if $("#accountNumber").val() != null and $("#accountNumber").val() != ""
+    $("#accountSubmitBtn").removeClass("hide").addClass("show")
+  else
+    alert "Please enter your credit cards expiration date to conitue."
+
+$("#accountForm").live "submit", (e) ->
+  stopEvent(e)
+  formdata = $(this).serialize()
+  $.ajax
+    type: "POST"
+    url: "accounts.html"
+    data: formdata
+    success: ->
+      alert "Your account has been added! --THIS IS NOT ACTUALLING DOING ANYTHING JUST YET!--"
 
 ###****************************************************************
 Bind to jQueries mobileinit
