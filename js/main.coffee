@@ -448,9 +448,11 @@ $("#billForm").live "submit", (e) ->
     formdata = $(this).serialize()
     $.ajax
       type: "POST"
-      url: "additem.html"
+      url: "http://strong-samurai-1042.herokuapp.com/api/add"
       data: formdata
-      success: ->
+      success: (json) ->
+        alert "done!"
+        console.log json
         storeData()
   else
     $('html, body').animate( scrollTop: 0 , 0)
