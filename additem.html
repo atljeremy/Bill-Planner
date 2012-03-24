@@ -69,13 +69,13 @@ additem.html
                 
                 <li><label for="payTo" class="sectionHeader">Pay To:</label><input type="text" id="payTo" name="payto" maxlength="30" title="Enter payee in this field. Maximum of 30 characters." class="required" placeholder="Full Sail University" /></li>
                 
-                <li><label for="payAmount" class="sectionHeader">Pay This Amount:</label><input type="range" id="payAmount" name="amount" min="0" max="250" value="100" name="amount" class="required" title="Use slider to select the amount you would like to pay." /></li>
+                <li><label for="payAmount" class="sectionHeader">Pay This Amount:</label><input type="range" id="payAmount" name="payamount" min="0" max="250" value="100" class="required" title="Use slider to select the amount you would like to pay." /></li>
                 
                 <li id="selectAccounts"><label for="payFrom" class="sectionHeader">Pay From:</label></li>
                 
-                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" id="payOn" class="required datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
+                <li><label for="payOn" class="sectionHeader">Pay On:</label><input type="date" name="payon" class="required datePicker" title="Enter the date you would like to make this payment. Format is mm-dd-yyyy." placeholder="mm/dd/yyyy" /></li>
                 
-                <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes" placeholder="Payment for Tuition"></textarea></li>
+                <li><label for="notes" class="sectionHeader">Notes:</label><textarea id="notes" name="notes" placeholder="Payment for Tuition"></textarea></li>
                 
                 <li><label for="rememberGroup" class="sectionHeader">Remember This Payment:</label>
                   <div data-role="controlgroup" data-type="horizontal" id="rememberGroup">
@@ -118,7 +118,7 @@ additem.html
   	
       <script type="text/javascript">
         $.mobile.accounts();
-        $.mobile.date();
+        //$.mobile.date();
       </script>
   	
     </div><!-- /page -->

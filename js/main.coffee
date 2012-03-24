@@ -445,15 +445,14 @@ Click Events
 $("#billForm").live "submit", (e) ->
   stopEvent(e)
   if $("#billForm").valid()
-    formdata = $(this).serialize()
     $.ajax
       type: "POST"
-      url: "http://strong-samurai-1042.herokuapp.com/api/add"
-      data: formdata
+      url: "http://localhost:3000/api/add"
+      data: $(this).serialize()
       success: (json) ->
         alert "done!"
         console.log json
-        storeData()
+        #storeData()
   else
     $('html, body').animate( scrollTop: 0 , 0)
   return false
@@ -755,6 +754,7 @@ getAccounts = ->
   makeSelect = document.createElement("select")
   makeSelect.setAttribute("id", "payFrom")
   makeSelect.setAttribute("class", "required")
+  makeSelect.setAttribute("name", "payfrom")
   for account in billAccounts
     makeOpt = document.createElement("option")
     makeOpt.setAttribute("value", account)
