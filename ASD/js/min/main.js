@@ -1,9 +1,9 @@
 
 /*
-Deliverable 4
+Deliverable 1
 Author: Jeremy Fox
-Created For: MiU Online
-Simple HTML5 / Javascript Mobile Web Form
+Created For: ASD Online
+main.coffee (main.js)
 */
 
 /*
@@ -26,9 +26,9 @@ Variables
 
   this.detailsKey = "";
 
-  /*****************************************************************
+  /***********************************************************
   State Control Methods
-  ****************************************************************
+  **********************************************************
   */
 
   setViewState = function(state) {
@@ -63,9 +63,9 @@ Variables
     return $("#itemDetails").empty();
   };
 
-  /*****************************************************************
+  /***********************************************************
   Getter and Setter for key to edit
-  ****************************************************************
+  **********************************************************
   */
 
   this.getKeyToEdit = function() {
@@ -76,9 +76,9 @@ Variables
     return _this.keyToEdit = key;
   };
 
-  /*****************************************************************
+  /***********************************************************
   Getter and Setter for details key
-  ****************************************************************
+  **********************************************************
   */
 
   setDetailsKey = function(key) {
@@ -89,9 +89,9 @@ Variables
     return _this.detailsKey;
   };
 
-  /*****************************************************************
+  /***********************************************************
   Main Metheds
-  ****************************************************************
+  **********************************************************
   */
 
   this.storeData = function() {
@@ -216,39 +216,39 @@ Variables
     return _.each(setupBills(), function(bill) {
       var OPERATOR, account, accountMatch, key, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
       key = bill.key;
-      makeListItem = document.createElement("li");
-      makeListItem.setAttribute("id", "li-key-" + key);
-      makeThumbIcon = document.createElement("img");
-      makeThumbIcon.setAttribute("class", "listThumbIcons");
+      makeListItem = $("<li>");
+      makeListItem.attr("id", "li-key-" + key);
+      makeThumbIcon = $("<img>");
+      makeThumbIcon.attr("class", "listThumbIcons");
       OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
       account = bill.account[1];
       accountMatch = account.match(OPERATOR);
       switch (accountMatch[0]) {
         case "Checking":
-          makeThumbIcon.setAttribute("src", "i/checking_thumb.png");
+          makeThumbIcon.attr("src", "i/checking_thumb.png");
           break;
         case "Savings":
-          makeThumbIcon.setAttribute("src", "i/savings_thumb.png");
+          makeThumbIcon.attr("src", "i/savings_thumb.png");
           break;
         case "Credit Card":
-          makeThumbIcon.setAttribute("src", "i/credit_thumb.png");
+          makeThumbIcon.attr("src", "i/credit_thumb.png");
           break;
         default:
-          makeThumbIcon.setAttribute("src", "i/checking_thumb.png");
+          makeThumbIcon.attr("src", "i/checking_thumb.png");
       }
-      makeArrowIcon = document.createElement("img");
-      makeArrowIcon.setAttribute("src", "i/arrow.png");
-      makeArrowIcon.setAttribute("class", "listArrowIcons");
+      makeArrowIcon = $("<img>");
+      makeArrowIcon.attr("src", "i/arrow.png");
+      makeArrowIcon.attr("class", "listArrowIcons");
       if (_.size(localStorage) === i) {
-        makeListItem.setAttribute("class", "lastBill");
+        makeListItem.attr("class", "lastBill");
       } else {
-        makeListItem.setAttribute("class", "bill");
+        makeListItem.attr("class", "bill");
       }
-      makeLink = document.createElement("a");
-      makeLink.setAttribute("href", "#");
-      makeListItem.appendChild(makeLink);
-      makeListItem.appendChild(makeThumbIcon);
-      makeListItem.appendChild(makeArrowIcon);
+      makeLink = $("<a>");
+      makeLink.attr("href", "#");
+      makeListItem.append(makeLink);
+      makeListItem.append(makeThumbIcon);
+      makeListItem.append(makeArrowIcon);
       $("#items").append(makeListItem);
       $("#li-key-" + key).click("click", function(e) {
         stopEvent(e);
@@ -263,7 +263,7 @@ Variables
       if (payTo.length >= 20) payTo = payTo.substr(0, 20) + "…";
       payAmount = "$" + bill.amount[1];
       payDate = "(" + bill.payon[1] + ")";
-      makeLink.innerHTML = payTo + " " + payAmount + " " + payDate;
+      makeLink.html(payTo + " " + payAmount + " " + payDate);
       return i++;
     });
   };
@@ -281,28 +281,23 @@ Variables
         transition: 'slide'
       });
     });
-    /*
-      Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
-      to set the values. We have to use the native javascipt method
-      document.getElementById("objectId").value = "something"
-    */
-    document.getElementById('name').value = bill.name[1];
-    document.getElementById('payTo').value = bill.payto[1];
-    document.getElementById('payAmount').value = bill.amount[1];
-    document.getElementById('payFrom').value = bill.account[1];
-    document.getElementById('payOn').value = bill.payon[1];
-    document.getElementById('notes').value = bill.notes[1];
+    $('#name').val(bill.name[1]);
+    $('#payTo').val(bill.payto[1]);
+    $('#payAmount').val(bill.amount[1]);
+    $('#payFrom').val(bill.account[1]);
+    $('#payOn').val(bill.payon[1]);
+    $('#notes').val(bill.notes[1]);
     radios = $("input[type='radio']");
     for (_i = 0, _len = radios.length; _i < _len; _i++) {
       radio = radios[_i];
       if (radio.value === "Yes" && bill.remember[1] === "Yes") {
-        radio.setAttribute("checked", "checked");
-        document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c");
-        document.getElementById("labelYes").setAttribute("class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active");
+        $(radio).attr("checked", "checked");
+        $("#labelNo").attr("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c");
+        $("#labelYes").attr("class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active");
       } else if (radio.value === "No" && bill.remember[1] === "No") {
-        radio.setAttribute("checked", "checked");
-        document.getElementById("labelYes").setAttribute("class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c");
-        document.getElementById("labelNo").setAttribute("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c");
+        $(radio).attr("checked", "checked");
+        $("#labelYes").attr("class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c");
+        $("#labelNo").attr("class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c");
       }
     }
     history.back();
@@ -346,9 +341,9 @@ Variables
     return alert("All Data Has Been Deleted.");
   };
 
-  /*****************************************************************
+  /***********************************************************
   Click Events
-  ****************************************************************
+  **********************************************************
   */
 
   $("#billForm").live("submit", function(e) {
@@ -468,9 +463,9 @@ Variables
     return false;
   });
 
-  /*****************************************************************
+  /***********************************************************
   Helper Methods
-  ****************************************************************
+  **********************************************************
   */
 
   add0 = function(n) {
@@ -618,9 +613,9 @@ Variables
     return $(document).unbind("click");
   };
 
-  /*****************************************************************
+  /***********************************************************
   Add Account Page Form Methods
-  ****************************************************************
+  **********************************************************
   */
 
   this.actBank = function() {
@@ -674,9 +669,9 @@ Variables
     });
   });
 
-  /*****************************************************************
+  /***********************************************************
   Bind to jQueries mobileinit
-  ****************************************************************
+  **********************************************************
   */
 
   $(document).bind("mobileinit", function() {
@@ -687,18 +682,18 @@ Variables
 
   getAccounts = function() {
     var account, liSelect, makeOpt, makeSelect, _i, _len;
-    liSelect = document.getElementById("selectAccounts");
-    makeSelect = document.createElement("select");
-    makeSelect.setAttribute("id", "payFrom");
-    makeSelect.setAttribute("class", "required");
+    liSelect = $("#selectAccounts");
+    makeSelect = $("<select>");
+    makeSelect.attr("id", "payFrom");
+    makeSelect.attr("class", "required");
     for (_i = 0, _len = billAccounts.length; _i < _len; _i++) {
       account = billAccounts[_i];
-      makeOpt = document.createElement("option");
-      makeOpt.setAttribute("value", account);
-      makeOpt.innerHTML = account;
-      makeSelect.appendChild(makeOpt);
+      makeOpt = $("<option>");
+      makeOpt.attr("value", account);
+      makeOpt.html(account);
+      makeSelect.append(makeOpt);
     }
-    liSelect.appendChild(makeSelect);
+    liSelect.append(makeSelect);
   };
 
   currentDate = function() {
@@ -708,7 +703,7 @@ Variables
     day = currentTime.getDate();
     year = currentTime.getFullYear();
     showDate = year + "-" + add0(month) + "-" + add0(day);
-    return document.getElementById("payOn").value = showDate;
+    return $("#payOn").val(showDate);
   };
 
   showBillDetails = function(key) {
@@ -720,45 +715,45 @@ Variables
     });
     key = (key !== void 0 ? key : getDetailsKey());
     destroyDetailsDataSet();
-    makeList = document.createElement("ul");
+    makeList = $("<ul>");
     $("#itemDetails").append(makeList);
-    makeListItem = document.createElement("li");
-    makeList.appendChild(makeListItem);
+    makeListItem = $("<li>");
+    makeList.append(makeListItem);
     value = localStorage[key];
     billObj = JSON.parse(value);
-    makeSubList = document.createElement("ul");
-    makeSubList.setAttribute("id", "bill-" + key);
-    makeEditIcon = document.createElement("img");
-    makeEditIcon.setAttribute("src", "i/pencil.png");
-    makeEditIcon.setAttribute("class", "icons");
-    makeEditIcon.setAttribute("id", "edit-" + key);
-    makeDeleteIcon = document.createElement("img");
-    makeDeleteIcon.setAttribute("src", "i/x.png");
-    makeDeleteIcon.setAttribute("class", "icons");
-    makeDeleteIcon.setAttribute("id", "delete-" + key);
-    makeAccountIcon = document.createElement("img");
+    makeSubList = $("<ul>");
+    makeSubList.attr("id", "bill-" + key);
+    makeEditIcon = $("<img>");
+    makeEditIcon.attr("src", "i/pencil.png");
+    makeEditIcon.attr("class", "icons");
+    makeEditIcon.attr("id", "edit-" + key);
+    makeDeleteIcon = $("<img>");
+    makeDeleteIcon.attr("src", "i/x.png");
+    makeDeleteIcon.attr("class", "icons");
+    makeDeleteIcon.attr("id", "delete-" + key);
+    makeAccountIcon = $("<img>");
     OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
     account = billObj.account[1];
     accountMatch = (account != null ? account.match(OPERATOR) : "Undefined");
     switch (accountMatch[0]) {
       case "Checking":
-        makeAccountIcon.setAttribute("src", "i/thumb_checking.png");
+        makeAccountIcon.attr("src", "i/thumb_checking.png");
         break;
       case "Savings":
-        makeAccountIcon.setAttribute("src", "i/thumb_savings.png");
+        makeAccountIcon.attr("src", "i/thumb_savings.png");
         break;
       case "Credit Card":
-        makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png");
+        makeAccountIcon.attr("src", "i/thumb_creditcard.png");
         break;
       case "Undefined":
-        makeAccountIcon.setAttribute("src", "i/thumb_checking.png");
+        makeAccountIcon.attr("src", "i/thumb_checking.png");
     }
-    makeAccountIcon.setAttribute("class", "icons");
-    makeAccountIcon.setAttribute("id", "account-" + key);
-    makeSubList.appendChild(makeEditIcon);
-    makeSubList.appendChild(makeDeleteIcon);
-    makeSubList.appendChild(makeAccountIcon);
-    makeListItem.appendChild(makeSubList);
+    makeAccountIcon.attr("class", "icons");
+    makeAccountIcon.attr("id", "account-" + key);
+    makeSubList.append(makeEditIcon);
+    makeSubList.append(makeDeleteIcon);
+    makeSubList.append(makeAccountIcon);
+    makeListItem.append(makeSubList);
     $("#edit-" + key).click("click", function(e) {
       return editItem(key);
     });
@@ -770,19 +765,19 @@ Variables
     });
     _.each(billObj, function(bill) {
       var field, makeSubListItem;
-      makeSubListItem = document.createElement("li");
+      makeSubListItem = $("<li>");
       if (bill[0] === "From Account:") {
-        makeSubListItem.setAttribute("id", "li-account-" + key);
+        makeSubListItem.attr("id", "li-account-" + key);
       }
-      makeSubList.appendChild(makeSubListItem);
-      field = document.createElement("span");
-      value = document.createElement("span");
-      field.setAttribute("class", "billField");
-      value.setAttribute("class", "billValue");
-      makeSubListItem.appendChild(field);
-      makeSubListItem.appendChild(value);
-      field.innerHTML = bill[0] + " ";
-      value.innerHTML = bill[1];
+      makeSubList.append(makeSubListItem);
+      field = $("<span>");
+      value = $("<span>");
+      field.attr("class", "billField");
+      value.attr("class", "billValue");
+      makeSubListItem.append(field);
+      makeSubListItem.append(value);
+      field.html(bill[0] + " ");
+      value.html(bill[1]);
       return true;
     });
     return true;

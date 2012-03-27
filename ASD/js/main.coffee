@@ -1,8 +1,8 @@
 ###
-Deliverable 4
+Deliverable 1
 Author: Jeremy Fox
-Created For: MiU Online
-Simple HTML5 / Javascript Mobile Web Form
+Created For: ASD Online
+main.coffee (main.js)
 ###
 
 ###
@@ -15,9 +15,9 @@ Variables
 billAccounts          = ["Please Select An Account", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
 @detailsKey           = "" # Key used to retreive bill details on details.html
 
-###****************************************************************
+###**********************************************************
 State Control Methods
-****************************************************************###
+**********************************************************###
 setViewState = (state) =>
   @dataViewState = state
 
@@ -42,27 +42,27 @@ destroyDataSet = () ->
 destroyDetailsDataSet = () ->
   $("#itemDetails").empty()
   
-###****************************************************************
+###**********************************************************
 Getter and Setter for key to edit
-****************************************************************###
+**********************************************************###
 @getKeyToEdit = () =>
   return @keyToEdit
   
 @setKeyToEdit = (key) =>
   @keyToEdit = key
   
-###****************************************************************
+###**********************************************************
 Getter and Setter for details key
-****************************************************************###
+**********************************************************###
 setDetailsKey = (key) =>
   @detailsKey = key
   
 getDetailsKey = () =>
   return @detailsKey
 
-###****************************************************************
+###**********************************************************
 Main Metheds
-****************************************************************###
+**********************************************************###
 @storeData = () =>
   newDate = new Date()
 
@@ -174,11 +174,11 @@ qryBills = ->
   
     key = bill.key
     
-    makeListItem = document.createElement("li")
-    makeListItem.setAttribute("id", "li-key-"+key)
+    makeListItem = $("<li>")
+    makeListItem.attr "id", "li-key-"+key
     
-    makeThumbIcon = document.createElement("img")
-    makeThumbIcon.setAttribute("class", "listThumbIcons")
+    makeThumbIcon = $("<img>")
+    makeThumbIcon.attr "class", "listThumbIcons"
     
     OPERATOR = ///
     ((Checking)|(Savings)|(Credit\sCard))+
@@ -187,25 +187,25 @@ qryBills = ->
     account = bill.account[1]
     accountMatch = account.match(OPERATOR)
     switch accountMatch[0]
-      when "Checking" then makeThumbIcon.setAttribute("src", "i/checking_thumb.png")
-      when "Savings" then makeThumbIcon.setAttribute("src", "i/savings_thumb.png")
-      when "Credit Card" then makeThumbIcon.setAttribute("src", "i/credit_thumb.png")
-      else makeThumbIcon.setAttribute("src", "i/checking_thumb.png")
+      when "Checking" then makeThumbIcon.attr "src", "i/checking_thumb.png"
+      when "Savings" then makeThumbIcon.attr "src", "i/savings_thumb.png"
+      when "Credit Card" then makeThumbIcon.attr "src", "i/credit_thumb.png"
+      else makeThumbIcon.attr "src", "i/checking_thumb.png"
     
-    makeArrowIcon = document.createElement("img")
-    makeArrowIcon.setAttribute("src", "i/arrow.png")
-    makeArrowIcon.setAttribute("class", "listArrowIcons")
+    makeArrowIcon = $("<img>")
+    makeArrowIcon.attr "src", "i/arrow.png"
+    makeArrowIcon.attr "class", "listArrowIcons"
     
     if(_.size(localStorage) == i)
-      makeListItem.setAttribute("class", "lastBill")
+      makeListItem.attr "class", "lastBill"
     else
-      makeListItem.setAttribute("class", "bill")
+      makeListItem.attr "class", "bill"
     
-    makeLink = document.createElement("a")
-    makeLink.setAttribute("href", "#")
-    makeListItem.appendChild makeLink
-    makeListItem.appendChild makeThumbIcon
-    makeListItem.appendChild makeArrowIcon
+    makeLink = $("<a>")
+    makeLink.attr "href", "#"
+    makeListItem.append makeLink
+    makeListItem.append makeThumbIcon
+    makeListItem.append makeArrowIcon
 
     $("#items").append makeListItem
     
@@ -226,131 +226,10 @@ qryBills = ->
     payAmount = "$" + bill.amount[1]
     payDate = "(" + bill.payon[1] + ")"
 
-    makeLink.innerHTML = payTo + " " + payAmount + " " + payDate
+    makeLink.html payTo + " " + payAmount + " " + payDate
     
     i++
   )  
-   
-# qryBills = (storage, from) ->
-#   #Create unordered list
-#   makeList = document.createElement("ul")
-#   #Add list to "items" div
-#   $("#items").append makeList
-#   #for each item in localStorage do the following
-#   _.each(_.keys(storage), (key) ->
-#     #Make a list item
-#     makeListItem = document.createElement("li")
-#     #Add the list item to the Unordered list
-#     makeList.appendChild makeListItem
-#     
-#     if from == "localStorage"
-#       #Get the value of the item in storage
-#       value = storage.getItem(key)
-#     else
-#       value = storage[key]
-#     
-#     if from == "localStorage"
-#       #parse the value's JSON
-#       billObj = JSON.parse value
-#     else
-#       #parse the value's JSON
-#       billObj = value
-#     
-#     #create a new Unordered list within the original Unordered list
-#     makeSubList = document.createElement("ul")
-#   
-#     #set class and id attribute for the new Unordered list for styling
-#     makeSubList.setAttribute("class", "bill")
-#     makeSubList.setAttribute("id", "bill-"+key)
-#   
-#     #Create a new img view for edit icon
-#     makeEditIcon = document.createElement("img")
-#   
-#     #Set src, class and id attribute on edit icon img view
-#     makeEditIcon.setAttribute("src", "i/pencil.png")
-#     makeEditIcon.setAttribute("class", "icons")
-#     makeEditIcon.setAttribute("id", "edit-"+key)
-#   
-#     #Create a new img view for delete icon
-#     makeDeleteIcon = document.createElement("img")
-#   
-#     #Set src, class and id attribute on delete icon img view
-#     makeDeleteIcon.setAttribute("src", "i/x.png")
-#     makeDeleteIcon.setAttribute("class", "icons")
-#     makeDeleteIcon.setAttribute("id", "delete-"+key)
-#     
-#     #Create a new img view for account icon
-#     makeAccountIcon = document.createElement("img")
-#   
-#     #Set src, class and id attribute on delete icon img view
-#     OPERATOR = ///
-#     ((Checking)|(Savings)|(Credit\sCard))+
-#     ///g
-# 
-#     account = billObj.account[1]
-#     accountMatch = account.match(OPERATOR)
-#     switch accountMatch[0]
-#       when "Checking" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
-#       when "Savings" then makeAccountIcon.setAttribute("src", "i/thumb_savings.png")
-#       when "Credit Card" then makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png")
-#     
-#     makeAccountIcon.setAttribute("class", "icons")
-#     makeAccountIcon.setAttribute("id", "account-"+key)
-#     
-#     #Add icons to subList
-#     makeSubList.appendChild makeEditIcon
-#     makeSubList.appendChild makeDeleteIcon
-#     makeSubList.appendChild makeAccountIcon
-#     
-#     #Add the new Unordered list to the list item of original Unordered list
-#     makeListItem.appendChild makeSubList
-#     
-#     #Set click listener on edit icon
-#     $("#edit-"+key).click("click", (e) ->
-#       editItem(key)
-#     )
-#     
-#     #Set click listener on delete icon
-#     $("#delete-"+key).click("click", (e) ->
-#       deleteItem(key)
-#     )
-#     
-#     #Set click listener on account icon
-#     $("#account-"+key).click("click", (e) ->
-#       showAccount(key)
-#     )
-#     
-#     #for each bill in the billObj do the following
-#     _.each(billObj, (bill) ->
-#     
-#       #Make a list item
-#       makeSubListItem = document.createElement("li")
-#       
-#       if bill[0] == "From Account:"
-#         makeSubListItem.setAttribute("id", "li-account-"+key)
-#       
-#       #Add the list item to the new Unordered list
-#       makeSubList.appendChild makeSubListItem
-#       
-#       #Create the text to display for each line
-#       field = document.createElement("span")
-#       value = document.createElement("span")
-#       
-#       field.setAttribute("class", "billField")
-#       value.setAttribute("class", "billValue")
-#         
-#                       
-#       #Add the text to the new list item
-#       makeSubListItem.appendChild field
-#       makeSubListItem.appendChild value
-#       
-#       field.innerHTML = bill[0] + " "
-#       value.innerHTML = bill[1]
-#       true
-#     )
-#     true
-#   )
-#   true    
 
 editItem = (key) =>
   value = localStorage.getItem key
@@ -368,27 +247,22 @@ editItem = (key) =>
     )
   )
   
-  ###
-  Unfortunately, due to a bug in jQuery, we can not use $("objectId").val("something")
-  to set the values. We have to use the native javascipt method
-  document.getElementById("objectId").value = "something"
-  ###
-  document.getElementById('name').value = bill.name[1]
-  document.getElementById('payTo').value = bill.payto[1]
-  document.getElementById('payAmount').value = bill.amount[1]
-  document.getElementById('payFrom').value = bill.account[1]
-  document.getElementById('payOn').value = bill.payon[1]
-  document.getElementById('notes').value = bill.notes[1]
+  $('#name').val bill.name[1]
+  $('#payTo').val bill.payto[1]
+  $('#payAmount').val bill.amount[1]
+  $('#payFrom').val bill.account[1]
+  $('#payOn').val bill.payon[1]
+  $('#notes').val bill.notes[1]
   radios = $("input[type='radio']")
   for radio in radios
     if radio.value == "Yes" and bill.remember[1] == "Yes"
-      radio.setAttribute "checked", "checked"
-      document.getElementById("labelNo").setAttribute "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c"
-      document.getElementById("labelYes").setAttribute "class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active"
+      $(radio).attr "checked", "checked"
+      $("#labelNo").attr "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-off ui-btn-up-c"
+      $("#labelYes").attr "class", "ui-btn ui-corner-left ui-btn-up-c ui-radio-on ui-btn-active"
     else if radio.value == "No" and bill.remember[1] == "No"
-      radio.setAttribute "checked", "checked"
-      document.getElementById("labelYes").setAttribute "class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c"
-      document.getElementById("labelNo").setAttribute "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c"
+      $(radio).attr "checked", "checked"
+      $("#labelYes").attr "class", "ui-btn ui-radio-off ui-corner-left ui-btn-up-c"
+      $("#labelNo").attr "class", "ui-btn ui-corner-right ui-controlgroup-last ui-radio-on ui-btn-active ui-btn-up-c"
   
   history.back()
   
@@ -412,16 +286,6 @@ deleteItem = (key) ->
     , 1000)
     return false
     
-#     if _.size(localStorage) > 1
-#       localStorage.removeItem key
-#       setInvalidated(true)
-#     else if _.size(localStorage) == 1
-#       localStorage.removeItem key
-#       setInvalidated(true)
-#       setTimeout(->
-#         @displayData()
-#       , 1000)
-    
 showAccount = (key) ->
   $("#li-account-"+key).animate
     opacity: 0.00
@@ -438,9 +302,9 @@ showAccount = (key) ->
   localStorage.clear();
   alert "All Data Has Been Deleted."
   
-###****************************************************************
+###**********************************************************
 Click Events
-****************************************************************###
+**********************************************************###
 $("#billForm").live "submit", (e) ->
   stopEvent(e)
   if $("#billForm").valid()
@@ -555,9 +419,9 @@ $("#searchForm").submit (e) =>
   )
   false
 
-###****************************************************************
+###**********************************************************
 Helper Methods
-****************************************************************###
+**********************************************************###
 add0 = (n) ->
   (if n < 10 then "0" + n else "" + n)
 
@@ -693,9 +557,9 @@ hideBillForm = ->
 unBindClickListeners = () ->
   $(document).unbind("click")
   
-###****************************************************************
+###**********************************************************
 Add Account Page Form Methods
-****************************************************************###
+**********************************************************###
 @actBank = ->
   if $("#accountBank").val() != null and $("#accountBank").val() != ""
     $("#actType").removeClass("hide").addClass("show")
@@ -734,9 +598,9 @@ $("#accountForm").live "submit", (e) ->
     success: ->
       alert "Your account has been added! --THIS IS NOT ACTUALLING DOING ANYTHING JUST YET!--"
 
-###****************************************************************
+###**********************************************************
 Bind to jQueries mobileinit
-****************************************************************###
+**********************************************************###
 $(document).bind "mobileinit", ->
   $.mobile.accounts     = getAccounts
   $.mobile.date         = currentDate
@@ -744,16 +608,16 @@ $(document).bind "mobileinit", ->
   return
 
 getAccounts = ->
-  liSelect   = document.getElementById("selectAccounts")
-  makeSelect = document.createElement("select")
-  makeSelect.setAttribute("id", "payFrom")
-  makeSelect.setAttribute("class", "required")
+  liSelect   = $("#selectAccounts")
+  makeSelect = $("<select>")
+  makeSelect.attr "id", "payFrom"
+  makeSelect.attr "class", "required"
   for account in billAccounts
-    makeOpt = document.createElement("option")
-    makeOpt.setAttribute("value", account)
-    makeOpt.innerHTML = account
-    makeSelect.appendChild(makeOpt)
-  liSelect.appendChild(makeSelect)
+    makeOpt = $("<option>")
+    makeOpt.attr "value", account
+    makeOpt.html account
+    makeSelect.append makeOpt
+  liSelect.append makeSelect
   return
 
 currentDate = ->
@@ -762,7 +626,7 @@ currentDate = ->
   day = currentTime.getDate()
   year = currentTime.getFullYear()
   showDate = year + "-" + add0(month) + "-" + add0(day)
-  document.getElementById("payOn").value=showDate
+  $("#payOn").val showDate
   
 showBillDetails = (key) ->
 
@@ -778,41 +642,41 @@ showBillDetails = (key) ->
   destroyDetailsDataSet()
   
   #Create unordered list
-  makeList = document.createElement("ul")
+  makeList = $("<ul>")
   #Add list to "items" div
   $("#itemDetails").append makeList
   #Make a list item
-  makeListItem = document.createElement("li")
+  makeListItem = $("<li>")
   #Add the list item to the Unordered list
-  makeList.appendChild makeListItem
+  makeList.append makeListItem
   
   value = localStorage[key]
   billObj = JSON.parse value
   
   #create a new Unordered list within the original Unordered list
-  makeSubList = document.createElement("ul")
+  makeSubList = $("<ul>")
 
   #set class and id attribute for the new Unordered list for styling
-  makeSubList.setAttribute("id", "bill-"+key)
+  makeSubList.attr "id", "bill-"+key
 
   #Create a new img view for edit icon
-  makeEditIcon = document.createElement("img")
+  makeEditIcon = $("<img>")
 
   #Set src, class and id attribute on edit icon img view
-  makeEditIcon.setAttribute("src", "i/pencil.png")
-  makeEditIcon.setAttribute("class", "icons")
-  makeEditIcon.setAttribute("id", "edit-"+key)
+  makeEditIcon.attr "src", "i/pencil.png"
+  makeEditIcon.attr "class", "icons"
+  makeEditIcon.attr "id", "edit-"+key
 
   #Create a new img view for delete icon
-  makeDeleteIcon = document.createElement("img")
+  makeDeleteIcon = $("<img>")
 
   #Set src, class and id attribute on delete icon img view
-  makeDeleteIcon.setAttribute("src", "i/x.png")
-  makeDeleteIcon.setAttribute("class", "icons")
-  makeDeleteIcon.setAttribute("id", "delete-"+key)
+  makeDeleteIcon.attr "src", "i/x.png"
+  makeDeleteIcon.attr "class", "icons"
+  makeDeleteIcon.attr "id", "delete-"+key
   
   #Create a new img view for account icon
-  makeAccountIcon = document.createElement("img")
+  makeAccountIcon = $("<img>")
 
   #Set src, class and id attribute on delete icon img view
   OPERATOR = ///
@@ -822,21 +686,21 @@ showBillDetails = (key) ->
   account = billObj.account[1]
   accountMatch = (if account? then account.match(OPERATOR) else "Undefined")
   switch accountMatch[0]
-    when "Checking" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
-    when "Savings" then makeAccountIcon.setAttribute("src", "i/thumb_savings.png")
-    when "Credit Card" then makeAccountIcon.setAttribute("src", "i/thumb_creditcard.png")
-    when "Undefined" then makeAccountIcon.setAttribute("src", "i/thumb_checking.png")
+    when "Checking" then makeAccountIcon.attr "src", "i/thumb_checking.png"
+    when "Savings" then makeAccountIcon.attr "src", "i/thumb_savings.png"
+    when "Credit Card" then makeAccountIcon.attr "src", "i/thumb_creditcard.png"
+    when "Undefined" then makeAccountIcon.attr "src", "i/thumb_checking.png"
   
-  makeAccountIcon.setAttribute("class", "icons")
-  makeAccountIcon.setAttribute("id", "account-"+key)
+  makeAccountIcon.attr "class", "icons"
+  makeAccountIcon.attr "id", "account-"+key
   
   #Add icons to subList
-  makeSubList.appendChild makeEditIcon
-  makeSubList.appendChild makeDeleteIcon
-  makeSubList.appendChild makeAccountIcon
+  makeSubList.append makeEditIcon
+  makeSubList.append makeDeleteIcon
+  makeSubList.append makeAccountIcon
   
   #Add the new Unordered list to the list item of original Unordered list
-  makeListItem.appendChild makeSubList
+  makeListItem.append makeSubList
   
   #Set click listener on edit icon
   $("#edit-"+key).click("click", (e) ->
@@ -857,28 +721,28 @@ showBillDetails = (key) ->
   _.each(billObj, (bill) ->
   
     #Make a list item
-    makeSubListItem = document.createElement("li")
+    makeSubListItem = $("<li>")
     
     if bill[0] == "From Account:"
-      makeSubListItem.setAttribute("id", "li-account-"+key)
+      makeSubListItem.attr "id", "li-account-"+key
     
     #Add the list item to the new Unordered list
-    makeSubList.appendChild makeSubListItem
+    makeSubList.append makeSubListItem
     
     #Create the text to display for each line
-    field = document.createElement("span")
-    value = document.createElement("span")
+    field = $("<span>")
+    value = $("<span>")
     
-    field.setAttribute("class", "billField")
-    value.setAttribute("class", "billValue")
+    field.attr "class", "billField"
+    value.attr "class", "billValue"
       
                     
     #Add the text to the new list item
-    makeSubListItem.appendChild field
-    makeSubListItem.appendChild value
+    makeSubListItem.append field
+    makeSubListItem.append value
     
-    field.innerHTML = bill[0] + " "
-    value.innerHTML = bill[1]
+    field.html bill[0] + " "
+    value.html bill[1]
     true
   )
   true
