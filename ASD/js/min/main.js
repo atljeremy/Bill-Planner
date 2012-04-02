@@ -591,7 +591,7 @@ Variables
     setViewState(false);
     hideItems();
     viewBillForm();
-    $("#displayData").text("Display Data");
+    $("#displayData").text("Load JSON");
     $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
   };
 
@@ -605,7 +605,7 @@ Variables
       setDataDisplayed(true);
       setInvalidated(false);
     }
-    $("#displayData").text("Display Form");
+    $("#displayData").text("Show Form");
     $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
   };
 

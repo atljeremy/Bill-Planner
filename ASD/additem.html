@@ -104,8 +104,14 @@ additem.html
       	</section>
     	
       	<section class="center">
+          <div data-role="controlgroup" data-type="horizontal" id="linksData"> 
+            <a href="#" data-role="button" id="displayData" onclick="displayData()">Load JSON</a>
+            <a href="#" data-role="button" id="displayData" onclick="displayData()">Load XML</a>
+            <a href="#" data-role="button" id="displayData" onclick="displayData()">Load CSV</a>
+          </div> 
+      	
           <div data-role="controlgroup" data-type="horizontal" id="links">
-            <a href="#" data-role="button" id="clearData" onclick="clearStorage()">Clear Stored Data</a><a href="#" data-role="button" id="displayData" onclick="displayData()">Display Data</a>
+            <a href="#" data-role="button" id="clearData" onclick="clearStorage()">Clear Stored Data</a>
           </div>
       	</section>
     	
