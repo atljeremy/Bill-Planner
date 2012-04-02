@@ -368,12 +368,12 @@ $("#viewBills").click("click", (e) =>
   stopEvent(e)
   
   $.ajax
-    type: "GET"
     url: "data/data.json"
     dataType: "json"
-    success: (data, status) ->
-      console.dir "DATA: " + data
-      console.dir "JSON: " + json
+    success: (data) ->
+      _.each(_.keys(data), (key) -> 
+        console.log "DATA: " + key
+      )
       #storeData()
     error: ->
       console.log "ERROR!!!"

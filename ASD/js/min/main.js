@@ -410,12 +410,12 @@ Variables
   $("#viewBills").click("click", function(e) {
     stopEvent(e);
     return $.ajax({
-      type: "GET",
       url: "data/data.json",
       dataType: "json",
-      success: function(data, status) {
-        console.dir("DATA: " + data);
-        return console.dir("JSON: " + json);
+      success: function(data) {
+        return _.each(_.keys(data), function(key) {
+          return console.log("DATA: " + key);
+        });
       },
       error: function() {
         return console.log("ERROR!!!");
