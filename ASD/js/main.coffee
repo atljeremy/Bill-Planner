@@ -366,13 +366,25 @@ $("#billSearchHide").click("click", (e) ->
 
 $("#viewBills").click("click", (e) =>
   stopEvent(e)
-  setTimeout(->
-    @displayData(true, false)
-  , 700)
-  $.mobile.changePage( "additem.html",
-    transition: "slideup"
-    showLoadMsg: true
-  )
+  
+  $.ajax
+    type: "GET"
+    url: "data/data.json"
+    dataType: "json"
+    success: (data, status) ->
+      console.dir "DATA: " + data
+      console.dir "JSON: " + json
+      #storeData()
+    error: ->
+      console.log "ERROR!!!"
+  
+  # setTimeout(->
+#     @displayData(true, false)
+#   , 700)
+#   $.mobile.changePage( "additem.html",
+#     transition: "slideup"
+#     showLoadMsg: true
+#   )
 )
 
 $("#accounts").click("click", (e) =>
