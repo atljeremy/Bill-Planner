@@ -409,12 +409,17 @@ Variables
 
   $("#viewBills").click("click", function(e) {
     stopEvent(e);
-    setTimeout(function() {
-      return this.displayData(true, false);
-    }, 700);
-    return $.mobile.changePage("additem.html", {
-      transition: "slideup",
-      showLoadMsg: true
+    return $.ajax({
+      type: "GET",
+      url: "data/data.json",
+      dataType: "json",
+      success: function(data, status) {
+        console.dir("DATA: " + data);
+        return console.dir("JSON: " + json);
+      },
+      error: function() {
+        return console.log("ERROR!!!");
+      }
     });
   });
 
