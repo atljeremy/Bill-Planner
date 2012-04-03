@@ -11,7 +11,7 @@ Variables
 */
 
 (function() {
-  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, showAccount, showBillDetails, stopEvent, storeJsonData, storeRemoteJsonData, unBindClickListeners, validateDate, validateRequiredFields, viewBillForm, viewItems,
+  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, loadCSV, loadJson, loadXML, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, showAccount, showBillDetails, stopEvent, unBindClickListeners, viewBillForm, viewItems,
     _this = this;
 
   this.dataViewState = false;
@@ -27,7 +27,7 @@ Variables
   this.detailsKey = "";
 
   /***********************************************************
-  State Control Methods
+  # State Control Methods
   **********************************************************
   */
 
@@ -64,7 +64,7 @@ Variables
   };
 
   /***********************************************************
-  Getter and Setter for key to edit
+  # Getter and Setter for key to edit
   **********************************************************
   */
 
@@ -77,7 +77,7 @@ Variables
   };
 
   /***********************************************************
-  Getter and Setter for details key
+  # Getter and Setter for details key
   **********************************************************
   */
 
@@ -90,7 +90,7 @@ Variables
   };
 
   /***********************************************************
-  Main Metheds
+  # Main Metheds
   **********************************************************
   */
 
@@ -122,77 +122,19 @@ Variables
     }
   };
 
-  $(window).scroll(function() {
-    if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
-      $("div#loadmoreajaxloader").show();
-      return $.ajax({
-        type: "POST",
-        url: "php/load_bills.php",
-        success: function(json) {
-          if (getViewState()) {
-            if (json) {
-              return storeRemoteJsonData(json);
-            } else {
-              return $("div#loadmoreajaxloader").hide();
-            }
-          } else {
-            return $("div#loadmoreajaxloader").hide();
-          }
-        }
-      });
-    }
-  });
+  /***********************************************************
+  # Continuous Scrolling Methods. Curretnly Uneeded.
+  **********************************************************
+  */
 
-  storeRemoteJsonData = function(json) {
-    _.each(_.keys(json), function(key) {
-      var billIndexKey;
-      billIndexKey = key;
-      return _.each(_.keys(json[key]), function(key) {
-        var billObject, item;
-        item = json[billIndexKey];
-        billObject = item[key];
-        try {
-          localStorage.setItem(key, JSON.stringify(billObject));
-          return true;
-        } catch (e) {
-          return alert(e);
-        }
-      });
-    });
-    setInvalidated(true);
-    $("div#loadmoreajaxloader").hide();
-    return getData();
-  };
-
-  storeJsonData = function() {
-    _.each(_.keys(_this.json), function(key) {
-      var item;
-      item = this.json[key];
-      try {
-        localStorage.setItem(key, JSON.stringify(item));
-      } catch (e) {
-        return alert(e);
-      }
-    });
-    setInvalidated(true);
-    return getData();
-  };
-
-  getData = function() {
-    if (_.size(localStorage) > 0) {
-      return qryBills(localStorage, "localStorage");
-    } else {
-      return storeJsonData();
-    }
-  };
-
-  setupBills = function() {
+  setupBills = function(data) {
     var billsList, callbackFunc;
     billsList = [];
-    _.each(_.keys(localStorage), function(key) {
-      var billObj, value;
-      value = localStorage.getItem(key);
-      billObj = JSON.parse(value);
+    _.each(data, function(value, key) {
+      var billObj;
+      console.log("KEY: " + key);
+      console.log("VALUE: " + value);
+      billObj = value;
       billObj.key = key;
       return billsList.push(billObj);
     });
@@ -210,10 +152,10 @@ Variables
     return billsList.sort(callbackFunc);
   };
 
-  qryBills = function() {
+  getData = function(data) {
     var i;
     i = 1;
-    return _.each(setupBills(), function(bill) {
+    return _.each(setupBills(data), function(bill) {
       var OPERATOR, account, accountMatch, key, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
       key = bill.key;
       makeListItem = $("<li>");
@@ -239,7 +181,7 @@ Variables
       makeArrowIcon = $("<img>");
       makeArrowIcon.attr("src", "i/arrow.png");
       makeArrowIcon.attr("class", "listArrowIcons");
-      if (_.size(localStorage) === i) {
+      if (_.size(data) === i) {
         makeListItem.attr("class", "lastBill");
       } else {
         makeListItem.attr("class", "bill");
@@ -423,6 +365,54 @@ Variables
     });
   });
 
+  /***********************************************************
+  # JSON
+  **********************************************************
+  */
+
+  $("#displayJson").live("click", function(e) {
+    stopEvent(e);
+    if (getViewState()) {
+      _this.displayData(false, true, null);
+      $("#displayJson").text("Load JSON");
+      return $("#displayJson").css("padding", "0.65em 15px 0.6em 15px");
+    } else {
+      return loadJson();
+    }
+  });
+
+  /***********************************************************
+  # XML
+  **********************************************************
+  */
+
+  $("#displayXML").live("click", function(e) {
+    stopEvent(e);
+    if (getViewState()) {
+      _this.displayData(false, true, null);
+      $("#displayXML").text("Load XML");
+      return $("#displayXML").css("padding", "0.65em 15px 0.6em 15px");
+    } else {
+      return loadXML();
+    }
+  });
+
+  /***********************************************************
+  # CSV
+  **********************************************************
+  */
+
+  $("#displayCSV").live("click", function(e) {
+    stopEvent(e);
+    if (getViewState()) {
+      _this.displayData(false, true, null);
+      $("#displayCSV").text("Load CSV");
+      return $("#displayCSV").css("padding", "0.65em 15px 0.6em 15px");
+    } else {
+      return loadCSV();
+    }
+  });
+
   $("#accounts").click("click", function(e) {
     stopEvent(e);
     return $.mobile.changePage("accounts.html", {
@@ -494,63 +484,6 @@ Variables
     }
   };
 
-  validateRequiredFields = function() {
-    var message;
-    message = [];
-    if ($("#name").val() === null || $("#name").val() === "") {
-      message.push("Please Enter Your Name.");
-    }
-    if ($("#payTo").val() === null || $("#payTo").val() === "") {
-      message.push("Please Enter Who You Would Like To Pay.");
-    }
-    if ($("#payAmount").val() === null || $("#payAmount").val() === 0) {
-      message.push("Please Enter The Amount To Pay.");
-    }
-    if ($("#payFrom").val() === null || $("#payFrom").val() === "" || $("#payFrom").val() === "-- Choose Account --") {
-      message.push("Please Enter The Account To Pay From.");
-    }
-    if ($("#payOn").val() === null || $("#payOn").val() === "") {
-      message.push("Please Enter The Date You Would Like To Make This Payment.");
-    }
-    if (validateDate($("#payOn").val())) {
-      message.push("Please Enter A Valid Date.");
-    }
-    return message;
-  };
-
-  validateDate = function(date) {
-    var OPERATOR, currentTime, dateArray, day, invalidDate, matchDate, month, year;
-    invalidDate = false;
-    OPERATOR = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-    matchDate = date.match(OPERATOR);
-    if (matchDate.length <= 0) invalidDate = true;
-    currentTime = new Date();
-    month = "";
-    month = currentTime.getMonth() + 1;
-    day = "";
-    day = currentTime.getDate();
-    year = "";
-    year = currentTime.getFullYear();
-    dateArray = _.toArray(date.split("-"));
-    if (dateArray[0] < year) {
-      invalidDate = true;
-      console.log("Entered Year =" + dateArray[0] + ". Current Year =" + year);
-    }
-    if (dateArray[1] < add0(month)) {
-      invalidDate = true;
-      console.log("Entered Month =" + dateArray[1] + ". Current Month =" + add0(month));
-    }
-    if (dateArray[2] < add0(day) && dateArray[1] === add0(month)) {
-      invalidDate = true;
-      console.log("Entered Day =" + dateArray[2] + ". Current Day =" + add0(day));
-    }
-    if (invalidDate !== null || invalidDate !== "" && _.isBoolean(invalidDate)) {
-      return invalidDate;
-    } else {
-      return alert("ERROR: Please Try Again.");
-    }
-  };
-
   stopEvent = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -577,18 +510,18 @@ Variables
     $("#billForm").css("display", "none");
   };
 
-  this.displayData = function(showBills, showForm) {
+  this.displayData = function(showBills, showForm, data) {
     var bills, form;
     bills = (showBills !== null || showBills !== "" ? showBills : false);
     form = (showForm !== null || showForm !== "" ? showForm : false);
     if (form) {
       _this.showForm();
     } else if (bills) {
-      _this.showBills();
+      _this.showBills(data);
     } else if (getViewState()) {
       _this.showForm();
     } else {
-      _this.showBills();
+      _this.showBills(data);
     }
   };
 
@@ -596,22 +529,66 @@ Variables
     setViewState(false);
     hideItems();
     viewBillForm();
-    $("#displayData").text("Load JSON");
-    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
   };
 
-  this.showBills = function() {
+  this.showBills = function(data) {
     setViewState(true);
     hideBillForm();
     viewItems();
     if (getDataDisplayed() === false || getInvalidated()) {
       destroyDataSet();
-      getData();
+      getData(data);
       setDataDisplayed(true);
       setInvalidated(false);
     }
-    $("#displayData").text("Show Form");
-    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
+  };
+
+  loadJson = function() {
+    var _this = this;
+    return $.ajax({
+      url: "data/data.json",
+      dataType: "json",
+      success: function(json) {
+        _this.displayData(true, false, json);
+        $("#displayJson").text("Show Form");
+        return $("#displayJson").css("padding", "0.65em 15px 0.6em 15px");
+      },
+      error: function(error) {
+        return alert("ERROR: " + error);
+      }
+    });
+  };
+
+  loadXML = function() {
+    var _this = this;
+    return $.ajax({
+      url: "data/data.xml",
+      dataType: "xml",
+      success: function(xml) {
+        _this.displayData(true, false, xml);
+        $("#displayXML").text("Show Form");
+        return $("#displayXML").css("padding", "0.65em 15px 0.6em 15px");
+      },
+      error: function(error) {
+        return alert("ERROR: " + error);
+      }
+    });
+  };
+
+  loadCSV = function() {
+    var _this = this;
+    return $.ajax({
+      url: "data/data.csv",
+      dataType: "text",
+      success: function(csv) {
+        _this.displayData(true, false, csv);
+        $("#displayCSV").text("Show Form");
+        return $("#displayCSV").css("padding", "0.65em 15px 0.6em 15px");
+      },
+      error: function(error) {
+        return alert("ERROR: " + error);
+      }
+    });
   };
 
   unBindClickListeners = function() {

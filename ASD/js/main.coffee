@@ -8,7 +8,7 @@ main.coffee (main.js)
 ###
 Variables
 ###
-@dataViewState        = false #false = bills (in localStorage) not visible. true = bills visible
+@dataViewState        = false #false = bills not visible. true = bills visible
 @hasDataBeenDisplayed = false #Keeps track of whether or not localStorage has been display, if so, there is no reason to re-query localStorage, just show the previously viewed data.
 @invalidateData       = false #set this to true when we need to force the app to re-query localStorage for new data.
 @keyToEdit            = 0 #The key of the item in localStorage we want to edit
@@ -16,7 +16,7 @@ billAccounts          = ["Please Select An Account", "Bank of America - Checking
 @detailsKey           = "" # Key used to retreive bill details on details.html
 
 ###**********************************************************
-State Control Methods
+# State Control Methods
 **********************************************************###
 setViewState = (state) =>
   @dataViewState = state
@@ -43,7 +43,7 @@ destroyDetailsDataSet = () ->
   $("#itemDetails").empty()
   
 ###**********************************************************
-Getter and Setter for key to edit
+# Getter and Setter for key to edit
 **********************************************************###
 @getKeyToEdit = () =>
   return @keyToEdit
@@ -52,7 +52,7 @@ Getter and Setter for key to edit
   @keyToEdit = key
   
 ###**********************************************************
-Getter and Setter for details key
+# Getter and Setter for details key
 **********************************************************###
 setDetailsKey = (key) =>
   @detailsKey = key
@@ -61,7 +61,7 @@ getDetailsKey = () =>
   return @detailsKey
 
 ###**********************************************************
-Main Metheds
+# Main Metheds
 **********************************************************###
 @storeData = () =>
   newDate = new Date()
@@ -71,11 +71,6 @@ Main Metheds
   else
     itemId = @getKeyToEdit()
 
-#   messages = validateRequiredFields()
-#   unless _.isEmpty(messages)
-#     message = messages.join('\n')
-#     alert message
-#   else
   item = {}
   item.name     = ["Name:", $("#name").val()]
   item.payto    = ["Pay To:", $("#payTo").val()]
@@ -95,67 +90,66 @@ Main Metheds
     return
   catch e
     alert e
-      
-$(window).scroll ->
-  if $(window).scrollTop() >= $(document).height() - $(window).height() - 100
-    $("div#loadmoreajaxloader").show()
-    $.ajax
-      type: "POST"
-      url: "php/load_bills.php"
-      success: (json) ->
-        if getViewState()
-          if json          
-            storeRemoteJsonData(json)
-          else
-            $("div#loadmoreajaxloader").hide()
-        else
-          $("div#loadmoreajaxloader").hide()
 
-storeRemoteJsonData = (json) =>
-  _.each(_.keys(json), (key) ->
-    billIndexKey = key
-    _.each(_.keys(json[key]), (key) ->
-      item = json[billIndexKey]
-      billObject = item[key]
+###**********************************************************
+# Continuous Scrolling Methods. Curretnly Uneeded.
+**********************************************************###
+# $(window).scroll ->
+#   if $(window).scrollTop() >= $(document).height() - $(window).height() - 100
+#     $("div#loadmoreajaxloader").show()
+#     $.ajax
+#       type: "POST"
+#       url: "php/load_bills.php"
+#       success: (json) ->
+#         if getViewState()
+#           if json          
+#             storeRemoteJsonData(json)
+#           else
+#             $("div#loadmoreajaxloader").hide()
+#         else
+#           $("div#loadmoreajaxloader").hide()
+# 
+# storeRemoteJsonData = (json) =>
+#   _.each(_.keys(json), (key) ->
+#     billIndexKey = key
+#     _.each(_.keys(json[key]), (key) ->
+#       item = json[billIndexKey]
+#       billObject = item[key]
+#       
+#       try
+#         localStorage.setItem key, JSON.stringify(billObject)
+#         true
+#       catch e
+#         alert e
+#     )
+#   )
+#   
+#   setInvalidated(true)
+#   $("div#loadmoreajaxloader").hide()
+#   getData()
+#       
+# storeJsonData = () =>
+#   _.each(_.keys(@json), (key) ->
+#     item = @json[key]
+# 
+#     try
+#       localStorage.setItem key, JSON.stringify(item)
+#       return
+#     catch e
+#       alert e
+#   )
+#   setInvalidated(true)
+#   getData()
       
-      try
-        localStorage.setItem key, JSON.stringify(billObject)
-        true
-      catch e
-        alert e
-    )
-  )
-  
-  setInvalidated(true)
-  $("div#loadmoreajaxloader").hide()
-  getData()
-      
-storeJsonData = () =>
-  _.each(_.keys(@json), (key) ->
-    item = @json[key]
-
-    try
-      localStorage.setItem key, JSON.stringify(item)
-      return
-    catch e
-      alert e
-  )
-  setInvalidated(true)
-  getData()
-
-getData = ->
-    if _.size(localStorage) > 0
-      qryBills(localStorage, "localStorage")
-    else
-      storeJsonData()
-      # qryBills(@json, "json")
-      
-setupBills = ->
+setupBills = (data) ->
   billsList = []
 
-  _.each(_.keys(localStorage), (key) ->
-    value = localStorage.getItem(key)
-    billObj = JSON.parse value
+  _.each(data, (value, key) ->
+  
+    console.log "KEY: " + key
+    console.log "VALUE: " + value
+    
+    billObj = value
     billObj.key = key    
     billsList.push billObj
   )
@@ -167,10 +161,19 @@ setupBills = ->
     (if (a.payon[1] < b.payon[1]) then -1 else 1)
   
   billsList.sort callbackFunc
+  
+# ***** ORIGINAL getData - UNNEEDED CODE *******
+# getData = ->
+#   if _.size(localStorage) > 0
+#     qryBills(localStorage, "localStorage")
+#   else
+#     storeJsonData()
+#     # qryBills(@json, "json")
+# **********************************************
 
-qryBills = ->
+getData = (data) ->
   i = 1
-  _.each(setupBills(), (bill) ->
+  _.each(setupBills(data), (bill) ->
   
     key = bill.key
     
@@ -196,7 +199,7 @@ qryBills = ->
     makeArrowIcon.attr "src", "i/arrow.png"
     makeArrowIcon.attr "class", "listArrowIcons"
     
-    if(_.size(localStorage) == i)
+    if(_.size(data) == i)
       makeListItem.attr "class", "lastBill"
     else
       makeListItem.attr "class", "bill"
@@ -387,6 +390,48 @@ $("#viewBills").click("click", (e) =>
 #   )
 )
 
+###**********************************************************
+# JSON
+**********************************************************###
+$("#displayJson").live("click", (e) =>
+
+  stopEvent(e)
+  if getViewState()
+    @displayData(false, true, null)
+    $("#displayJson").text "Load JSON"
+    $("#displayJson").css "padding", "0.65em 15px 0.6em 15px"
+  else
+    loadJson()
+)
+
+###**********************************************************
+# XML
+**********************************************************###
+$("#displayXML").live("click", (e) =>
+
+  stopEvent(e)
+  if getViewState()
+    @displayData(false, true, null)
+    $("#displayXML").text "Load XML"
+    $("#displayXML").css "padding", "0.65em 15px 0.6em 15px"
+  else
+    loadXML()
+)
+
+###**********************************************************
+# CSV
+**********************************************************###
+$("#displayCSV").live("click", (e) =>
+
+  stopEvent(e)
+  if getViewState()
+    @displayData(false, true, null)
+    $("#displayCSV").text "Load CSV"
+    $("#displayCSV").css "padding", "0.65em 15px 0.6em 15px"
+  else
+    loadCSV()
+)
+
 $("#accounts").click("click", (e) =>
   stopEvent(e)
   $.mobile.changePage( "accounts.html",
@@ -445,58 +490,6 @@ getFavValue = ->
       rememberValue = radio.value
       return rememberValue
 
-validateRequiredFields = ->
-  message = []
-  #Validate Name
-  message.push "Please Enter Your Name." if $("#name").val() == null or $("#name").val() == ""
-  #Validate Pay To
-  message.push "Please Enter Who You Would Like To Pay." if $("#payTo").val() == null or $("#payTo").val() == ""
-  #Validate Pay Amount
-  message.push "Please Enter The Amount To Pay." if $("#payAmount").val() == null or $("#payAmount").val() == 0
-  #Validate Pay From
-  message.push "Please Enter The Account To Pay From." if $("#payFrom").val() == null or $("#payFrom").val() == "" or $("#payFrom").val() == "-- Choose Account --"
-  #Validate Payment Date
-  message.push "Please Enter The Date You Would Like To Make This Payment." if $("#payOn").val() == null or $("#payOn").val() == ""
-  message.push "Please Enter A Valid Date." if validateDate($("#payOn").val())
-  return message
-  
-validateDate = (date) ->
-  invalidDate = false
-
-  OPERATOR = ///^
-  [0-9]{4}-                  #Checks year format and length
-  (0[1-9]|1[0-2])-           #Checks month format and lenth
-  (0[1-9]|[1-2][0-9]|3[0-1]) #Check day format and length
-  $///
-  
-  matchDate = date.match(OPERATOR)
-  invalidDate = true if matchDate.length <= 0
-  
-  currentTime = new Date()
-  month = ""
-  month = currentTime.getMonth()+1
-  day   = ""
-  day   = currentTime.getDate()
-  year  = ""
-  year  = currentTime.getFullYear()
-  
-  dateArray = _.toArray(date.split("-"))
-  
-  if dateArray[0] < year
-    invalidDate = true
-    console.log "Entered Year =" + dateArray[0] + ". Current Year =" + year
-  if dateArray[1] < add0(month)
-    invalidDate = true
-    console.log "Entered Month =" + dateArray[1] + ". Current Month =" + add0(month)
-  if dateArray[2] < add0(day) and dateArray[1] == add0(month)
-    invalidDate = true
-    console.log "Entered Day =" + dateArray[2] + ". Current Day =" + add0(day)
-  
-  if invalidDate != null or invalidDate != "" and _.isBoolean(invalidDate)
-    return invalidDate
-  else
-    alert "ERROR: Please Try Again."
-
 stopEvent = (event) ->
   event.preventDefault()
   event.stopPropagation()
@@ -521,7 +514,7 @@ hideBillForm = ->
   $("#billForm").css "display", "none"
   return
   
-@displayData = (showBills, showForm) =>
+@displayData = (showBills, showForm, data) =>
   bills = (if showBills isnt null or showBills isnt "" then showBills else false)
   form  = (if showForm isnt null or showForm isnt "" then showForm else false)
 
@@ -532,7 +525,7 @@ hideBillForm = ->
 
   else if bills
     #Form is visible, show bills
-    @showBills()
+    @showBills(data)
     return
     
   else if getViewState()
@@ -542,29 +535,58 @@ hideBillForm = ->
   
   else
     #Form is visible, show bills
-    @showBills()
+    @showBills(data)
     return
     
-@showForm = () ->
+@showForm = ->
   setViewState(false)
   hideItems()
   viewBillForm()
-  $("#displayData").text "Load JSON"
-  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
   return
   
-@showBills = () ->
+@showBills = (data) ->
   setViewState(true)
   hideBillForm()
   viewItems()
   if getDataDisplayed() == false or getInvalidated()
     destroyDataSet()
-    getData()
+    getData(data)
     setDataDisplayed(true)
     setInvalidated(false)
-  $("#displayData").text "Show Form"
-  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
   return
+
+loadJson = ->
+  $.ajax
+    url: "data/data.json"
+    dataType: "json"
+    success: (json) =>
+      @displayData(true, false, json)
+      $("#displayJson").text "Show Form"
+      $("#displayJson").css "padding", "0.65em 15px 0.6em 15px"
+    error: (error) ->
+      alert "ERROR: " + error
+
+loadXML = ->
+  $.ajax
+    url: "data/data.xml"
+    dataType: "xml"
+    success: (xml) =>
+      @displayData(true, false, xml)
+      $("#displayXML").text "Show Form"
+      $("#displayXML").css "padding", "0.65em 15px 0.6em 15px"
+    error: (error) ->
+      alert "ERROR: " + error
+      
+loadCSV = ->
+  $.ajax
+    url: "data/data.csv"
+    dataType: "text"
+    success: (csv) =>
+      @displayData(true, false, csv)
+      $("#displayCSV").text "Show Form"
+      $("#displayCSV").css "padding", "0.65em 15px 0.6em 15px"
+    error: (error) ->
+      alert "ERROR: " + error
     
 unBindClickListeners = () ->
   $(document).unbind("click")
