@@ -216,9 +216,7 @@ getData = (data) ->
       stopEvent(e)
       $(this).removeClass("bill").addClass("billClicked")
       setDetailsKey(key)
-      $.mobile.changePage( "details.html",
-        showLoadMsg: true
-      )
+      showBillDetails(key)
       return false
     )
     
@@ -663,6 +661,8 @@ currentDate = ->
   $("#payOn").val showDate
   
 showBillDetails = (key) ->
+  
+  key = (if key isnt undefined then key else getDetailsKey())
 
   # Setup back button listener for details page
   $("#backToBills").click("click", (e) ->
@@ -670,8 +670,6 @@ showBillDetails = (key) ->
     history.back()
     $("#li-key-"+key).removeClass("billClick").addClass("bill")
   )
-
-  key = (if key isnt undefined then key else getDetailsKey())
   
   destroyDetailsDataSet()
   
@@ -778,5 +776,8 @@ showBillDetails = (key) ->
     field.html bill[0] + " "
     value.html bill[1]
     true
+  )
+  $.mobile.changePage( "details.html",
+    showLoadMsg: true
   )
   true

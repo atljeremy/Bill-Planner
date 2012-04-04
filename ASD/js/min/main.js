@@ -196,9 +196,7 @@ Variables
         stopEvent(e);
         $(this).removeClass("bill").addClass("billClicked");
         setDetailsKey(key);
-        $.mobile.changePage("details.html", {
-          showLoadMsg: true
-        });
+        showBillDetails(key);
         return false;
       });
       payTo = bill.payto[1];
@@ -690,12 +688,12 @@ Variables
 
   showBillDetails = function(key) {
     var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeList, makeListItem, makeSubList, value;
+    key = (key !== void 0 ? key : getDetailsKey());
     $("#backToBills").click("click", function(e) {
       stopEvent(e);
       history.back();
       return $("#li-key-" + key).removeClass("billClick").addClass("bill");
     });
-    key = (key !== void 0 ? key : getDetailsKey());
     destroyDetailsDataSet();
     makeList = $("<ul>");
     $("#itemDetails").append(makeList);
@@ -761,6 +759,9 @@ Variables
       field.html(bill[0] + " ");
       value.html(bill[1]);
       return true;
+    });
+    $.mobile.changePage("details.html", {
+      showLoadMsg: true
     });
     return true;
   };
