@@ -79,11 +79,6 @@ Main Metheds
   else
     itemId = @getKeyToEdit()
 
-#   messages = validateRequiredFields()
-#   unless _.isEmpty(messages)
-#     message = messages.join('\n')
-#     alert message
-#   else
   item = {}
   item.name     = ["Name:", $("#name").val()]
   item.payto    = ["Pay To:", $("#payTo").val()]
@@ -847,7 +842,73 @@ createListWithXMLData = (data) ->
   )
   
 createListWithCSVData = (data) ->
-  console.log "CSV Not implemented yet!"
+  
+  bills = csvToArray(data)
+  
+  i = 1
+  _.each(bills, (bill) ->
+    key = ""
+    console.log bill
+    _.find(bill, (details) ->
+      key = details[1]
+      
+      makeListItem = $("<li>")
+      makeListItem.attr "id", "li-key-"+key
+      
+      makeThumbIcon = $("<img>")
+      makeThumbIcon.attr "class", "listThumbIcons"
+      
+      OPERATOR = ///
+      ((Checking)|(Savings)|(Credit\sCard))+
+      ///g
+  
+      account = details[9]
+      accountMatch = account.match(OPERATOR)
+      switch accountMatch
+        when "Checking" then makeThumbIcon.attr "src", "i/checking_thumb.png"
+        when "Savings" then makeThumbIcon.attr "src", "i/savings_thumb.png"
+        when "Credit Card" then makeThumbIcon.attr "src", "i/credit_thumb.png"
+        else makeThumbIcon.attr "src", "i/checking_thumb.png"
+      
+      makeArrowIcon = $("<img>")
+      makeArrowIcon.attr "src", "i/arrow.png"
+      makeArrowIcon.attr "class", "listArrowIcons"
+  
+      if(_.size(bills) == i)
+        makeListItem.attr "class", "lastBill"
+      else
+        makeListItem.attr "class", "bill"
+      
+      makeLink = $("<a>")
+      makeLink.attr "href", "#"
+      makeListItem.append makeLink
+      makeListItem.append makeThumbIcon
+      makeListItem.append makeArrowIcon
+  
+      $("#homeItems").append makeListItem
+      
+      $("#li-key-"+key).click("click", (e) ->
+        stopEvent(e)
+        $(this).removeClass("bill").addClass("billClicked")
+        setDetailsKey(key)
+        $.mobile.changePage( "details.html",
+          showLoadMsg: true
+        )
+        return false
+      )
+      
+      payTo = details[5]
+      if payTo.length >= 20
+        payTo = payTo.substr(0, 20) + "…"
+        
+      payAmount = "$" + details[7]
+      payDate = "(" + details[11] + ")"
+  
+      makeLink.html payTo + " " + payAmount + " " + payDate
+      
+    )
+    i++
+  )
       
 setupStaticBills = (data) ->
   billsList = []
@@ -944,6 +1005,19 @@ loadCSV = ->
       $("#displayCSV").css "padding", "0.65em 15px 0.6em 15px"
     error: (error) ->
       alert "ERROR: " + error.statusText
+
+csvToArray = (strData, strDelimiter) ->
+  strDelimiter = (strDelimiter or ",")
+  quote_regexp = new RegExp("^\"(.*)\"$")
+  arrData = []
+  lines = strData.split(new RegExp("\r?[\r\n]"))
+  
+  _.each(lines, (value, key) ->
+    arrData.push { key : value.split(strDelimiter) }
+    
+  )
+
+  arrData
       
 @displayStaticData = (showBills, showHome, data, type) =>
   bills = (if showBills isnt null or showBills isnt "" then showBills else false)

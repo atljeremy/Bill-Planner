@@ -11,7 +11,7 @@ Variables
 */
 
 (function() {
-  var add0, billAccounts, createListWithCSVData, createListWithJsonData, createListWithXMLData, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, destroyStaticDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getStaticData, getViewState, hideBillForm, hideHome, hideItems, hideStaticItems, loadCSV, loadJson, loadXML, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, setupStaticBills, showAccount, showBillDetails, stopEvent, storeJsonData, unBindClickListeners, viewBillForm, viewHome, viewItems, viewStaticItems,
+  var add0, billAccounts, createListWithCSVData, createListWithJsonData, createListWithXMLData, csvToArray, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, destroyStaticDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getStaticData, getViewState, hideBillForm, hideHome, hideItems, hideStaticItems, loadCSV, loadJson, loadXML, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, setupStaticBills, showAccount, showBillDetails, stopEvent, storeJsonData, unBindClickListeners, viewBillForm, viewHome, viewItems, viewStaticItems,
     _this = this;
 
   this.dataViewState = false;
@@ -823,7 +823,67 @@ Variables
   };
 
   createListWithCSVData = function(data) {
-    return console.log("CSV Not implemented yet!");
+    var bills, i;
+    bills = csvToArray(data);
+    i = 1;
+    return _.each(bills, function(bill) {
+      var key;
+      key = "";
+      console.log(bill);
+      _.find(bill, function(details) {
+        var OPERATOR, account, accountMatch, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
+        key = details[1];
+        makeListItem = $("<li>");
+        makeListItem.attr("id", "li-key-" + key);
+        makeThumbIcon = $("<img>");
+        makeThumbIcon.attr("class", "listThumbIcons");
+        OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
+        account = details[9];
+        accountMatch = account.match(OPERATOR);
+        switch (accountMatch) {
+          case "Checking":
+            makeThumbIcon.attr("src", "i/checking_thumb.png");
+            break;
+          case "Savings":
+            makeThumbIcon.attr("src", "i/savings_thumb.png");
+            break;
+          case "Credit Card":
+            makeThumbIcon.attr("src", "i/credit_thumb.png");
+            break;
+          default:
+            makeThumbIcon.attr("src", "i/checking_thumb.png");
+        }
+        makeArrowIcon = $("<img>");
+        makeArrowIcon.attr("src", "i/arrow.png");
+        makeArrowIcon.attr("class", "listArrowIcons");
+        if (_.size(bills) === i) {
+          makeListItem.attr("class", "lastBill");
+        } else {
+          makeListItem.attr("class", "bill");
+        }
+        makeLink = $("<a>");
+        makeLink.attr("href", "#");
+        makeListItem.append(makeLink);
+        makeListItem.append(makeThumbIcon);
+        makeListItem.append(makeArrowIcon);
+        $("#homeItems").append(makeListItem);
+        $("#li-key-" + key).click("click", function(e) {
+          stopEvent(e);
+          $(this).removeClass("bill").addClass("billClicked");
+          setDetailsKey(key);
+          $.mobile.changePage("details.html", {
+            showLoadMsg: true
+          });
+          return false;
+        });
+        payTo = details[5];
+        if (payTo.length >= 20) payTo = payTo.substr(0, 20) + "…";
+        payAmount = "$" + details[7];
+        payDate = "(" + details[11] + ")";
+        return makeLink.html(payTo + " " + payAmount + " " + payDate);
+      });
+      return i++;
+    });
   };
 
   setupStaticBills = function(data) {
@@ -947,6 +1007,20 @@ Variables
         return alert("ERROR: " + error.statusText);
       }
     });
+  };
+
+  csvToArray = function(strData, strDelimiter) {
+    var arrData, lines, quote_regexp;
+    strDelimiter = strDelimiter || ",";
+    quote_regexp = new RegExp("^\"(.*)\"$");
+    arrData = [];
+    lines = strData.split(new RegExp("\r?[\r\n]"));
+    _.each(lines, function(value, key) {
+      return arrData.push({
+        key: value.split(strDelimiter)
+      });
+    });
+    return arrData;
   };
 
   this.displayStaticData = function(showBills, showHome, data, type) {
