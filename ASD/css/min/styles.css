@@ -209,7 +209,18 @@ div#submitButton div.ui-btn.ui-btn-corner-all.ui-shadow.ui-btn-hover-c {
   width: 95%;
   margin: auto;
 }
+#homeItemsSection {
+  display: none;
+  padding: 0px;
+  width: 95%;
+  margin: auto;
+}
 #items {
+  padding: 0px;
+  width: 100%;
+  margin: auto;
+}
+#homeItems {
   padding: 0px;
   width: 100%;
   margin: auto;
