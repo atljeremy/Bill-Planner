@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-Deliverable 1
+Deliverable 2
 Author: Jeremy Fox
 Created For: ASD Online
 index.html
@@ -30,7 +30,7 @@ index.html
 
   </head>
 
-  <body id="PAGETOP">
+  <body id="home">
 
     <div data-role="page" id="home" data-dom-cache="true" data-theme="c">
   
@@ -43,13 +43,13 @@ index.html
         </a>
     	</div><!-- /header -->
     
-        <!-- unoSlider markup -->
-        <ul id="unoslider" class="unoslider">
-        	<li><img id="cta-bills" src="i/cta-bills.png" /></li>
-        	<li><img id="cta-accounts" src="i/cta-accounts.png" /></li>
-        </ul>
+      <!-- unoSlider markup -->
+      <ul id="unoslider" class="unoslider">
+      	<li><img id="cta-bills" src="i/cta-bills.png" /></li>
+      	<li><img id="cta-accounts" src="i/cta-accounts.png" /></li>
+      </ul>
     
-    	<div data-role="content">
+    	<div data-role="content" id="homeContent">
     	
         <!-- Search Form To Replace Header Branding -->
         <div id="searchFormContainer">
@@ -97,8 +97,28 @@ index.html
             </div>
           </div>
         </div>
+        
+        <section id="homeItemsSection">
+          <div id="postswrapper">
+            <div class="item">
+              <div id="itemsHeader">Bills</div>
+                <ul id="homeItems">
+                  <!-- Bills will be populated here programmatically -->
+                </ul>
+              </div>
+            <div id="loadmoreajaxloader">Loading… <br /><img src="i/ajax-loader.gif"/></div>
+          </div>
+      	</section>
 
       </div> <!-- /content -->
+
+      <section class="center">
+        <div data-role="controlgroup" data-type="horizontal" id="linksData"> 
+          <a href="#" data-role="button" id="displayJson">Load JSON</a>
+          <a href="#" data-role="button" id="displayXML">Load XML</a>
+          <a href="#" data-role="button" id="displayCSV">Load CSV</a>
+        </div>
+      </section>
     
       <div data-role="footer">
         <h4>&copy; Jeremy Fox 2012</h4>

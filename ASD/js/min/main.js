@@ -1,6 +1,6 @@
 
 /*
-Deliverable 1
+Deliverable 2
 Author: Jeremy Fox
 Created For: ASD Online
 main.coffee (main.js)
@@ -11,7 +11,7 @@ Variables
 */
 
 (function() {
-  var add0, billAccounts, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getViewState, hideBillForm, hideItems, loadCSV, loadJson, loadXML, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, showAccount, showBillDetails, stopEvent, unBindClickListeners, viewBillForm, viewItems,
+  var add0, billAccounts, createListWithCSVData, createListWithJsonData, createListWithXMLData, csvToArray, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, destroyStaticDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getStaticData, getViewState, hideBillForm, hideHome, hideItems, hideStaticItems, loadCSV, loadJson, loadXML, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, setupStaticBills, showAccount, showBillDetails, stopEvent, storeJsonData, unBindClickListeners, viewBillForm, viewHome, viewItems, viewStaticItems,
     _this = this;
 
   this.dataViewState = false;
@@ -22,12 +22,12 @@ Variables
 
   this.keyToEdit = 0;
 
-  billAccounts = ["Please Select An Account", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"];
+  billAccounts = ["Please Select An Account", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card", "Wells Fargo - Checking", "Wells Fargo - Savings", "Wells Fargo - Credit Card"];
 
   this.detailsKey = "";
 
   /***********************************************************
-  # State Control Methods
+  State Control Methods
   **********************************************************
   */
 
@@ -64,7 +64,7 @@ Variables
   };
 
   /***********************************************************
-  # Getter and Setter for key to edit
+  Getter and Setter for key to edit
   **********************************************************
   */
 
@@ -77,7 +77,7 @@ Variables
   };
 
   /***********************************************************
-  # Getter and Setter for details key
+  Getter and Setter for details key
   **********************************************************
   */
 
@@ -90,7 +90,7 @@ Variables
   };
 
   /***********************************************************
-  # Main Metheds
+  Main Metheds
   **********************************************************
   */
 
@@ -122,19 +122,35 @@ Variables
     }
   };
 
-  /***********************************************************
-  # Continuous Scrolling Methods. Curretnly Uneeded.
-  **********************************************************
-  */
+  storeJsonData = function() {
+    _.each(_.keys(_this.json), function(key) {
+      var item;
+      item = this.json[key];
+      try {
+        localStorage.setItem(key, JSON.stringify(item));
+      } catch (e) {
+        return alert(e);
+      }
+    });
+    setInvalidated(true);
+    return getData();
+  };
 
-  setupBills = function(data) {
+  getData = function() {
+    if (_.size(localStorage) > 0) {
+      return qryBills(localStorage, "localStorage");
+    } else {
+      return storeJsonData();
+    }
+  };
+
+  setupBills = function() {
     var billsList, callbackFunc;
     billsList = [];
-    _.each(data, function(value, key) {
-      var billObj;
-      console.log("KEY: " + key);
-      console.log("VALUE: " + value);
-      billObj = value;
+    _.each(_.keys(localStorage), function(key) {
+      var billObj, value;
+      value = localStorage.getItem(key);
+      billObj = JSON.parse(value);
       billObj.key = key;
       return billsList.push(billObj);
     });
@@ -149,13 +165,17 @@ Variables
         return 1;
       }
     };
-    return billsList.sort(callbackFunc);
+    if (_.size(billsList) > 1) {
+      return billsList.sort(callbackFunc);
+    } else {
+      return billsList;
+    }
   };
 
-  getData = function(data) {
+  qryBills = function() {
     var i;
     i = 1;
-    return _.each(setupBills(data), function(bill) {
+    return _.each(setupBills(), function(bill) {
       var OPERATOR, account, accountMatch, key, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
       key = bill.key;
       makeListItem = $("<li>");
@@ -181,7 +201,7 @@ Variables
       makeArrowIcon = $("<img>");
       makeArrowIcon.attr("src", "i/arrow.png");
       makeArrowIcon.attr("class", "listArrowIcons");
-      if (_.size(data) === i) {
+      if (_.size(localStorage) === i) {
         makeListItem.attr("class", "lastBill");
       } else {
         makeListItem.attr("class", "bill");
@@ -224,6 +244,7 @@ Variables
     $('#name').val(bill.name[1]);
     $('#payTo').val(bill.payto[1]);
     $('#payAmount').val(bill.amount[1]);
+    console.log(bill.account[1]);
     $('#payFrom').val(bill.account[1]);
     $('#payOn').val(bill.payon[1]);
     $('#notes').val(bill.notes[1]);
@@ -349,66 +370,13 @@ Variables
 
   $("#viewBills").click("click", function(e) {
     stopEvent(e);
-    return $.ajax({
-      url: "data/data.json",
-      dataType: "json",
-      success: function(data) {
-        return _.each(_.keys(data), function(key) {
-          return console.log("DATA: " + key);
-        });
-      },
-      error: function() {
-        return console.log("ERROR!!!");
-      }
+    setTimeout(function() {
+      return this.displayData(true, false);
+    }, 700);
+    return $.mobile.changePage("additem.html", {
+      transition: "slideup",
+      showLoadMsg: true
     });
-  });
-
-  /***********************************************************
-  # JSON
-  **********************************************************
-  */
-
-  $("#displayJson").live("click", function(e) {
-    stopEvent(e);
-    if (getViewState()) {
-      _this.displayData(false, true, null);
-      $("#displayJson").text("Load JSON");
-      return $("#displayJson").css("padding", "0.65em 15px 0.6em 15px");
-    } else {
-      return loadJson();
-    }
-  });
-
-  /***********************************************************
-  # XML
-  **********************************************************
-  */
-
-  $("#displayXML").live("click", function(e) {
-    stopEvent(e);
-    if (getViewState()) {
-      _this.displayData(false, true, null);
-      $("#displayXML").text("Load XML");
-      return $("#displayXML").css("padding", "0.65em 15px 0.6em 15px");
-    } else {
-      return loadXML();
-    }
-  });
-
-  /***********************************************************
-  # CSV
-  **********************************************************
-  */
-
-  $("#displayCSV").live("click", function(e) {
-    stopEvent(e);
-    if (getViewState()) {
-      _this.displayData(false, true, null);
-      $("#displayCSV").text("Load CSV");
-      return $("#displayCSV").css("padding", "0.65em 15px 0.6em 15px");
-    } else {
-      return loadCSV();
-    }
   });
 
   $("#accounts").click("click", function(e) {
@@ -508,18 +476,18 @@ Variables
     $("#billForm").css("display", "none");
   };
 
-  this.displayData = function(showBills, showForm, data) {
+  this.displayData = function(showBills, showForm) {
     var bills, form;
     bills = (showBills !== null || showBills !== "" ? showBills : false);
     form = (showForm !== null || showForm !== "" ? showForm : false);
     if (form) {
       _this.showForm();
     } else if (bills) {
-      _this.showBills(data);
+      _this.showBills();
     } else if (getViewState()) {
       _this.showForm();
     } else {
-      _this.showBills(data);
+      _this.showBills();
     }
   };
 
@@ -527,66 +495,22 @@ Variables
     setViewState(false);
     hideItems();
     viewBillForm();
+    $("#displayData").text("Display Data");
+    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
   };
 
-  this.showBills = function(data) {
+  this.showBills = function() {
     setViewState(true);
     hideBillForm();
     viewItems();
     if (getDataDisplayed() === false || getInvalidated()) {
       destroyDataSet();
-      getData(data);
+      getData();
       setDataDisplayed(true);
       setInvalidated(false);
     }
-  };
-
-  loadJson = function() {
-    var _this = this;
-    return $.ajax({
-      url: "data/data.json",
-      dataType: "json",
-      success: function(json) {
-        _this.displayData(true, false, json);
-        $("#displayJson").text("Show Form");
-        return $("#displayJson").css("padding", "0.65em 15px 0.6em 15px");
-      },
-      error: function(error) {
-        return alert("ERROR: " + error);
-      }
-    });
-  };
-
-  loadXML = function() {
-    var _this = this;
-    return $.ajax({
-      url: "data/data.xml",
-      dataType: "xml",
-      success: function(xml) {
-        _this.displayData(true, false, xml);
-        $("#displayXML").text("Show Form");
-        return $("#displayXML").css("padding", "0.65em 15px 0.6em 15px");
-      },
-      error: function(error) {
-        return alert("ERROR: " + error);
-      }
-    });
-  };
-
-  loadCSV = function() {
-    var _this = this;
-    return $.ajax({
-      url: "data/data.csv",
-      dataType: "text",
-      success: function(csv) {
-        _this.displayData(true, false, csv);
-        $("#displayCSV").text("Show Form");
-        return $("#displayCSV").css("padding", "0.65em 15px 0.6em 15px");
-      },
-      error: function(error) {
-        return alert("ERROR: " + error);
-      }
-    });
+    $("#displayData").text("Display Form");
+    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
   };
 
   unBindClickListeners = function() {
@@ -764,6 +688,431 @@ Variables
       showLoadMsg: true
     });
     return true;
+  };
+
+  /*****************************************************************
+  # Methods to show json / xml / csv
+  ****************************************************************
+  */
+
+  getStaticData = function(data, type) {
+    switch (type) {
+      case "json":
+        return createListWithJsonData(data);
+      case "xml":
+        return createListWithXMLData(data);
+      case "csv":
+        return createListWithCSVData(data);
+    }
+  };
+
+  createListWithJsonData = function(data) {
+    var i;
+    i = 1;
+    return _.each(setupStaticBills(data), function(bill) {
+      var OPERATOR, account, accountMatch, key, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
+      key = bill.key;
+      makeListItem = $("<li>");
+      makeListItem.attr("id", "li-key-" + key);
+      makeThumbIcon = $("<img>");
+      makeThumbIcon.attr("class", "listThumbIcons");
+      OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
+      account = bill.account[1];
+      accountMatch = account.match(OPERATOR);
+      switch (accountMatch[0]) {
+        case "Checking":
+          makeThumbIcon.attr("src", "i/checking_thumb.png");
+          break;
+        case "Savings":
+          makeThumbIcon.attr("src", "i/savings_thumb.png");
+          break;
+        case "Credit Card":
+          makeThumbIcon.attr("src", "i/credit_thumb.png");
+          break;
+        default:
+          makeThumbIcon.attr("src", "i/checking_thumb.png");
+      }
+      makeArrowIcon = $("<img>");
+      makeArrowIcon.attr("src", "i/arrow.png");
+      makeArrowIcon.attr("class", "listArrowIcons");
+      if (_.size(data) === i) {
+        makeListItem.attr("class", "lastBill");
+      } else {
+        makeListItem.attr("class", "bill");
+      }
+      makeLink = $("<a>");
+      makeLink.attr("href", "#");
+      makeListItem.append(makeLink);
+      makeListItem.append(makeThumbIcon);
+      makeListItem.append(makeArrowIcon);
+      $("#homeItems").append(makeListItem);
+      $("#li-key-" + key).click("click", function(e) {
+        stopEvent(e);
+        $(this).removeClass("bill").addClass("billClicked");
+        setDetailsKey(key);
+        $.mobile.changePage("details.html", {
+          showLoadMsg: true
+        });
+        return false;
+      });
+      payTo = bill.payto[1];
+      if (payTo.length >= 20) payTo = payTo.substr(0, 20) + "…";
+      payAmount = "$" + bill.amount[1];
+      payDate = "(" + bill.payon[1] + ")";
+      makeLink.html(payTo + " " + payAmount + " " + payDate);
+      return i++;
+    });
+  };
+
+  createListWithXMLData = function(data) {
+    var bills, i;
+    bills = $(data).find('bill');
+    i = 1;
+    return _.each(bills, function(bill) {
+      var OPERATOR, account, accountMatch, key, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
+      key = $(bill).find("id").text();
+      makeListItem = $("<li>");
+      makeListItem.attr("id", "li-key-" + key);
+      makeThumbIcon = $("<img>");
+      makeThumbIcon.attr("class", "listThumbIcons");
+      OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
+      account = $(bill).find("account").text();
+      accountMatch = account.match(OPERATOR);
+      switch (accountMatch[0]) {
+        case "Checking":
+          makeThumbIcon.attr("src", "i/checking_thumb.png");
+          break;
+        case "Savings":
+          makeThumbIcon.attr("src", "i/savings_thumb.png");
+          break;
+        case "Credit Card":
+          makeThumbIcon.attr("src", "i/credit_thumb.png");
+          break;
+        default:
+          makeThumbIcon.attr("src", "i/checking_thumb.png");
+      }
+      makeArrowIcon = $("<img>");
+      makeArrowIcon.attr("src", "i/arrow.png");
+      makeArrowIcon.attr("class", "listArrowIcons");
+      if (_.size(bills) === i) {
+        makeListItem.attr("class", "lastBill");
+      } else {
+        makeListItem.attr("class", "bill");
+      }
+      makeLink = $("<a>");
+      makeLink.attr("href", "#");
+      makeListItem.append(makeLink);
+      makeListItem.append(makeThumbIcon);
+      makeListItem.append(makeArrowIcon);
+      $("#homeItems").append(makeListItem);
+      $("#li-key-" + key).click("click", function(e) {
+        stopEvent(e);
+        $(this).removeClass("bill").addClass("billClicked");
+        setDetailsKey(key);
+        $.mobile.changePage("details.html", {
+          showLoadMsg: true
+        });
+        return false;
+      });
+      payTo = $(bill).find("payto").text();
+      if (payTo.length >= 20) payTo = payTo.substr(0, 20) + "…";
+      payAmount = "$" + $(bill).find("amount").text();
+      payDate = "(" + $(bill).find("payon").text() + ")";
+      makeLink.html(payTo + " " + payAmount + " " + payDate);
+      return i++;
+    });
+  };
+
+  createListWithCSVData = function(data) {
+    var bills, i;
+    bills = csvToArray(data);
+    i = 1;
+    return _.each(bills, function(bill) {
+      var key;
+      key = "";
+      console.log(bill);
+      _.find(bill, function(details) {
+        var OPERATOR, account, accountMatch, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
+        key = details[1];
+        makeListItem = $("<li>");
+        makeListItem.attr("id", "li-key-" + key);
+        makeThumbIcon = $("<img>");
+        makeThumbIcon.attr("class", "listThumbIcons");
+        OPERATOR = /((Checking)|(Savings)|(Credit\sCard))+/g;
+        account = details[9];
+        accountMatch = account.match(OPERATOR);
+        switch (accountMatch) {
+          case "Checking":
+            makeThumbIcon.attr("src", "i/checking_thumb.png");
+            break;
+          case "Savings":
+            makeThumbIcon.attr("src", "i/savings_thumb.png");
+            break;
+          case "Credit Card":
+            makeThumbIcon.attr("src", "i/credit_thumb.png");
+            break;
+          default:
+            makeThumbIcon.attr("src", "i/checking_thumb.png");
+        }
+        makeArrowIcon = $("<img>");
+        makeArrowIcon.attr("src", "i/arrow.png");
+        makeArrowIcon.attr("class", "listArrowIcons");
+        if (_.size(bills) === i) {
+          makeListItem.attr("class", "lastBill");
+        } else {
+          makeListItem.attr("class", "bill");
+        }
+        makeLink = $("<a>");
+        makeLink.attr("href", "#");
+        makeListItem.append(makeLink);
+        makeListItem.append(makeThumbIcon);
+        makeListItem.append(makeArrowIcon);
+        $("#homeItems").append(makeListItem);
+        $("#li-key-" + key).click("click", function(e) {
+          stopEvent(e);
+          $(this).removeClass("bill").addClass("billClicked");
+          setDetailsKey(key);
+          $.mobile.changePage("details.html", {
+            showLoadMsg: true
+          });
+          return false;
+        });
+        payTo = details[5];
+        if (payTo.length >= 20) payTo = payTo.substr(0, 20) + "…";
+        payAmount = "$" + details[7];
+        payDate = "(" + details[11] + ")";
+        return makeLink.html(payTo + " " + payAmount + " " + payDate);
+      });
+      return i++;
+    });
+  };
+
+  setupStaticBills = function(data) {
+    var billsList, callbackFunc;
+    billsList = [];
+    _.each(data, function(value, key) {
+      var billObj;
+      billObj = value;
+      billObj.key = key;
+      return billsList.push(billObj);
+    });
+    callbackFunc = function(a, b) {
+      if (a.payon[1] === b.payon[1]) {
+        if (a.payon[1] === b.payon[1]) return 0;
+        return (a.payon[1] < b.payon[1] ? -1 : 1);
+      }
+      if (a.payon[1] < b.payon[1]) {
+        return -1;
+      } else {
+        return 1;
+      }
+    };
+    return billsList.sort(callbackFunc);
+  };
+
+  /***********************************************************
+  # JSON
+  **********************************************************
+  */
+
+  $("#displayJson").live("click", function(e) {
+    stopEvent(e);
+    if (getViewState()) {
+      setInvalidated(true);
+      _this.displayStaticData(false, true, null, "json");
+      $("#displayJson").text("Load JSON");
+      return $("#displayJson").css("padding", "0.65em 15px 0.6em 15px");
+    } else {
+      return loadJson();
+    }
+  });
+
+  loadJson = function() {
+    var _this = this;
+    return $.ajax({
+      url: "data/data.json",
+      dataType: "json",
+      success: function(json) {
+        _this.displayStaticData(true, false, json, "json");
+        $("#displayJson").text("Show Home");
+        return $("#displayJson").css("padding", "0.65em 15px 0.6em 15px");
+      },
+      error: function(error) {
+        return alert("ERROR: " + error);
+      }
+    });
+  };
+
+  /***********************************************************
+  # XML
+  **********************************************************
+  */
+
+  $("#displayXML").live("click", function(e) {
+    stopEvent(e);
+    if (getViewState()) {
+      setInvalidated(true);
+      _this.displayStaticData(false, true, null, "xml");
+      $("#displayXML").text("Load XML");
+      return $("#displayXML").css("padding", "0.65em 15px 0.6em 15px");
+    } else {
+      return loadXML();
+    }
+  });
+
+  loadXML = function() {
+    var _this = this;
+    return $.ajax({
+      url: "data/data.xml",
+      dataType: "xml",
+      success: function(xml) {
+        _this.displayStaticData(true, false, xml, "xml");
+        $("#displayXML").text("Show Home");
+        return $("#displayXML").css("padding", "0.65em 15px 0.6em 15px");
+      },
+      error: function(error) {
+        console.log(error);
+        return alert("ERROR: " + error.statusText);
+      }
+    });
+  };
+
+  /***********************************************************
+  # CSV
+  **********************************************************
+  */
+
+  $("#displayCSV").live("click", function(e) {
+    stopEvent(e);
+    if (getViewState()) {
+      setInvalidated(true);
+      _this.displayStaticData(false, true, null, "csv");
+      $("#displayCSV").text("Load CSV");
+      return $("#displayCSV").css("padding", "0.65em 15px 0.6em 15px");
+    } else {
+      return loadCSV();
+    }
+  });
+
+  loadCSV = function() {
+    var _this = this;
+    return $.ajax({
+      url: "data/data.csv",
+      dataType: "text",
+      success: function(csv) {
+        _this.displayStaticData(true, false, csv, "csv");
+        $("#displayCSV").text("Show Home");
+        return $("#displayCSV").css("padding", "0.65em 15px 0.6em 15px");
+      },
+      error: function(error) {
+        return alert("ERROR: " + error.statusText);
+      }
+    });
+  };
+
+  csvToArray = function(strData, strDelimiter) {
+    var arrData, lines, quote_regexp;
+    strDelimiter = strDelimiter || ",";
+    quote_regexp = new RegExp("^\"(.*)\"$");
+    arrData = [];
+    lines = strData.split(new RegExp("\r?[\r\n]"));
+    _.each(lines, function(value, key) {
+      return arrData.push({
+        key: value.split(strDelimiter)
+      });
+    });
+    return arrData;
+  };
+
+  this.displayStaticData = function(showBills, showHome, data, type) {
+    var bills, form;
+    bills = (showBills !== null || showBills !== "" ? showBills : false);
+    form = (showHome !== null || showHome !== "" ? showHome : false);
+    if (form) {
+      switch (type) {
+        case "json":
+          _this.showHomeJson();
+          break;
+        case "xml":
+          _this.showHomeXML();
+          break;
+        case "csv":
+          _this.showHomeCSV();
+      }
+    } else if (bills) {
+      _this.showStaticBills(data, type);
+    } else if (getViewState()) {
+      switch (type) {
+        case "json":
+          _this.showHomeJson();
+          break;
+        case "xml":
+          _this.showHomeXML();
+          break;
+        case "csv":
+          _this.showHomeCSV();
+      }
+    } else {
+      _this.showStaticBills(data, type);
+    }
+  };
+
+  this.showStaticBills = function(data, type) {
+    setViewState(true);
+    hideHome();
+    viewStaticItems();
+    if (getDataDisplayed() === false || getInvalidated()) {
+      destroyStaticDataSet();
+      getStaticData(data, type);
+      setDataDisplayed(true);
+      setInvalidated(false);
+    }
+  };
+
+  this.showHomeJson = function() {
+    setViewState(false);
+    hideStaticItems();
+    viewHome();
+    $("#displayData").text("Load Json");
+    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
+  };
+
+  this.showHomeXML = function() {
+    setViewState(false);
+    hideStaticItems();
+    viewHome();
+    $("#displayData").text("Load XML");
+    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
+  };
+
+  this.showHomeCSV = function() {
+    setViewState(false);
+    hideStaticItems();
+    viewHome();
+    $("#displayData").text("Load CSV");
+    $("#displayData").css("padding", "0.65em 15px 0.6em 15px");
+  };
+
+  destroyStaticDataSet = function() {
+    return $("#homeItems").empty();
+  };
+
+  viewHome = function() {
+    $("#unoslider").css("display", "inline");
+    $("#grid").css("display", "inline-block");
+  };
+
+  hideHome = function() {
+    $("#unoslider").css("display", "none");
+    $("#grid").css("display", "none");
+  };
+
+  viewStaticItems = function() {
+    $("#homeItemsSection").css("display", "inline-block");
+  };
+
+  hideStaticItems = function() {
+    $("#homeItemsSection").css("display", "none");
   };
 
 }).call(this);

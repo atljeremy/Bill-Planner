@@ -1,5 +1,5 @@
 ###
-Deliverable 1
+Deliverable 2
 Author: Jeremy Fox
 Created For: ASD Online
 main.coffee (main.js)
@@ -8,15 +8,23 @@ main.coffee (main.js)
 ###
 Variables
 ###
-@dataViewState        = false #false = bills not visible. true = bills visible
+@dataViewState        = false #false = bills (in localStorage) not visible. true = bills visible
 @hasDataBeenDisplayed = false #Keeps track of whether or not localStorage has been display, if so, there is no reason to re-query localStorage, just show the previously viewed data.
 @invalidateData       = false #set this to true when we need to force the app to re-query localStorage for new data.
 @keyToEdit            = 0 #The key of the item in localStorage we want to edit
-billAccounts          = ["Please Select An Account", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card"]
+billAccounts          = [
+  "Please Select An Account",
+  "Bank of America - Checking",
+  "Bank of America - Savings",
+  "Bank of America - Credit Card",
+  "Wells Fargo - Checking",
+  "Wells Fargo - Savings",
+  "Wells Fargo - Credit Card"
+]
 @detailsKey           = "" # Key used to retreive bill details on details.html
 
 ###**********************************************************
-# State Control Methods
+State Control Methods
 **********************************************************###
 setViewState = (state) =>
   @dataViewState = state
@@ -43,7 +51,7 @@ destroyDetailsDataSet = () ->
   $("#itemDetails").empty()
   
 ###**********************************************************
-# Getter and Setter for key to edit
+Getter and Setter for key to edit
 **********************************************************###
 @getKeyToEdit = () =>
   return @keyToEdit
@@ -52,7 +60,7 @@ destroyDetailsDataSet = () ->
   @keyToEdit = key
   
 ###**********************************************************
-# Getter and Setter for details key
+Getter and Setter for details key
 **********************************************************###
 setDetailsKey = (key) =>
   @detailsKey = key
@@ -61,7 +69,7 @@ getDetailsKey = () =>
   return @detailsKey
 
 ###**********************************************************
-# Main Metheds
+Main Metheds
 **********************************************************###
 @storeData = () =>
   newDate = new Date()
@@ -90,10 +98,7 @@ getDetailsKey = () =>
     return
   catch e
     alert e
-
-###**********************************************************
-# Continuous Scrolling Methods. Curretnly Uneeded.
-**********************************************************###
+  
 # $(window).scroll ->
 #   if $(window).scrollTop() >= $(document).height() - $(window).height() - 100
 #     $("div#loadmoreajaxloader").show()
@@ -127,29 +132,33 @@ getDetailsKey = () =>
 #   setInvalidated(true)
 #   $("div#loadmoreajaxloader").hide()
 #   getData()
-#       
-# storeJsonData = () =>
-#   _.each(_.keys(@json), (key) ->
-#     item = @json[key]
-# 
-#     try
-#       localStorage.setItem key, JSON.stringify(item)
-#       return
-#     catch e
-#       alert e
-#   )
-#   setInvalidated(true)
-#   getData()
       
-setupBills = (data) ->
+storeJsonData = () =>
+  _.each(_.keys(@json), (key) ->
+    item = @json[key]
+
+    try
+      localStorage.setItem key, JSON.stringify(item)
+      return
+    catch e
+      alert e
+  )
+  setInvalidated(true)
+  getData()
+
+getData = ->
+  if _.size(localStorage) > 0
+    qryBills(localStorage, "localStorage")
+  else
+    storeJsonData()
+    # qryBills(@json, "json")
+      
+setupBills = ->
   billsList = []
 
-  _.each(data, (value, key) ->
-  
-    console.log "KEY: " + key
-    console.log "VALUE: " + value
-    
-    billObj = value
+  _.each(_.keys(localStorage), (key) ->
+    value = localStorage.getItem(key)
+    billObj = JSON.parse value
     billObj.key = key    
     billsList.push billObj
   )
@@ -160,20 +169,14 @@ setupBills = (data) ->
       return (if (a.payon[1] < b.payon[1]) then -1 else 1)
     (if (a.payon[1] < b.payon[1]) then -1 else 1)
   
-  billsList.sort callbackFunc
-  
-# ***** ORIGINAL getData - UNNEEDED CODE *******
-# getData = ->
-#   if _.size(localStorage) > 0
-#     qryBills(localStorage, "localStorage")
-#   else
-#     storeJsonData()
-#     # qryBills(@json, "json")
-# **********************************************
+  if _.size(billsList) > 1
+    billsList.sort callbackFunc
+  else
+    billsList
 
-getData = (data) ->
+qryBills = ->
   i = 1
-  _.each(setupBills(data), (bill) ->
+  _.each(setupBills(), (bill) ->
   
     key = bill.key
     
@@ -199,7 +202,7 @@ getData = (data) ->
     makeArrowIcon.attr "src", "i/arrow.png"
     makeArrowIcon.attr "class", "listArrowIcons"
     
-    if(_.size(data) == i)
+    if(_.size(localStorage) == i)
       makeListItem.attr "class", "lastBill"
     else
       makeListItem.attr "class", "bill"
@@ -251,6 +254,9 @@ editItem = (key) =>
   $('#name').val bill.name[1]
   $('#payTo').val bill.payto[1]
   $('#payAmount').val bill.amount[1]
+  
+  console.log bill.account[1]
+  
   $('#payFrom').val bill.account[1]
   $('#payOn').val bill.payon[1]
   $('#notes').val bill.notes[1]
@@ -367,67 +373,13 @@ $("#billSearchHide").click("click", (e) ->
 
 $("#viewBills").click("click", (e) =>
   stopEvent(e)
-  
-  $.ajax
-    url: "data/data.json"
-    dataType: "json"
-    success: (data) ->
-      _.each(_.keys(data), (key) -> 
-        console.log "DATA: " + key
-      )
-      #storeData()
-    error: ->
-      console.log "ERROR!!!"
-  
-  # setTimeout(->
-#     @displayData(true, false)
-#   , 700)
-#   $.mobile.changePage( "additem.html",
-#     transition: "slideup"
-#     showLoadMsg: true
-#   )
-)
-
-###**********************************************************
-# JSON
-**********************************************************###
-$("#displayJson").live("click", (e) =>
-
-  stopEvent(e)
-  if getViewState()
-    @displayData(false, true, null)
-    $("#displayJson").text "Load JSON"
-    $("#displayJson").css "padding", "0.65em 15px 0.6em 15px"
-  else
-    loadJson()
-)
-
-###**********************************************************
-# XML
-**********************************************************###
-$("#displayXML").live("click", (e) =>
-
-  stopEvent(e)
-  if getViewState()
-    @displayData(false, true, null)
-    $("#displayXML").text "Load XML"
-    $("#displayXML").css "padding", "0.65em 15px 0.6em 15px"
-  else
-    loadXML()
-)
-
-###**********************************************************
-# CSV
-**********************************************************###
-$("#displayCSV").live("click", (e) =>
-
-  stopEvent(e)
-  if getViewState()
-    @displayData(false, true, null)
-    $("#displayCSV").text "Load CSV"
-    $("#displayCSV").css "padding", "0.65em 15px 0.6em 15px"
-  else
-    loadCSV()
+  setTimeout(->
+    @displayData(true, false)
+  , 700)
+  $.mobile.changePage( "additem.html",
+    transition: "slideup"
+    showLoadMsg: true
+  )
 )
 
 $("#accounts").click("click", (e) =>
@@ -512,7 +464,7 @@ hideBillForm = ->
   $("#billForm").css "display", "none"
   return
   
-@displayData = (showBills, showForm, data) =>
+@displayData = (showBills, showForm) =>
   bills = (if showBills isnt null or showBills isnt "" then showBills else false)
   form  = (if showForm isnt null or showForm isnt "" then showForm else false)
 
@@ -523,7 +475,7 @@ hideBillForm = ->
 
   else if bills
     #Form is visible, show bills
-    @showBills(data)
+    @showBills()
     return
     
   else if getViewState()
@@ -533,58 +485,29 @@ hideBillForm = ->
   
   else
     #Form is visible, show bills
-    @showBills(data)
+    @showBills()
     return
     
-@showForm = ->
+@showForm = () ->
   setViewState(false)
   hideItems()
   viewBillForm()
+  $("#displayData").text "Display Data"
+  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
   return
   
-@showBills = (data) ->
+@showBills = () ->
   setViewState(true)
   hideBillForm()
   viewItems()
   if getDataDisplayed() == false or getInvalidated()
     destroyDataSet()
-    getData(data)
+    getData()
     setDataDisplayed(true)
     setInvalidated(false)
+  $("#displayData").text "Display Form"
+  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
   return
-
-loadJson = ->
-  $.ajax
-    url: "data/data.json"
-    dataType: "json"
-    success: (json) =>
-      @displayData(true, false, json)
-      $("#displayJson").text "Show Form"
-      $("#displayJson").css "padding", "0.65em 15px 0.6em 15px"
-    error: (error) ->
-      alert "ERROR: " + error
-
-loadXML = ->
-  $.ajax
-    url: "data/data.xml"
-    dataType: "xml"
-    success: (xml) =>
-      @displayData(true, false, xml)
-      $("#displayXML").text "Show Form"
-      $("#displayXML").css "padding", "0.65em 15px 0.6em 15px"
-    error: (error) ->
-      alert "ERROR: " + error
-      
-loadCSV = ->
-  $.ajax
-    url: "data/data.csv"
-    dataType: "text"
-    success: (csv) =>
-      @displayData(true, false, csv)
-      $("#displayCSV").text "Show Form"
-      $("#displayCSV").css "padding", "0.65em 15px 0.6em 15px"
-    error: (error) ->
-      alert "ERROR: " + error
     
 unBindClickListeners = () ->
   $(document).unbind("click")
@@ -781,3 +704,404 @@ showBillDetails = (key) ->
     showLoadMsg: true
   )
   true
+
+###****************************************************************
+# Methods to show json / xml / csv
+****************************************************************###
+getStaticData = (data, type) ->
+  
+  switch type
+    when "json" then createListWithJsonData(data)
+    when "xml" then createListWithXMLData(data)
+    when "csv" then createListWithCSVData(data)
+      
+createListWithJsonData = (data) ->
+  i = 1
+  _.each(setupStaticBills(data), (bill) ->
+    key = bill.key
+    
+    makeListItem = $("<li>")
+    makeListItem.attr "id", "li-key-"+key
+    
+    makeThumbIcon = $("<img>")
+    makeThumbIcon.attr "class", "listThumbIcons"
+    
+    OPERATOR = ///
+    ((Checking)|(Savings)|(Credit\sCard))+
+    ///g
+
+    account = bill.account[1]
+    accountMatch = account.match(OPERATOR)
+    switch accountMatch[0]
+      when "Checking" then makeThumbIcon.attr "src", "i/checking_thumb.png"
+      when "Savings" then makeThumbIcon.attr "src", "i/savings_thumb.png"
+      when "Credit Card" then makeThumbIcon.attr "src", "i/credit_thumb.png"
+      else makeThumbIcon.attr "src", "i/checking_thumb.png"
+    
+    makeArrowIcon = $("<img>")
+    makeArrowIcon.attr "src", "i/arrow.png"
+    makeArrowIcon.attr "class", "listArrowIcons"
+    
+    if(_.size(data) == i)
+      makeListItem.attr "class", "lastBill"
+    else
+      makeListItem.attr "class", "bill"
+    
+    makeLink = $("<a>")
+    makeLink.attr "href", "#"
+    makeListItem.append makeLink
+    makeListItem.append makeThumbIcon
+    makeListItem.append makeArrowIcon
+
+    $("#homeItems").append makeListItem
+    
+    $("#li-key-"+key).click("click", (e) ->
+      stopEvent(e)
+      $(this).removeClass("bill").addClass("billClicked")
+      setDetailsKey(key)
+      $.mobile.changePage( "details.html",
+        showLoadMsg: true
+      )
+      return false
+    )
+    
+    payTo = bill.payto[1]
+    if payTo.length >= 20
+      payTo = payTo.substr(0, 20) + "…"
+      
+    payAmount = "$" + bill.amount[1]
+    payDate = "(" + bill.payon[1] + ")"
+
+    makeLink.html payTo + " " + payAmount + " " + payDate
+    
+    i++
+  )
+  
+createListWithXMLData = (data) ->
+  
+  bills = $(data).find('bill')
+  
+  i = 1
+  _.each(bills, (bill) ->
+    key = $(bill).find("id").text()
+    
+    makeListItem = $("<li>")
+    makeListItem.attr "id", "li-key-"+key
+    
+    makeThumbIcon = $("<img>")
+    makeThumbIcon.attr "class", "listThumbIcons"
+    
+    OPERATOR = ///
+    ((Checking)|(Savings)|(Credit\sCard))+
+    ///g
+
+    account = $(bill).find("account").text()
+    accountMatch = account.match(OPERATOR)
+    switch accountMatch[0]
+      when "Checking" then makeThumbIcon.attr "src", "i/checking_thumb.png"
+      when "Savings" then makeThumbIcon.attr "src", "i/savings_thumb.png"
+      when "Credit Card" then makeThumbIcon.attr "src", "i/credit_thumb.png"
+      else makeThumbIcon.attr "src", "i/checking_thumb.png"
+    
+    makeArrowIcon = $("<img>")
+    makeArrowIcon.attr "src", "i/arrow.png"
+    makeArrowIcon.attr "class", "listArrowIcons"
+
+    if(_.size(bills) == i)
+      makeListItem.attr "class", "lastBill"
+    else
+      makeListItem.attr "class", "bill"
+    
+    makeLink = $("<a>")
+    makeLink.attr "href", "#"
+    makeListItem.append makeLink
+    makeListItem.append makeThumbIcon
+    makeListItem.append makeArrowIcon
+
+    $("#homeItems").append makeListItem
+    
+    $("#li-key-"+key).click("click", (e) ->
+      stopEvent(e)
+      $(this).removeClass("bill").addClass("billClicked")
+      setDetailsKey(key)
+      $.mobile.changePage( "details.html",
+        showLoadMsg: true
+      )
+      return false
+    )
+    
+    payTo = $(bill).find("payto").text()
+    if payTo.length >= 20
+      payTo = payTo.substr(0, 20) + "…"
+      
+    payAmount = "$" + $(bill).find("amount").text()
+    payDate = "(" + $(bill).find("payon").text() + ")"
+
+    makeLink.html payTo + " " + payAmount + " " + payDate
+    
+    i++
+  )
+  
+createListWithCSVData = (data) ->
+  
+  bills = csvToArray(data)
+  
+  i = 1
+  _.each(bills, (bill) ->
+    key = ""
+    console.log bill
+    _.find(bill, (details) ->
+      key = details[1]
+      
+      makeListItem = $("<li>")
+      makeListItem.attr "id", "li-key-"+key
+      
+      makeThumbIcon = $("<img>")
+      makeThumbIcon.attr "class", "listThumbIcons"
+      
+      OPERATOR = ///
+      ((Checking)|(Savings)|(Credit\sCard))+
+      ///g
+  
+      account = details[9]
+      accountMatch = account.match(OPERATOR)
+      switch accountMatch
+        when "Checking" then makeThumbIcon.attr "src", "i/checking_thumb.png"
+        when "Savings" then makeThumbIcon.attr "src", "i/savings_thumb.png"
+        when "Credit Card" then makeThumbIcon.attr "src", "i/credit_thumb.png"
+        else makeThumbIcon.attr "src", "i/checking_thumb.png"
+      
+      makeArrowIcon = $("<img>")
+      makeArrowIcon.attr "src", "i/arrow.png"
+      makeArrowIcon.attr "class", "listArrowIcons"
+  
+      if(_.size(bills) == i)
+        makeListItem.attr "class", "lastBill"
+      else
+        makeListItem.attr "class", "bill"
+      
+      makeLink = $("<a>")
+      makeLink.attr "href", "#"
+      makeListItem.append makeLink
+      makeListItem.append makeThumbIcon
+      makeListItem.append makeArrowIcon
+  
+      $("#homeItems").append makeListItem
+      
+      $("#li-key-"+key).click("click", (e) ->
+        stopEvent(e)
+        $(this).removeClass("bill").addClass("billClicked")
+        setDetailsKey(key)
+        $.mobile.changePage( "details.html",
+          showLoadMsg: true
+        )
+        return false
+      )
+      
+      payTo = details[5]
+      if payTo.length >= 20
+        payTo = payTo.substr(0, 20) + "…"
+        
+      payAmount = "$" + details[7]
+      payDate = "(" + details[11] + ")"
+  
+      makeLink.html payTo + " " + payAmount + " " + payDate
+      
+    )
+    i++
+  )
+      
+setupStaticBills = (data) ->
+  billsList = []
+
+  _.each(data, (value, key) ->
+    billObj = value
+    billObj.key = key    
+    billsList.push billObj
+  )
+
+  callbackFunc = (a, b) ->
+    if a.payon[1] is b.payon[1]
+      return 0 if a.payon[1] is b.payon[1]
+      return (if (a.payon[1] < b.payon[1]) then -1 else 1)
+    (if (a.payon[1] < b.payon[1]) then -1 else 1)
+  
+  billsList.sort callbackFunc
+  
+###**********************************************************
+# JSON
+**********************************************************###
+$("#displayJson").live("click", (e) =>
+
+  stopEvent(e)
+  if getViewState()
+    setInvalidated(true)
+    @displayStaticData(false, true, null, "json")
+    $("#displayJson").text "Load JSON"
+    $("#displayJson").css "padding", "0.65em 15px 0.6em 15px"
+  else
+    loadJson()
+)
+
+loadJson = ->
+  $.ajax
+    url: "data/data.json"
+    dataType: "json"
+    success: (json) =>
+      @displayStaticData(true, false, json, "json")
+      $("#displayJson").text "Show Home"
+      $("#displayJson").css "padding", "0.65em 15px 0.6em 15px"
+    error: (error) ->
+      alert "ERROR: " + error
+
+###**********************************************************
+# XML
+**********************************************************###
+$("#displayXML").live("click", (e) =>
+
+  stopEvent(e)
+  if getViewState()
+    setInvalidated(true)
+    @displayStaticData(false, true, null, "xml")
+    $("#displayXML").text "Load XML"
+    $("#displayXML").css "padding", "0.65em 15px 0.6em 15px"
+  else
+    loadXML()
+)
+
+loadXML = ->
+  $.ajax
+    url: "data/data.xml"
+    dataType: "xml"
+    success: (xml) =>
+      @displayStaticData(true, false, xml, "xml")
+      $("#displayXML").text "Show Home"
+      $("#displayXML").css "padding", "0.65em 15px 0.6em 15px"
+    error: (error) ->
+      console.log error
+      alert "ERROR: " + error.statusText
+
+###**********************************************************
+# CSV
+**********************************************************###
+$("#displayCSV").live("click", (e) =>
+
+  stopEvent(e)
+  if getViewState()
+    setInvalidated(true)
+    @displayStaticData(false, true, null, "csv")
+    $("#displayCSV").text "Load CSV"
+    $("#displayCSV").css "padding", "0.65em 15px 0.6em 15px"
+  else
+    loadCSV()
+)
+
+loadCSV = ->
+  $.ajax
+    url: "data/data.csv"
+    dataType: "text"
+    success: (csv) =>
+      @displayStaticData(true, false, csv, "csv")
+      $("#displayCSV").text "Show Home"
+      $("#displayCSV").css "padding", "0.65em 15px 0.6em 15px"
+    error: (error) ->
+      alert "ERROR: " + error.statusText
+
+csvToArray = (strData, strDelimiter) ->
+  strDelimiter = (strDelimiter or ",")
+  quote_regexp = new RegExp("^\"(.*)\"$")
+  arrData = []
+  lines = strData.split(new RegExp("\r?[\r\n]"))
+  
+  _.each(lines, (value, key) ->
+    arrData.push { key : value.split(strDelimiter) }
+    
+  )
+
+  arrData
+      
+@displayStaticData = (showBills, showHome, data, type) =>
+  bills = (if showBills isnt null or showBills isnt "" then showBills else false)
+  form  = (if showHome isnt null or showHome isnt "" then showHome else false)
+  
+  if form
+    #Bills are visible, show form
+    switch type
+      when "json" then @showHomeJson()
+      when "xml" then @showHomeXML()
+      when "csv" then @showHomeCSV()
+    return
+
+  else if bills
+    #Form is visible, show bills
+    @showStaticBills(data, type)
+    return
+    
+  else if getViewState()
+    #Bills are visible, show form
+    switch type
+      when "json" then @showHomeJson()
+      when "xml" then @showHomeXML()
+      when "csv" then @showHomeCSV()
+    return
+  
+  else
+    #Form is visible, show bills
+    @showStaticBills(data, type)
+    return
+    
+@showStaticBills = (data, type) ->
+  setViewState(true)
+  hideHome()
+  viewStaticItems()
+  if getDataDisplayed() == false or getInvalidated()
+    destroyStaticDataSet()
+    getStaticData(data, type)
+    setDataDisplayed(true)
+    setInvalidated(false)
+  return
+  
+@showHomeJson = () ->
+  setViewState(false)
+  hideStaticItems()
+  viewHome()
+  $("#displayData").text "Load Json"
+  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
+  return
+
+@showHomeXML = () ->
+  setViewState(false)
+  hideStaticItems()
+  viewHome()
+  $("#displayData").text "Load XML"
+  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
+  return
+  
+@showHomeCSV = () ->
+  setViewState(false)
+  hideStaticItems()
+  viewHome()
+  $("#displayData").text "Load CSV"
+  $("#displayData").css "padding", "0.65em 15px 0.6em 15px"
+  return
+  
+destroyStaticDataSet = () ->
+  $("#homeItems").empty()
+  
+viewHome = ->
+  $("#unoslider").css "display", "inline"
+  $("#grid").css "display", "inline-block"
+  return
+
+hideHome = ->
+  $("#unoslider").css "display", "none"
+  $("#grid").css "display", "none"
+  return
+  
+viewStaticItems = ->
+  $("#homeItemsSection").css "display", "inline-block"
+  return
+  
+hideStaticItems = ->
+  $("#homeItemsSection").css "display", "none"
+  return
