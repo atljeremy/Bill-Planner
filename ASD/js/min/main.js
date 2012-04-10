@@ -137,21 +137,30 @@ Variables
   };
 
   getData = function() {
-    if (_.size(localStorage) > 0) {
-      return qryBills(localStorage, "localStorage");
-    } else {
-      return storeJsonData();
-    }
+    return $.ajax({
+      url: "/billplannerdata/_all_docs?include_docs=true",
+      dataType: "json",
+      success: function(data) {
+        if (_.size(data.rows) > 0) {
+          return qryBills(data);
+        } else {
+          return alert("Nothing to show!");
+        }
+      },
+      error: function(data) {
+        return alert("ERROR: " + data.error);
+      }
+    });
   };
 
-  setupBills = function() {
+  setupBills = function(json) {
     var billsList, callbackFunc;
     billsList = [];
-    _.each(_.keys(localStorage), function(key) {
-      var billObj, value;
-      value = localStorage.getItem(key);
-      billObj = JSON.parse(value);
-      billObj.key = key;
+    _.each(json.rows, function(value, key) {
+      var billObj;
+      console.log(value);
+      billObj = value.doc;
+      billObj.key = value.key;
       return billsList.push(billObj);
     });
     callbackFunc = function(a, b) {
@@ -172,12 +181,13 @@ Variables
     }
   };
 
-  qryBills = function() {
+  qryBills = function(json) {
     var i;
     i = 1;
-    return _.each(setupBills(), function(bill) {
+    return _.each(setupBills(json), function(bill) {
       var OPERATOR, account, accountMatch, key, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
       key = bill.key;
+      console.log(key);
       makeListItem = $("<li>");
       makeListItem.attr("id", "li-key-" + key);
       makeThumbIcon = $("<img>");

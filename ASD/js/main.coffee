@@ -147,19 +147,27 @@ storeJsonData = () =>
   getData()
 
 getData = ->
-  if _.size(localStorage) > 0
-    qryBills(localStorage, "localStorage")
-  else
-    storeJsonData()
-    # qryBills(@json, "json")
+  $.ajax
+    url: "/billplannerdata/_all_docs?include_docs=true"
+    dataType: "json"
+    success: (data) ->
+      if _.size(data.rows) > 0
+        qryBills(data)
+      else
+        alert "Nothing to show!"
+        #storeJsonData()
+    error: (data) ->
+      alert "ERROR: " + data.error
       
-setupBills = ->
+setupBills = (json) ->
   billsList = []
 
-  _.each(_.keys(localStorage), (key) ->
-    value = localStorage.getItem(key)
-    billObj = JSON.parse value
-    billObj.key = key    
+  _.each(json.rows, (value, key) ->
+  
+    console.log value
+  
+    billObj = value.doc
+    billObj.key = value.key
     billsList.push billObj
   )
 
@@ -174,11 +182,13 @@ setupBills = ->
   else
     billsList
 
-qryBills = ->
+qryBills = (json) ->
   i = 1
-  _.each(setupBills(), (bill) ->
+  _.each(setupBills(json), (bill) ->
   
     key = bill.key
+    
+    console.log key
     
     makeListItem = $("<li>")
     makeListItem.attr "id", "li-key-"+key
