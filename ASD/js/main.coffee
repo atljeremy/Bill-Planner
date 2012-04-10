@@ -21,7 +21,8 @@ billAccounts          = [
   "Wells Fargo - Savings",
   "Wells Fargo - Credit Card"
 ]
-@detailsKey           = "" # Key used to retreive bill details on details.html
+@detailsKey           = ""   # Key used to retreive bill details on details.html
+@detailsJson          = null # Json used to show bill on detials.html
 
 ###**********************************************************
 State Control Methods
@@ -29,31 +30,31 @@ State Control Methods
 setViewState = (state) =>
   @dataViewState = state
 
-getViewState = () =>
+getViewState = =>
   return @dataViewState
   
 setDataDisplayed = (val) =>
   @hasDataBeenDisplayed = val
 
-getDataDisplayed = () =>
+getDataDisplayed = =>
   return @hasDataBeenDisplayed
   
 setInvalidated = (val) =>
   @invalidateData = val
 
-getInvalidated = () =>
+getInvalidated = =>
   return @invalidateData
   
-destroyDataSet = () ->
+destroyDataSet = ->
   $("#items").empty()
   
-destroyDetailsDataSet = () ->
+destroyDetailsDataSet = ->
   $("#itemDetails").empty()
   
 ###**********************************************************
 Getter and Setter for key to edit
 **********************************************************###
-@getKeyToEdit = () =>
+@getKeyToEdit = =>
   return @keyToEdit
   
 @setKeyToEdit = (key) =>
@@ -65,13 +66,21 @@ Getter and Setter for details key
 setDetailsKey = (key) =>
   @detailsKey = key
   
-getDetailsKey = () =>
+getDetailsKey = =>
   return @detailsKey
 
 ###**********************************************************
+Getter and Setter for details json
+**********************************************************###
+setDetailsJson = (json) =>
+  @detailsJson = json
+  
+getDetailsJson = =>
+  return @detailsJson
+###**********************************************************
 Main Metheds
 **********************************************************###
-@storeData = () =>
+@storeData = =>
   newDate = new Date()
 
   if @getKeyToEdit() == 0 or @getKeyToEdit() == ""
@@ -158,14 +167,24 @@ getData = ->
         #storeJsonData()
     error: (data) ->
       alert "ERROR: " + data.error
+
+getBill = (key) ->
+  $.ajax
+    url: "/billplannerdata/#{key}"
+    dataType: "json"
+    success: (data) ->
+      if data._id is key
+        setDetailsJson(data)
+        setupBillDetails(data._id, data)
+      else
+        alert "ERROR 001: This bill could not be found."
+    error: (data) ->
+      alert "ERROR 002: This bill could not be found."
       
 setupBills = (json) ->
   billsList = []
 
   _.each(json.rows, (value, key) ->
-  
-    console.log value
-  
     billObj = value.doc
     billObj.key = value.key
     billsList.push billObj
@@ -229,7 +248,7 @@ qryBills = (json) ->
       stopEvent(e)
       $(this).removeClass("bill").addClass("billClicked")
       setDetailsKey(key)
-      showBillDetails(key)
+      getBill(key)
       return false
     )
     
@@ -569,7 +588,7 @@ Bind to jQueries mobileinit
 $(document).bind "mobileinit", ->
   $.mobile.accounts     = getAccounts
   $.mobile.date         = currentDate
-  $.mobile.details      = showBillDetails
+  $.mobile.details      = setupBillDetails
   return
 
 getAccounts = ->
@@ -593,9 +612,13 @@ currentDate = ->
   showDate = year + "-" + add0(month) + "-" + add0(day)
   $("#payOn").val showDate
   
-showBillDetails = (key) ->
-  
+setupBillDetails = (key, json) ->
+
+  console.log "setupBillDetails"
+
   key = (if key isnt undefined then key else getDetailsKey())
+  billObj = (if json isnt undefined then json else getDetailsJson())
+  console.log billObj
 
   # Setup back button listener for details page
   $("#backToBills").click("click", (e) ->
@@ -615,8 +638,8 @@ showBillDetails = (key) ->
   #Add the list item to the Unordered list
   makeList.append makeListItem
   
-  value = localStorage[key]
-  billObj = JSON.parse value
+#   value = localStorage[key]
+#   billObj = JSON.parse value
   
   #create a new Unordered list within the original Unordered list
   makeSubList = $("<ul>")

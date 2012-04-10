@@ -11,7 +11,7 @@ Variables
 */
 
 (function() {
-  var add0, billAccounts, createListWithCSVData, createListWithJsonData, createListWithXMLData, csvToArray, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, destroyStaticDataSet, editItem, getAccounts, getData, getDataDisplayed, getDetailsKey, getFavValue, getInvalidated, getStaticData, getViewState, hideBillForm, hideHome, hideItems, hideStaticItems, loadCSV, loadJson, loadXML, qryBills, setDataDisplayed, setDetailsKey, setInvalidated, setViewState, setupBills, setupStaticBills, showAccount, showBillDetails, stopEvent, storeJsonData, unBindClickListeners, viewBillForm, viewHome, viewItems, viewStaticItems,
+  var add0, billAccounts, createListWithCSVData, createListWithJsonData, createListWithXMLData, csvToArray, currentDate, deleteItem, destroyDataSet, destroyDetailsDataSet, destroyStaticDataSet, editItem, getAccounts, getBill, getData, getDataDisplayed, getDetailsJson, getDetailsKey, getFavValue, getInvalidated, getStaticData, getViewState, hideBillForm, hideHome, hideItems, hideStaticItems, loadCSV, loadJson, loadXML, qryBills, setDataDisplayed, setDetailsJson, setDetailsKey, setInvalidated, setViewState, setupBillDetails, setupBills, setupStaticBills, showAccount, stopEvent, storeJsonData, unBindClickListeners, viewBillForm, viewHome, viewItems, viewStaticItems,
     _this = this;
 
   this.dataViewState = false;
@@ -25,6 +25,8 @@ Variables
   billAccounts = ["Please Select An Account", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card", "Wells Fargo - Checking", "Wells Fargo - Savings", "Wells Fargo - Credit Card"];
 
   this.detailsKey = "";
+
+  this.detailsJson = null;
 
   /***********************************************************
   State Control Methods
@@ -87,6 +89,19 @@ Variables
 
   getDetailsKey = function() {
     return _this.detailsKey;
+  };
+
+  /***********************************************************
+  Getter and Setter for details json
+  **********************************************************
+  */
+
+  setDetailsJson = function(json) {
+    return _this.detailsJson = json;
+  };
+
+  getDetailsJson = function() {
+    return _this.detailsJson;
   };
 
   /***********************************************************
@@ -153,12 +168,29 @@ Variables
     });
   };
 
+  getBill = function(key) {
+    return $.ajax({
+      url: "/billplannerdata/" + key,
+      dataType: "json",
+      success: function(data) {
+        if (data._id === key) {
+          setDetailsJson(data);
+          return setupBillDetails(data._id, data);
+        } else {
+          return alert("ERROR 001: This bill could not be found.");
+        }
+      },
+      error: function(data) {
+        return alert("ERROR 002: This bill could not be found.");
+      }
+    });
+  };
+
   setupBills = function(json) {
     var billsList, callbackFunc;
     billsList = [];
     _.each(json.rows, function(value, key) {
       var billObj;
-      console.log(value);
       billObj = value.doc;
       billObj.key = value.key;
       return billsList.push(billObj);
@@ -226,7 +258,7 @@ Variables
         stopEvent(e);
         $(this).removeClass("bill").addClass("billClicked");
         setDetailsKey(key);
-        showBillDetails(key);
+        getBill(key);
         return false;
       });
       payTo = bill.payto[1];
@@ -591,7 +623,7 @@ Variables
   $(document).bind("mobileinit", function() {
     $.mobile.accounts = getAccounts;
     $.mobile.date = currentDate;
-    $.mobile.details = showBillDetails;
+    $.mobile.details = setupBillDetails;
   });
 
   getAccounts = function() {
@@ -620,9 +652,12 @@ Variables
     return $("#payOn").val(showDate);
   };
 
-  showBillDetails = function(key) {
-    var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeList, makeListItem, makeSubList, value;
+  setupBillDetails = function(key, json) {
+    var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeList, makeListItem, makeSubList;
+    console.log("setupBillDetails");
     key = (key !== void 0 ? key : getDetailsKey());
+    billObj = (json !== void 0 ? json : getDetailsJson());
+    console.log(billObj);
     $("#backToBills").click("click", function(e) {
       stopEvent(e);
       history.back();
@@ -633,8 +668,6 @@ Variables
     $("#itemDetails").append(makeList);
     makeListItem = $("<li>");
     makeList.append(makeListItem);
-    value = localStorage[key];
-    billObj = JSON.parse(value);
     makeSubList = $("<ul>");
     makeSubList.attr("id", "bill-" + key);
     makeEditIcon = $("<img>");
@@ -678,7 +711,7 @@ Variables
       return showAccount(key);
     });
     _.each(billObj, function(bill) {
-      var field, makeSubListItem;
+      var field, makeSubListItem, value;
       makeSubListItem = $("<li>");
       if (bill[0] === "From Account:") {
         makeSubListItem.attr("id", "li-account-" + key);
