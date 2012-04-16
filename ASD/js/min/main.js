@@ -22,6 +22,8 @@ Variables
 
   this.keyToEdit = 0;
 
+  this.cloudantURL = "https://onglandistanyboubtaindeg:7kD3juiBXaEP82dEXBmiGQkX@atljeremy.cloudant.com/billplannerdata/";
+
   billAccounts = ["Please Select An Account", "Bank of America - Checking", "Bank of America - Savings", "Bank of America - Credit Card", "Wells Fargo - Checking", "Wells Fargo - Savings", "Wells Fargo - Credit Card"];
 
   this.detailsKey = "";
@@ -317,7 +319,7 @@ Variables
     if (ask) {
       $.ajax({
         type: "DELETE",
-        url: "http://127.0.0.1:5984/billplannerdata/" + key,
+        url: this.cloudantURL + key,
         headers: {
           "If-Match": rev
         },
@@ -366,10 +368,11 @@ Variables
   */
 
   $("#billForm").live("submit", function(e) {
-    var formdata, isUpdate, json, updateJson;
+    var isUpdate, json, newJson, updateJson, _rev;
     stopEvent(e);
-    isUpdate = $('#_rev').val() !== null || 'undefined';
-    formdata = $(this).serialize();
+    _rev = $('#_rev').val();
+    isUpdate = (typeof _rev !== "undefined") && (_rev !== null || "");
+    console.log(isUpdate);
     if ($("#billForm").valid()) {
       if (isUpdate) {
         updateJson = {};
@@ -383,15 +386,18 @@ Variables
         updateJson.notes = ["Notes:", $("#notes").val()];
         updateJson.remember = ["Remember This Payment:", getFavValue()];
         json = JSON.stringify(updateJson);
+        console.log(this.cloudantURL + updateJson._id);
         $.ajax({
           type: "PUT",
-          url: "http://127.0.0.1:5984/billplannerdata/" + updateJson._id,
+          url: this.cloudantURL + updateJson._id,
           data: json,
           success: function(data) {
             var response;
             response = JSON.parse(data);
             if (response.ok) {
               setInvalidated(true);
+              this.setKeyToEdit(0);
+              $("legend").html("<h2>Create a New Bill</h2>");
               return alert("Bill Updated Successfully!");
             }
           },
@@ -400,13 +406,29 @@ Variables
           }
         });
       } else {
-        console.log("Submitting normally!");
+        newJson = {};
+        newJson.name = ["Name:", $("#name").val()];
+        newJson.payto = ["Pay To:", $("#payTo").val()];
+        newJson.amount = ["Amount:", $("#payAmount").val()];
+        newJson.account = ["From Account:", $("#payFrom").val()];
+        newJson.payon = ["Pay On:", $("#payOn").val()];
+        newJson.notes = ["Notes:", $("#notes").val()];
+        newJson.remember = ["Remember This Payment:", getFavValue()];
+        json = JSON.stringify(newJson);
         $.ajax({
           type: "POST",
-          url: "additem.html",
-          data: formdata,
-          success: function() {
-            return storeData();
+          url: this.cloudantURL,
+          dataType: "json",
+          data: json,
+          success: function(data) {
+            var response;
+            response = JSON.parse(data);
+            if (response.ok) {
+              setInvalidated(true);
+              alert("Bill Added!");
+              this.setKeyToEdit(0);
+              return this.displayData();
+            }
           },
           error: function(error) {
             return alert("ERROR: " + error.statusText);

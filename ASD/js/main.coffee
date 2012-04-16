@@ -12,6 +12,7 @@ Variables
 @hasDataBeenDisplayed = false #Keeps track of whether or not localStorage has been display, if so, there is no reason to re-query localStorage, just show the previously viewed data.
 @invalidateData       = false #set this to true when we need to force the app to re-query localStorage for new data.
 @keyToEdit            = 0 #The key of the item in localStorage we want to edit
+@cloudantURL          = "https://onglandistanyboubtaindeg:7kD3juiBXaEP82dEXBmiGQkX@atljeremy.cloudant.com/billplannerdata/"
 billAccounts          = [
   "Please Select An Account",
   "Bank of America - Checking",
@@ -312,7 +313,7 @@ deleteItem = (key, rev) ->
   if ask
     $.ajax
       type: "DELETE"
-      url: "http://127.0.0.1:5984/billplannerdata/#{key}"
+      url: @cloudantURL + key
       headers:
         "If-Match": rev
       success: (data) ->
@@ -350,8 +351,11 @@ Click Events
 **********************************************************###
 $("#billForm").live "submit", (e) ->
   stopEvent(e)
-  isUpdate = ($('#_rev').val() isnt null or 'undefined')
-  formdata = $(this).serialize()  
+  _rev = $('#_rev').val()
+  isUpdate = ((typeof _rev isnt "undefined") and (_rev isnt null or ""))
+  
+  console.log isUpdate
+  
   if $("#billForm").valid()
     if isUpdate
     
@@ -367,25 +371,45 @@ $("#billForm").live "submit", (e) ->
       updateJson.remember = ["Remember This Payment:", getFavValue()]
       json = JSON.stringify updateJson
 
+      console.log @cloudantURL + updateJson._id
+
       $.ajax
         type: "PUT"
-        url: "http://127.0.0.1:5984/billplannerdata/#{updateJson._id}"
+        url: @cloudantURL + updateJson._id
         data: json
         success: (data) ->
           response = JSON.parse data
           if response.ok
             setInvalidated(true)
+            @setKeyToEdit(0)
+            $("legend").html("<h2>Create a New Bill</h2>")
             alert "Bill Updated Successfully!"
         error: (error) ->
           alert "ERROR: " + error.statusText
     else
-      console.log "Submitting normally!"
+      
+      newJson = {}
+      newJson.name     = ["Name:", $("#name").val()]
+      newJson.payto    = ["Pay To:", $("#payTo").val()]
+      newJson.amount   = ["Amount:", $("#payAmount").val()]
+      newJson.account  = ["From Account:", $("#payFrom").val()]
+      newJson.payon    = ["Pay On:", $("#payOn").val()]
+      newJson.notes    = ["Notes:", $("#notes").val()]
+      newJson.remember = ["Remember This Payment:", getFavValue()]
+      json = JSON.stringify newJson
+      
       $.ajax
         type: "POST"
-        url: "additem.html"
-        data: formdata
-        success: ->
-          storeData()
+        url: @cloudantURL
+        dataType: "json"
+        data: json
+        success: (data) ->
+          response = JSON.parse data
+          if response.ok
+            setInvalidated(true)
+            alert("Bill Added!")
+            @setKeyToEdit(0)
+            @displayData()
         error: (error) ->
           alert "ERROR: " + error.statusText
   else
