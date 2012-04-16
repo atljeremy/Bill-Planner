@@ -162,8 +162,8 @@ Variables
           return alert("Nothing to show!");
         }
       },
-      error: function(data) {
-        return alert("ERROR: " + data.error);
+      error: function(error) {
+        return alert("ERROR: " + error.statusText);
       }
     });
   };
@@ -180,8 +180,8 @@ Variables
           return alert("ERROR 001: This bill could not be found.");
         }
       },
-      error: function(data) {
-        return alert("ERROR 002: This bill could not be found.");
+      error: function(error) {
+        return alert("ERROR 002: " + error.statusText);
       }
     });
   };
@@ -219,7 +219,6 @@ Variables
     return _.each(setupBills(json), function(bill) {
       var OPERATOR, account, accountMatch, key, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
       key = bill.key;
-      console.log(key);
       makeListItem = $("<li>");
       makeListItem.attr("id", "li-key-" + key);
       makeThumbIcon = $("<img>");
@@ -243,7 +242,7 @@ Variables
       makeArrowIcon = $("<img>");
       makeArrowIcon.attr("src", "i/arrow.png");
       makeArrowIcon.attr("class", "listArrowIcons");
-      if (_.size(localStorage) === i) {
+      if (_.size(json.rows) === i) {
         makeListItem.attr("class", "lastBill");
       } else {
         makeListItem.attr("class", "bill");
@@ -270,10 +269,10 @@ Variables
     });
   };
 
-  editItem = function(key) {
-    var bill, radio, radios, value, _i, _len;
-    value = localStorage.getItem(key);
-    bill = JSON.parse(value);
+  editItem = function() {
+    var bill, key, radio, radios, _i, _id, _len, _rev;
+    bill = getDetailsJson();
+    key = bill._id;
     _this.setKeyToEdit(key);
     $("legend").html("<h2>Your Editing a Bill - <a href=\"#\" id=\"cancelEdit\" data-ajax=\"false\" >Cancel</a></h2>");
     $("#cancelEdit").click("click", function(e) {
@@ -286,10 +285,13 @@ Variables
     $('#name').val(bill.name[1]);
     $('#payTo').val(bill.payto[1]);
     $('#payAmount').val(bill.amount[1]);
-    console.log(bill.account[1]);
     $('#payFrom').val(bill.account[1]);
     $('#payOn').val(bill.payon[1]);
     $('#notes').val(bill.notes[1]);
+    _rev = $('<input>').attr('id', '_rev').attr('name', '_rev').attr('type', 'hidden').val(bill._rev);
+    _id = $('<input>').attr('id', '_id').attr('name', '_id').attr('type', 'hidden').val(bill._id);
+    $('#billForm').append(_rev);
+    $('#billForm').append(_id);
     radios = $("input[type='radio']");
     for (_i = 0, _len = radios.length; _i < _len; _i++) {
       radio = radios[_i];
@@ -309,20 +311,36 @@ Variables
     }, 500);
   };
 
-  deleteItem = function(key) {
+  deleteItem = function(key, rev) {
     var ask;
     ask = confirm("Are you sure you want to delete this bill?");
     if (ask) {
-      $("#bill-" + key).animate({
-        opacity: 0.00,
-        height: 'toggle'
-      }, 1000);
-      setTimeout(function() {
-        localStorage.removeItem(key);
-        setInvalidated(true);
-        history.back();
-        return this.displayData(true, false);
-      }, 1000);
+      $.ajax({
+        type: "DELETE",
+        url: "http://127.0.0.1:5984/billplannerdata/" + key,
+        headers: {
+          "If-Match": rev
+        },
+        success: function(data) {
+          var response;
+          response = JSON.parse(data);
+          if (response.ok) {
+            setInvalidated(true);
+            $("#bill-" + key).animate({
+              opacity: 0.00,
+              height: 'toggle'
+            }, 1000);
+            return setTimeout(function() {
+              setInvalidated(true);
+              history.back();
+              return this.displayData(true, false);
+            }, 1000);
+          }
+        },
+        error: function(error) {
+          return alert("ERROR: " + error.statusText);
+        }
+      });
       return false;
     }
   };
@@ -337,8 +355,6 @@ Variables
     });
   };
 
-  this.addAccount = function(account) {};
-
   this.clearStorage = function() {
     localStorage.clear();
     return alert("All Data Has Been Deleted.");
@@ -350,18 +366,53 @@ Variables
   */
 
   $("#billForm").live("submit", function(e) {
-    var formdata;
+    var formdata, isUpdate, json, updateJson;
     stopEvent(e);
+    isUpdate = $('#_rev').val() !== null || 'undefined';
+    formdata = $(this).serialize();
     if ($("#billForm").valid()) {
-      formdata = $(this).serialize();
-      $.ajax({
-        type: "POST",
-        url: "additem.html",
-        data: formdata,
-        success: function() {
-          return storeData();
-        }
-      });
+      if (isUpdate) {
+        updateJson = {};
+        updateJson._id = $("#_id").val();
+        updateJson._rev = $("#_rev").val();
+        updateJson.name = ["Name:", $("#name").val()];
+        updateJson.payto = ["Pay To:", $("#payTo").val()];
+        updateJson.amount = ["Amount:", $("#payAmount").val()];
+        updateJson.account = ["From Account:", $("#payFrom").val()];
+        updateJson.payon = ["Pay On:", $("#payOn").val()];
+        updateJson.notes = ["Notes:", $("#notes").val()];
+        updateJson.remember = ["Remember This Payment:", getFavValue()];
+        json = JSON.stringify(updateJson);
+        $.ajax({
+          type: "PUT",
+          url: "http://127.0.0.1:5984/billplannerdata/" + updateJson._id,
+          data: json,
+          success: function(data) {
+            var response;
+            response = JSON.parse(data);
+            if (response.ok) {
+              setInvalidated(true);
+              return alert("Bill Updated Successfully!");
+            }
+          },
+          error: function(error) {
+            return alert("ERROR: " + error.statusText);
+          }
+        });
+      } else {
+        console.log("Submitting normally!");
+        $.ajax({
+          type: "POST",
+          url: "additem.html",
+          data: formdata,
+          success: function() {
+            return storeData();
+          },
+          error: function(error) {
+            return alert("ERROR: " + error.statusText);
+          }
+        });
+      }
     } else {
       $('html, body').animate({
         scrollTop: 0
@@ -601,6 +652,8 @@ Variables
     }
   };
 
+  this.addAccount = function(account) {};
+
   $("#accountForm").live("submit", function(e) {
     var formdata;
     stopEvent(e);
@@ -611,6 +664,9 @@ Variables
       data: formdata,
       success: function() {
         return alert("Your account has been added! --THIS IS NOT ACTUALLING DOING ANYTHING JUST YET!--");
+      },
+      error: function(error) {
+        return alert("ERROR: " + error.statusText);
       }
     });
   });
@@ -654,10 +710,8 @@ Variables
 
   setupBillDetails = function(key, json) {
     var OPERATOR, account, accountMatch, billObj, makeAccountIcon, makeDeleteIcon, makeEditIcon, makeList, makeListItem, makeSubList;
-    console.log("setupBillDetails");
     key = (key !== void 0 ? key : getDetailsKey());
     billObj = (json !== void 0 ? json : getDetailsJson());
-    console.log(billObj);
     $("#backToBills").click("click", function(e) {
       stopEvent(e);
       history.back();
@@ -702,15 +756,15 @@ Variables
     makeSubList.append(makeAccountIcon);
     makeListItem.append(makeSubList);
     $("#edit-" + key).click("click", function(e) {
-      return editItem(key);
+      return editItem();
     });
     $("#delete-" + key).click("click", function(e) {
-      return deleteItem(key);
+      return deleteItem(key, billObj._rev);
     });
     $("#account-" + key).click("click", function(e) {
       return showAccount(key);
     });
-    _.each(billObj, function(bill) {
+    _.each(billObj, function(bill, key) {
       var field, makeSubListItem, value;
       makeSubListItem = $("<li>");
       if (bill[0] === "From Account:") {
@@ -723,8 +777,19 @@ Variables
       value.attr("class", "billValue");
       makeSubListItem.append(field);
       makeSubListItem.append(value);
-      field.html(bill[0] + " ");
-      value.html(bill[1]);
+      switch (key) {
+        case "_id":
+          field.html("ID: ");
+          value.html(bill);
+          break;
+        case "_rev":
+          field.html("Revision: ");
+          value.html(bill);
+          break;
+        default:
+          field.html(bill[0] + " ");
+          value.html(bill[1]);
+      }
       return true;
     });
     $.mobile.changePage("details.html", {
@@ -873,7 +938,6 @@ Variables
     return _.each(bills, function(bill) {
       var key;
       key = "";
-      console.log(bill);
       _.find(bill, function(details) {
         var OPERATOR, account, accountMatch, makeArrowIcon, makeLink, makeListItem, makeThumbIcon, payAmount, payDate, payTo;
         key = details[1];
@@ -1014,7 +1078,6 @@ Variables
         return $("#displayXML").css("padding", "0.65em 15px 0.6em 15px");
       },
       error: function(error) {
-        console.log(error);
         return alert("ERROR: " + error.statusText);
       }
     });

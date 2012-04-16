@@ -77,6 +77,7 @@ setDetailsJson = (json) =>
   
 getDetailsJson = =>
   return @detailsJson
+
 ###**********************************************************
 Main Metheds
 **********************************************************###
@@ -165,8 +166,8 @@ getData = ->
       else
         alert "Nothing to show!"
         #storeJsonData()
-    error: (data) ->
-      alert "ERROR: " + data.error
+    error: (error) ->
+      alert "ERROR: " + error.statusText
 
 getBill = (key) ->
   $.ajax
@@ -178,8 +179,8 @@ getBill = (key) ->
         setupBillDetails(data._id, data)
       else
         alert "ERROR 001: This bill could not be found."
-    error: (data) ->
-      alert "ERROR 002: This bill could not be found."
+    error: (error) ->
+      alert "ERROR 002: " + error.statusText
       
 setupBills = (json) ->
   billsList = []
@@ -204,10 +205,8 @@ setupBills = (json) ->
 qryBills = (json) ->
   i = 1
   _.each(setupBills(json), (bill) ->
-  
+
     key = bill.key
-    
-    console.log key
     
     makeListItem = $("<li>")
     makeListItem.attr "id", "li-key-"+key
@@ -231,7 +230,7 @@ qryBills = (json) ->
     makeArrowIcon.attr "src", "i/arrow.png"
     makeArrowIcon.attr "class", "listArrowIcons"
     
-    if(_.size(localStorage) == i)
+    if(_.size(json.rows) == i)
       makeListItem.attr "class", "lastBill"
     else
       makeListItem.attr "class", "bill"
@@ -264,9 +263,9 @@ qryBills = (json) ->
     i++
   )  
 
-editItem = (key) =>
-  value = localStorage.getItem key
-  bill = JSON.parse value
+editItem = =>
+  bill = getDetailsJson()
+  key = bill._id
   
   @setKeyToEdit(key)
   
@@ -284,11 +283,13 @@ editItem = (key) =>
   $('#payTo').val bill.payto[1]
   $('#payAmount').val bill.amount[1]
   
-  console.log bill.account[1]
-  
   $('#payFrom').val bill.account[1]
   $('#payOn').val bill.payon[1]
   $('#notes').val bill.notes[1]
+  _rev = $('<input>').attr('id', '_rev').attr('name', '_rev').attr('type', 'hidden').val(bill._rev)
+  _id = $('<input>').attr('id', '_id').attr('name', '_id').attr('type', 'hidden').val(bill._id)
+  $('#billForm').append _rev
+  $('#billForm').append _id
   radios = $("input[type='radio']")
   for radio in radios
     if radio.value == "Yes" and bill.remember[1] == "Yes"
@@ -306,20 +307,29 @@ editItem = (key) =>
     @displayData()
   , 500)
   
-deleteItem = (key) ->
+deleteItem = (key, rev) ->
   ask = confirm "Are you sure you want to delete this bill?"
   if ask
-    $("#bill-"+key).animate
-      opacity: 0.00
-      height: 'toggle'
-    , 1000
-    
-    setTimeout(->
-      localStorage.removeItem key
-      setInvalidated(true)
-      history.back()
-      @displayData(true, false)
-    , 1000)
+    $.ajax
+      type: "DELETE"
+      url: "http://127.0.0.1:5984/billplannerdata/#{key}"
+      headers:
+        "If-Match": rev
+      success: (data) ->
+        response = JSON.parse data
+        if response.ok
+          setInvalidated(true)
+          $("#bill-"+key).animate
+            opacity: 0.00
+            height: 'toggle'
+          , 1000
+          setTimeout(->
+            setInvalidated(true)
+            history.back()
+            @displayData(true, false)
+          ,1000)
+      error: (error) ->
+        alert "ERROR: " + error.statusText
     return false
     
 showAccount = (key) ->
@@ -331,9 +341,6 @@ showAccount = (key) ->
     , 500, ->
       return
 
-@addAccount = (account) ->
-  #something
-
 @clearStorage = () ->
   localStorage.clear();
   alert "All Data Has Been Deleted."
@@ -343,14 +350,44 @@ Click Events
 **********************************************************###
 $("#billForm").live "submit", (e) ->
   stopEvent(e)
+  isUpdate = ($('#_rev').val() isnt null or 'undefined')
+  formdata = $(this).serialize()  
   if $("#billForm").valid()
-    formdata = $(this).serialize()
-    $.ajax
-      type: "POST"
-      url: "additem.html"
-      data: formdata
-      success: ->
-        storeData()
+    if isUpdate
+    
+      updateJson = {}
+      updateJson._id      = $("#_id").val()
+      updateJson._rev     = $("#_rev").val()
+      updateJson.name     = ["Name:", $("#name").val()]
+      updateJson.payto    = ["Pay To:", $("#payTo").val()]
+      updateJson.amount   = ["Amount:", $("#payAmount").val()]
+      updateJson.account  = ["From Account:", $("#payFrom").val()]
+      updateJson.payon    = ["Pay On:", $("#payOn").val()]
+      updateJson.notes    = ["Notes:", $("#notes").val()]
+      updateJson.remember = ["Remember This Payment:", getFavValue()]
+      json = JSON.stringify updateJson
+
+      $.ajax
+        type: "PUT"
+        url: "http://127.0.0.1:5984/billplannerdata/#{updateJson._id}"
+        data: json
+        success: (data) ->
+          response = JSON.parse data
+          if response.ok
+            setInvalidated(true)
+            alert "Bill Updated Successfully!"
+        error: (error) ->
+          alert "ERROR: " + error.statusText
+    else
+      console.log "Submitting normally!"
+      $.ajax
+        type: "POST"
+        url: "additem.html"
+        data: formdata
+        success: ->
+          storeData()
+        error: (error) ->
+          alert "ERROR: " + error.statusText
   else
     $('html, body').animate( scrollTop: 0 , 0)
   return false
@@ -571,6 +608,9 @@ Add Account Page Form Methods
     $("#accountSubmitBtn").removeClass("hide").addClass("show")
   else
     alert "Please enter your credit cards expiration date to conitue."
+    
+@addAccount = (account) ->
+  #something
 
 $("#accountForm").live "submit", (e) ->
   stopEvent(e)
@@ -581,6 +621,8 @@ $("#accountForm").live "submit", (e) ->
     data: formdata
     success: ->
       alert "Your account has been added! --THIS IS NOT ACTUALLING DOING ANYTHING JUST YET!--"
+    error: (error) ->
+      alert "ERROR: " + error.statusText
 
 ###**********************************************************
 Bind to jQueries mobileinit
@@ -613,12 +655,8 @@ currentDate = ->
   $("#payOn").val showDate
   
 setupBillDetails = (key, json) ->
-
-  console.log "setupBillDetails"
-
   key = (if key isnt undefined then key else getDetailsKey())
   billObj = (if json isnt undefined then json else getDetailsJson())
-  console.log billObj
 
   # Setup back button listener for details page
   $("#backToBills").click("click", (e) ->
@@ -637,9 +675,6 @@ setupBillDetails = (key, json) ->
   makeListItem = $("<li>")
   #Add the list item to the Unordered list
   makeList.append makeListItem
-  
-#   value = localStorage[key]
-#   billObj = JSON.parse value
   
   #create a new Unordered list within the original Unordered list
   makeSubList = $("<ul>")
@@ -692,12 +727,12 @@ setupBillDetails = (key, json) ->
   
   #Set click listener on edit icon
   $("#edit-"+key).click("click", (e) ->
-    editItem(key)
+    editItem()
   )
   
   #Set click listener on delete icon
   $("#delete-"+key).click("click", (e) ->
-    deleteItem(key)
+    deleteItem(key, billObj._rev)
   )
   
   #Set click listener on account icon
@@ -706,8 +741,7 @@ setupBillDetails = (key, json) ->
   )
   
   #for each bill in the billObj do the following
-  _.each(billObj, (bill) ->
-  
+  _.each(billObj, (bill, key) ->
     #Make a list item
     makeSubListItem = $("<li>")
     
@@ -729,8 +763,11 @@ setupBillDetails = (key, json) ->
     makeSubListItem.append field
     makeSubListItem.append value
     
-    field.html bill[0] + " "
-    value.html bill[1]
+    switch key
+      when "_id" then field.html "ID: "; value.html bill
+      when "_rev" then field.html "Revision: "; value.html bill
+      else field.html bill[0] + " "; value.html bill[1]
+
     true
   )
   $.mobile.changePage( "details.html",
@@ -882,7 +919,6 @@ createListWithCSVData = (data) ->
   i = 1
   _.each(bills, (bill) ->
     key = ""
-    console.log bill
     _.find(bill, (details) ->
       key = details[1]
       
@@ -1011,7 +1047,6 @@ loadXML = ->
       $("#displayXML").text "Show Home"
       $("#displayXML").css "padding", "0.65em 15px 0.6em 15px"
     error: (error) ->
-      console.log error
       alert "ERROR: " + error.statusText
 
 ###**********************************************************
